@@ -42,7 +42,11 @@ SECRET_KEY = 'django-insecure-i-quay)0vi@ofqo!o*js^01l_p7s+sh^c7!mdydd53y0x5lb3w
 DEBUG = True
 # DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # O tu dominio si es necesario
+
+if not DEBUG:
+    # Configura el static para permitir --insecure
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
@@ -147,17 +151,12 @@ DATABASES = {
         'ENGINE': 'mssql',
         'NAME': env('DB_NAME_SITO'),
         'USER': env('DB_USER_SITO'),
-        # 'PASSWORD': '$A7$P#p?KHdb',
-        'PASSWORD': DB_PASS_SITO,
+        'PASSWORD': '$A7$P#p?KHdb',
+        # 'PASSWORD': DB_PASS_SITO,
         'HOST': env('DB_HOST_SITO'),
         'PORT': env('DB_PORT_SITO'),
         'OPTIONS':  {
-            'driver': 'ODBC Driver 17 for SQL Server',
-            #'driver': 'FreeTDS',
-            #'unicode_results': True,
-            #'host_is_server': True,
-            #'driver_supports_utf8': True,
-            #'extra_params': 'tds_version=7.4',
+            'driver': 'ODBC Driver 17 for SQL Server'
         }
     }
 }

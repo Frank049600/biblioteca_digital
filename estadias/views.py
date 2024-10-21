@@ -101,7 +101,7 @@ def convert_base64(doc, name_doc = False, revert = False, data = False):
 def temporary_file_base_64(base_64_input):
     # base64_string = base_64_input.strip().split(',')[1]
     decoded_bytes = base64.b64decode(base_64_input)
-    file_temp, path_temp = tempfile.mkstemp()
+    file_temp, path_temp = tempfile.mkstemp(suffix=".pdf", dir=settings.MEDIA_ROOT + "/")
     try:
         with os.fdopen(file_temp, 'wb') as tmp:
             tmp.write(decoded_bytes)
@@ -113,20 +113,16 @@ def temporary_file_base_64(base_64_input):
 # Función para mostrar file report
 def view_report(request, report_rute):
     try:
-      id_reporte = model_estadias.objects.filter(reporte=report_rute).first()
-      # if id_reporte is None:
-      #     raise ValueError("No se encontró el reporte")
-
-      # path_tem = temporary_file_base_64(id_reporte.base64)
-      # print(f"Ruta temporal: {path_tem}")
-      side_code = 301
-      # ruta = path_tem if path_tem else ''
-      ruta = '/media/Reporte de estadías_Francisco Javier Hernandez Arredondo.pdf'
-      return render(request, 'iframe_pdf.html', {'reporte': ruta, "side_code":side_code, "alumno":id_reporte})
+        # Código de ubicación para sidebar
+        side_code = 301
+        id_reporte = model_estadias.objects.filter(reporte=report_rute).first()
+        # Se crea el archivo temporal y se obtiene la ruta
+        name_temp = temporary_file_base_64(id_reporte.base64)
+        # Se separan los datos no necesarios
+        ruta = name_temp.split('/code')[1]
+        return render(request, 'iframe_pdf.html', {'reporte': ruta, "side_code":side_code, "alumno":id_reporte})
     except Exception as v:
         print(f"Error en al generar vista de PDF: {v}")
-        # Retorna una página de error o una respuesta por defecto en caso de fallo
-        # return render(request, 'error.html', {'mensaje': 'No se pudo generar el reporte.'})
 
 def servir_pdf(request, report_rute):
     file_path = os.path.join(settings.MEDIA_ROOT, report_rute)
