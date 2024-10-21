@@ -1,0 +1,803 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block title%}Catalogo{%endblock%}
+{%block content%}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/catalogo.css' %}">
+{% endblock %}
+
+<section class="content-header mt-5">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Catálogo</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{% url 'inicio' %}"><i class="fas fa-home color-info"></i></a>
+                    </li>
+                    <li class="breadcrumb-item">Catálogo</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<div class="portafolio">
+    <div class="card card-primary card-outline card-outline-tabs mx-3">
+        <div class="card-header p-0 border-bottom-0">
+            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-bs-toggle="pill"
+                        href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
+                        aria-selected="true" style="color: #e26b0a">ADM</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-bs-toggle="pill"
+                        href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile"
+                        aria-selected="false" style="color: #16365c">PIA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-messages-tab" data-bs-toggle="pill"
+                        href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages"
+                        aria-selected="false" style="color: #632523">MET</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-settings-tab" data-bs-toggle="pill"
+                        href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings"
+                        aria-selected="false" style="color: #00b050">ERC</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-quim-tab" data-bs-toggle="pill"
+                        href="#custom-tabs-four-quim" role="tab" aria-controls="custom-tabs-four-quim"
+                        aria-selected="false" style="color: #339966">QUIM</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-tis-tab" data-bs-toggle="pill" href="#custom-tabs-four-tis"
+                        role="tab" aria-controls="custom-tabs-four-tis" aria-selected="false"
+                        style="color: #08c1ca">TIS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-cba-tab" data-bs-toggle="pill" href="#custom-tabs-four-cba"
+                        role="tab" aria-controls="custom-tabs-four-cba" aria-selected="false"
+                        style="color: #00b0f0">CBA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-fsc-tab" data-bs-toggle="pill" href="#custom-tabs-four-fsc"
+                        role="tab" aria-controls="custom-tabs-four-fsc" aria-selected="false"
+                        style="color: #7030a0">FSC</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="custom-tabs-four-tabContent">
+                <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel"
+                    aria-labelledby="custom-tabs-four-home-tab">
+
+                    <!--Administración-->
+                    <div id="admo" class="mb-3">
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="admo_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Administración financiera</li>
+                                        <li>Autor: Arturo Morales Castro</li>
+                                        <li>Edición: 3era Edición</li>
+                                        <li>Carrera: Administración</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="admo_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Administración por valores</li>
+                                        <li>Autor: O´Connor</li>
+                                        <li>Edición: 6ta Edición</li>
+                                        <li>Carrera: Administración</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="admo_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Calidad de vida en el trabajo</li>
+                                        <li>Autor: Patlán Pérez, Juana</li>
+                                        <li>Edición: 4ta Edición</li>
+                                        <li>Carrera: Administración</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="admo_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Administración moderna</li>
+                                        <li>Autor: Agustín Reyes Ponce</li>
+                                        <li>Edición: 1era Edición</li>
+                                        <li>Carrera: Administración</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="admo_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Calidad y productividad</li>
+                                        <li>Autor: Humberto Gutiérrez Pulido</li>
+                                        <li>Edición: 4ta Edición</li>
+                                        <li>Carrera: Administración</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="admo_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: ¿Cómo administrar su tiempo?</li>
+                                        <li>Autor: Patrick Forsyth</li>
+                                        <li>Edición: 3era Edición</li>
+                                        <li>Carrera: Administración</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!--Procesos Industriales-->
+                <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
+                    aria-labelledby="custom-tabs-four-profile-tab">
+
+                    <div id="pia" class="mb-3">
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="pia_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Control estadístico de la calidad</li>
+                                        <li>Autor: Douglas C. Montgomery</li>
+                                        <li>Edición: 3era Edición</li>
+                                        <li>Carrera: Procesos Industriales</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="pia_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Dibujo industrial</li>
+                                        <li>Autor: A. Chevalier</li>
+                                        <li>Edición: 1era Edición</li>
+                                        <li>Carrera: Procesos Industriales</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="pia_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Calidad de vida en el trabajo</li>
+                                        <li>Autor: Patlán Pérez, Juana</li>
+                                        <li>Edición: 4ta Edición</li>
+                                        <li>Carrera: Procesos Industriales</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="pia_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Dibujo para diseño de ingeniería</li>
+                                        <li>Autor: Dennis K. Lieu</li>
+                                        <li>Edición: 4ta Edición</li>
+                                        <li>Carrera: Procesos Industriales</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="pia_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: El gran libro de Solidworks</li>
+                                        <li>Autor: Sergio Gómez González</li>
+                                        <li>Edición: 6ta Edición</li>
+                                        <li>Carrera: Procesos Industriales</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="pia_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Procesos de manufactura</li>
+                                        <li>Autor: B.H. Amstead</li>
+                                        <li>Edición: 6ta Edición</li>
+                                        <li>Carrera: Procesos Industriales</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--Mecatrónica-->
+                <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel"
+                    aria-labelledby="custom-tabs-four-messages-tab">
+
+                    <div id="met" class="mb-3">
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="met_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Autocad 2009 3D y espacio papel</li>
+                                        <li>Autor: Ferney E. Gutiérrez</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Mecatrónica</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="met_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Ciencia e ingeniería de los materiales</li>
+                                        <li>Autor: Donal R. Askeland</li>
+                                        <li>Edición: 4ta Edición</li>
+                                        <li>Carrera: Mecatrónica</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="met_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Dispositivos electrónicos</li>
+                                        <li>Autor: Thomas L. Floyd</li>
+                                        <li>Edición: 8va Edición</li>
+                                        <li>Carrera: Mecatrónica</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="met_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Autómatas programables</li>
+                                        <li>Autor: Josep Balcells</li>
+                                        <li>Edición: 1era Edición</li>
+                                        <li>Carrera: Mecatrónica</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="met_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Instrumentación industrial</li>
+                                        <li>Autor: Antonio Creus</li>
+                                        <li>Edición: 8va Edición</li>
+                                        <li>Carrera: Mecatrónica</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="met_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Maquinas eléctricas</li>
+                                        <li>Autor: Stephen J. Chapman</li>
+                                        <li>Edición: 4ta Edición</li>
+                                        <li>Carrera: Mecatrónica</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--Energías Renovables-->
+                <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
+                    aria-labelledby="custom-tabs-four-settings-tab">
+
+                    <div id="erc" class="mb-3">
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="erc_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Comunicaciones industriales</li>
+                                        <li>Autor: Vicente Guerrero</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Energías Renovables</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="erc_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Desarrollo sustentable una oportunidad para la vida</li>
+                                        <li>Autor: Reynol Díaz Coutiño</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Energías Renovables</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="erc_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Diseño de máquinas</li>
+                                        <li>Autor: Robert L. Norton</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Energías Renovables</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="erc_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Diseño en ingeniería mecánica de shigley</li>
+                                        <li>Autor: Richard G. Budynas</li>
+                                        <li>Edición: 9na Edición</li>
+                                        <li>Carrera: Energías Renovables</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="erc_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Seguridad e higiene industrial</li>
+                                        <li>Autor: Alfonso Hernández</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Energías Renovables</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="erc_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Sistemas SCADA</li>
+                                        <li>Autor: Aquilino Rodríguez Penin</li>
+                                        <li>Edición: 2da Edición</li>
+                                        <li>Carrera: Energías Renovables</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--Química-->
+                <div class="tab-pane fade" id="custom-tabs-four-quim" role="tabpanel"
+                    aria-labelledby="custom-tabs-four-quim-tab">
+
+                    <div id="quim" class="mb-3">
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="quim_fondo" style="height: 180px">
+                                    <ul>
+                                        <li>Nombre: Bioquímica</li>
+                                        <li>Autor: Albert L. Lehninger</li>
+                                        <li>Edición: 2da Edición</li>
+                                        <li>Carrera: Química</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="quim_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Fisicoquímica</li>
+                                        <li>Autor: Raymond Chang</li>
+                                        <li>Edición: 3era Edición</li>
+                                        <li>Carrera: Química</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="quim_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Fisioquímica</li>
+                                        <li>Autor: Gilbert W. Castellan</li>
+                                        <li>Edición: 2da Edición</li>
+                                        <li>Carrera: Química</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="quim_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Manual de oleohidráulica</li>
+                                        <li>Autor: Antonio Diez de la Cortína León</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Química</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="quim_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Manual del ingeniero químico Tomo I y II</li>
+                                        <li>Autor: Perry</li>
+                                        <li>Edición: 6ta Edición</li>
+                                        <li>Carrera: Química</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="quim_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Nomenclatura química</li>
+                                        <li>Autor: Hugo E. Solis Correa</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Química</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--Tecnologías de la información-->
+
+                <div class="tab-pane fade" id="custom-tabs-four-tis" role="tabpanel"
+                    aria-labelledby="custom-tabs-four-tis-tab">
+
+                    <div id="tis" class="mb-3">
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="tis_fondo" style="height: 180px">
+                                    <ul>
+                                        <li>Nombre: Microsoft office 2010</li>
+                                        <li>Autor: Gaskin, Shelley</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Tecnologías de la información</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="tis_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Microsoft office 2010 para los negocios.</li>
+                                        <li>Autor: Bribiesca Correa Graciela</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Tecnologías de la información</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="tis_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Microsoft office 2010 Todo práctica</li>
+                                        <li>Autor: Rosario Peña</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Tecnologías de la información</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="tis_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Office 2010 paso a paso con actividades</li>
+                                        <li>Autor: Gonzalo Ferreyra</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Tecnologías de la información</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="tis_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Office 2010 paso a paso</li>
+                                        <li>Autor: Cox Joyce</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Tecnologías de la información</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="tis_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Office 2007 paso a paso</li>
+                                        <li>Autor: Joan Preppernau</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Tecnologías de la información</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--Ciencias Básicas Aplicadas-->
+
+                <div class="tab-pane fade" id="custom-tabs-four-cba" role="tabpanel"
+                    aria-labelledby="custom-tabs-four-cba-tab">
+
+                    <div id="cba" class="mb-3">
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="cba_fondo" style="height: 180px">
+                                    <ul>
+                                        <li>Nombre: Álgebra</li>
+                                        <li>Autor: Aurelio Baldor</li>
+                                        <li>Edición: 4ta Edición</li>
+                                        <li>Carrera: Ciencias Básicas Aplicadas</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="cba_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Álgebra</li>
+                                        <li>Autor: Elena Oteyza</li>
+                                        <li>Edición: 3era Edición</li>
+                                        <li>Carrera: Ciencias Básicas Aplicadas</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="cba_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Álgebra</li>
+                                        <li>Autor: María Teresa Sada García</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Ciencias Básicas Aplicadas</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="cba_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Álgebra elemental</li>
+                                        <li>Autor: Allen R. Angel</li>
+                                        <li>Edición: 6ta Edición</li>
+                                        <li>Carrera: Ciencias Básicas Aplicadas</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="cba_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Álgebra intermedia</li>
+                                        <li>Autor: Allen R. Angel</li>
+                                        <li>Edición: 9na Edición</li>
+                                        <li>Carrera: Ciencias Básicas Aplicadas</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="cba_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Álgebra intermedia</li>
+                                        <li>Autor: R. David Gustafson</li>
+                                        <li>Edición: 7ma Edición</li>
+                                        <li>Carrera: Ciencias Básicas Aplicadas</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--Formación Sociocultural (Por finalizar)-->
+
+                <div class="tab-pane fade" id="custom-tabs-four-fsc" role="tabpanel"
+                    aria-labelledby="custom-tabs-four-fsc-tab">
+
+                    <div id="fsc" class="mb-3">
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="fsc_fondo" style="height: 180px">
+                                    <ul>
+                                        <li>Nombre: Álgebra</li>
+                                        <li>Autor: Aurelio Baldor</li>
+                                        <li>Edición: 4ta Edición</li>
+                                        <li>Carrera: Formación Sociocultural</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="fsc_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Álgebra</li>
+                                        <li>Autor: Elena Oteyza</li>
+                                        <li>Edición: 3era Edición</li>
+                                        <li>Carrera: Formación Sociocultural</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="fsc_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Álgebra</li>
+                                        <li>Autor: María Teresa Sada García</li>
+                                        <li>Edición: 1er Edición</li>
+                                        <li>Carrera: Formación Sociocultural</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 ml-2">
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="fsc_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Álgebra elemental</li>
+                                        <li>Autor: Allen R. Angel</li>
+                                        <li>Edición: 6ta Edición</li>
+                                        <li>Carrera: Formación Sociocultural</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="fsc_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Álgebra intermedia</li>
+                                        <li>Autor: Allen R. Angel</li>
+                                        <li>Edición: 9na Edición</li>
+                                        <li>Carrera: Formación Sociocultural</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="position-relative p-3" id="fsc_fondo" style="height: 180px">
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                    </div>
+                                    <ul>
+                                        <li>Nombre: Álgebra intermedia</li>
+                                        <li>Autor: R. David Gustafson</li>
+                                        <li>Edición: 7ma Edición</li>
+                                        <li>Carrera: Formación Sociocultural</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+{% block js %}
+<script src="{% static 'js/catalogo.js' %}"></script>
+{% endblock %}

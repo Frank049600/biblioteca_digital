@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/inicio.css' %}">
+{% endblock %}
+<!-- Content Header (Page header) -->
+<div id="home">
+    {% if grupo == 'Administrador' %}
+    <section class="content-header mt-5">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Inicio</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'inicio' %}"><i class="fas fa-home"
+                                    style="color: black;"></i></a></li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- Etiquetas de estado -->
+    <section class="content-header" id="tags">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ data.total_book }}</h3>
+                            <p>Libros en existencia</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <a href="{% url 'acervo' %}" class="small-box-footer">Más información <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>0</h3>
+                            <p>Libros prestados</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <a href="{% url 'catalago_View' %}" class="small-box-footer">Más información <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6">
+                    <!-- Sección de Dashboard Pie-->
+                    {% if data.total_state > 0 %}
+                    <figure class="highcharts-figure" id="chartPie" data-states="{{ data.states }}">
+                        <div id="container"></div>
+                    </figure>
+                    {% endif %}
+                </div>
+                <div class="col-xl-6">
+                    <figure class="highcharts-figure" id="chartColum" data-libros="{{ data.cant_libros }}"
+                        data-discos="{{ data.cant_discos }}">
+                        <div id="container_colum"></div>
+                    </figure>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <figure class="highcharts-figure" id="chartColumAdqui" data-valueadqui="{{ data.value_adqui }}"
+                        data-nameadqui="{{ data.name_cole }}">
+                        <div id="adqui_colum"></div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% else %}
+    <section class="content-header" id="bg_init" style="background-image: url('static/img/fondo_biblioteca.webp');">
+        <img class="rounded mx-auto d-block" src="{% static 'img/fondo_biblioteca.jpg' %}" width="70%" alt="">
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
+{% block js %}
+<script src="{% static 'js/inicio.js' %}"></script>
+{% endblock %}

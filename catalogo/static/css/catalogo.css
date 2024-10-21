@@ -1,0 +1,185 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}*/
+
+span {
+    padding-bottom: 15px;
+}
+
+.contenedor {
+    padding: 60px 0;
+    width: 90%;
+    max-width: 1000px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.portafolio {
+    background: #f2f2f2;
+}
+
+.galeria-port {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.galeria-port #administracion {
+    background-color: #e2ab87;
+}
+
+.galeria-port #quimica {
+    background-color: #88e174;
+}
+
+.galeria-port #mecatronica {
+    background-color: #c1a672;
+}
+
+.galeria-port #idgs {
+    background-color: #81bdd2;
+}
+
+.imagen-port {
+    width: 200px;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+    position: relative;
+    color: black;
+    user-select: none;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, .5);
+}
+
+/*----------------------------------------------------------------------------*/
+
+#admo_fondo {
+    background-color: #e26b0a;
+    color: #ffffff;
+    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+#pia_fondo {
+    background-color: #16365c;
+    color: #ffffff;
+    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+#met_fondo {
+    background-color: #632523;
+    color: #ffffff;
+    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+#erc_fondo {
+    background-color: #00b050;
+    color: #ffffff;
+    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+#quim_fondo {
+    background-color: #339966;
+    color: #ffffff;
+    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+#tis_fondo {
+    background-color: #08c1ca;
+    color: #000000;
+    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+#cba_fondo {
+    /*background-color: #00b0f0;*/
+    border: 3px solid #00b0f0;
+    color: #000000;
+    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+#fsc_fondo {
+    /*background-color: #7030a0;*/
+    border: 3px solid #7030a0;
+    color: #000000;
+    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+#otc_fondo {
+    /*background-color: #7030a0;*/
+    border: 3px solid #ff33cc;
+    color: #000000;
+    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+
+/*----------------------------------------------------------------------------*/
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Estilos para el botón del dropdown */
+.btnadmin {
+    /* fbf5d0 background-color: #e26b0a;*/
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.btnpia {
+    background-color: #16365c;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Estilos para el contenido del dropdown (oculto por defecto) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 300px;
+    /* Ajusta el ancho según tu contenido */
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 10px;
+}
+
+/* Mostrar el contenido del dropdown cuando tiene la clase 'show' */
+.show {
+    display: block;
+}
+
+/* Puedes añadir estilos adicionales para el contenido aquí */
+.row {
+    margin: 0;
+}
+
+.bg-yellow {
+    background-color: yellow;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.p-3 {
+    padding: 1rem;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
