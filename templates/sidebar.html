@@ -55,7 +55,7 @@
                             </p>
                         </a>
                 </li>
-                {% if grupo != 'Alumno' and grupo != 'Docentes' %}
+                <!-- Sección de Acervo -->
                 <li class="nav-item">
                     {% if side_code == 200 %}
                     <a href="{% url 'acervo' %}" class="nav-link active">
@@ -68,7 +68,7 @@
                             </p>
                         </a>
                 </li>
-                {% endif %}
+                <!-- Sección de Libros -->
                 <li class="nav-item">
                     {% if side_code == 400 %}
                     <a href="#" class="nav-link active">
@@ -94,6 +94,7 @@
                             </li>
                         </ul>
                 </li>
+                <!-- Sección de Estadías -->
                 <li class="nav-item">
                     {% if side_code == 300 or side_code == 301 %}
                     <a href="#" class="nav-link active">

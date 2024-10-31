@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from .models import model_estadias
 from .forms import estadias_form
 import os
@@ -14,6 +13,11 @@ from static.context_processors import group_permission
 from django.http import JsonResponse
 import base64
 import tempfile
+import time
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 # def modal_registro(request):
@@ -86,17 +90,13 @@ def estadias_registro(request):
         return redirect('proyectos')
 
 # Función para convertir documento a base64
-def convert_base64(doc, name_doc = False, revert = False, data = False):
+def convert_base64(doc):
     # Se convierte el pdf en formato base64
-    if not revert:
-        # Lee el documento que llega en formulario
-        file = doc.read()
-        # Convierte el documento en base64
-        encoded_string = base64.b64encode(file)
-        return encoded_string.decode('utf-8')
-
-    else:
-        print('close')
+    # Lee el documento que llega en formulario
+    file = doc.read()
+    # Convierte el documento en base64
+    encoded_string = base64.b64encode(file)
+    return encoded_string.decode('utf-8')
 
 def temporary_file_base_64(base_64_input):
     # base64_string = base_64_input.strip().split(',')[1]
@@ -120,9 +120,35 @@ def view_report(request, report_rute):
         name_temp = temporary_file_base_64(id_reporte.base64)
         # Se separan los datos no necesarios
         ruta = name_temp.split('/code')[1]
+
         return render(request, 'iframe_pdf.html', {'reporte': ruta, "side_code":side_code, "alumno":id_reporte})
     except Exception as v:
         print(f"Error en al generar vista de PDF: {v}")
+
+# Función para el borrado de los archivos temporales.
+# def delete_pdf(request):
+#     try:
+#         # Se obtiene el dato que llega de JavaScript
+#         url_delete = request.GET.get('rute_pdf')
+#         # Valida que 'url_delete' no sea None
+#         if not url_delete:
+#             return JsonResponse({"status": "error", "message": "Ruta del PDF no proporcionada"}, status=400)
+#         # Se quita el texto '/media/' para evitar duplicidad
+#         url = url_delete.split('/media/')
+#         # Se obtiene la ruta completa
+#         ruta = os.path.join(settings.MEDIA_ROOT, url[1])
+#         print(ruta)
+#         # Se valida que exista el documento
+#         if os.path.exists(ruta):
+#             # Si existe se realiza el borrado del archivo
+#             os.remove(ruta)
+#             return JsonResponse({"status": "success", "message": "PDF eliminado correctamente."})
+#         else:
+#             return JsonResponse({"status": "error", "message": "El archivo no existe en el servidor."}, status=404)
+#     except Exception as d:
+#         # Regresa un mensaje de error en caso de excepción
+#         return JsonResponse({"status": "error", "message": f"Error al eliminar el archivo: {str(d)}"}, status=500)
+
 
 def servir_pdf(request, report_rute):
     file_path = os.path.join(settings.MEDIA_ROOT, report_rute)
@@ -156,3 +182,20 @@ def get_alumno(request):
         except Exception as a:
             print(f"Algo salio mal: {a}")
     return JsonResponse({'error': 'Matricula no proporcionada'}, status=400)
+
+
+# def borrar_archivos_pdf():
+#     carpeta = settings.MEDIA_ROOT
+#     for archivo in os.listdir(carpeta):
+#         if archivo.endswith('.pdf'):
+#             os.remove(os.path.join(carpeta, archivo))
+#             print(f'Archivo borrado: {archivo}')
+#
+# # if __name__ == '__main__':
+# # Programar la tarea para que se ejecute una vez al día
+# # schedule.every(24).hours.do(borrar_archivos_pdf)
+# schedule.every(1).minutes.do(borrar_archivos_pdf)
+# #
+# while True:
+#     schedule.run_pending()
+#     time.sleep(1)  # Esperar un segundo entre verificaciones

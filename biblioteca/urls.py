@@ -27,13 +27,14 @@ urlpatterns = [
     path('delete_acervo/<col>', login_required(delete_acervo), name='delete_acervo'),
     path('edit_register/<col>', login_required(edit_register), name='edit_register'),
     path('edit_acervo/', login_required(edit_acervo), name='edit_acervo'),
-    # path('deleteAcervo/<codigo>', deleteAcervo)
 
     path('estadias_registro/',login_required(estadias_registro)),
     path('get_alumno/', get_alumno, name='get_alumno'),
 
     path('view_report/<report_rute>', login_required(view_report), name='view_report'),
-     path('view_report/<report_rute>', login_required(servir_pdf), name='servir_pdf'),
+    path('view_report/<report_rute>', login_required(servir_pdf), name='servir_pdf'),
+    # path para borrado de archivos pdf
+    # path('delete_pdf/', login_required(delete_pdf), name='delete_pdf'),
 
     # aplicación de sesión
     path('session-security/', include('session_security.urls')),

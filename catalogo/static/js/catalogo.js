@@ -22,3 +22,5 @@ $('#relacion').on('click', function () {
 $('#botonpia').on('click', function () {
     $('#pia').toggle('slow');
 })
+
+alert('Hola')
