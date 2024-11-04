@@ -7,15 +7,17 @@ from datetime import datetime
 from django.contrib import messages
 from sito.models import Persona
 from sistema.models import UsuarioAcceso, UsuarioManager
-from static.helpers import dd
+from static.helpers import *
 
 # Create your views here.
+@groups_required('Administrador')
 def index_acervo(request):
         side_code = 200
         listado = acervo_model.objects.all()
         form = registro_form()
         return render(request, 'index_almacen.html', { "list_acervo": listado, "form":form, "side_code":side_code})
 
+@groups_required('Administrador')
 def acervo_registro(request):
     if request.method == 'POST':
         form = registro_form(request.POST)
@@ -57,18 +59,21 @@ def acervo_registro(request):
         messages.add_message(request, messages.ERROR, '¡Algo salio mal!')
         return redirect('acervo')
 
+@groups_required('Administrador')
 def delete_acervo(request, col):
         acervo_delete = acervo_model.objects.filter(colocacion=col).first()
         acervo_delete.delete()
         messages.success(request, 'Registro Eliminado')
         return redirect(to="acervo")
 
+@groups_required('Administrador')
 def edit_register(request, col):
       register = acervo_model.objects.filter(colocacion=col).first()
       listado = acervo_model.objects.all()
       return redirect(reverse('acervo')+'?'+{"register":register})
       # return redirect(request, 'index_almacen.html', { "id_edit": register, "list_acervo": listado})
 
+@groups_required('Administrador')
 def edit_acervo(request):
     if request.method == 'POST':
         form = registro_form(request.POST)

@@ -5,7 +5,7 @@ import os
 from django.http import FileResponse
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
-from static.helpers import file_new_name
+from static.helpers import *
 from django.contrib import messages
 from static.utils import dd
 from sito.models import Alumno, AlumnoGrupo, Grupo, Carrera, Usuario, Persona, Periodo
@@ -18,6 +18,14 @@ import time
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
+
+def add_group_name_to_contex(view_class):
+    original_dispatch = view_class.dispatch
+
+    def dispatch(self, request, *args, **kwargs):
+        user = self.request.user
+        print(user)
+
 
 # Create your views here.
 # def modal_registro(request):
@@ -34,6 +42,7 @@ def get_fullname_grupo(request):
         "name": name
     }
 
+@groups_required('Alumno', 'Docente')
 def index_proyectos(request):
     form = estadias_form()
     fullname = get_fullname_grupo(request)['name']
@@ -45,6 +54,7 @@ def index_proyectos(request):
     side_code = 300
     return render(request,'index_proyectos.html',{"reporte":reporte, "form":form,"side_code":side_code})
 
+@groups_required('Alumno', 'Docente')
 def estadias_registro(request):
     if request.method == 'POST':
         form = estadias_form(request.POST, request.FILES)
@@ -111,6 +121,7 @@ def temporary_file_base_64(base_64_input):
     return path_temp
 
 # Función para mostrar file report
+@groups_required('Alumno', 'Docente')
 def view_report(request, report_rute):
     try:
         # Código de ubicación para sidebar
@@ -155,7 +166,7 @@ def servir_pdf(request, report_rute):
     response = FileResponse(open(file_path, 'rb'), content_type='application/pdf')
     response['Content-Disposition'] = 'inline; filename="mi_documento.pdf"'
     return response
-
+@groups_required('Alumno', 'Docente')
 # Función de búsqueda para retorno de información por búsqueda con matricula
 def get_alumno(request):
     matricula = request.GET.get('matricula')

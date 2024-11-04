@@ -71,6 +71,7 @@ SESSION_COOKIE_HTTPONLY = True
 # Application definition
 
 INSTALLED_APPS = [
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -212,3 +213,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# Utilización de Crontab
+CRONJOBS = [
+    ('*/1 * * * *', 'estadias.cron.hi')
+]

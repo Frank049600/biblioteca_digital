@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from static.utils import dd
 from almacen.models import acervo_model
 from sito.models import Persona
+from static.helpers import *
 
 # Create your views here.
+@groups_required('Administrador')
 def index_inicio(request):
     # Se asigna el código para el focus en el sidebar
     side_code = 100
