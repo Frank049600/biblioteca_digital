@@ -1,8 +1,0 @@
-*/1 * * * * /usr/local/bin/python3 /code/my_cron >> /var/log/my_cron.log 2>&1
-
-# * min (0-59)
-# * hour (0-23)
-# * day (1-31)
-# * month (1-12) || jan,feb,mar ...
-# * weekday (0-6) || sun,mon,true,web ... sun = 0
-# command

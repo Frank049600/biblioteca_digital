@@ -4,11 +4,13 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV DEBIAN_FRONTEND noninteractive
 
+# Añade odbcinst.ini
 ADD odbcinst.ini /etc/
 
+# Instala dependencias del sistema
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends curl gnupg unixodbc unixodbc-dev tdsodbc freetds-common freetds-bin freetds-dev \
-    postgresql python3-scipy python3-numpy python3-pandas cron && \
+    apt-get install -y --no-install-recommends at supervisor curl gnupg unixodbc unixodbc-dev tdsodbc freetds-common freetds-bin freetds-dev \
+    postgresql python3-scipy python3-numpy python3-pandas && \
     curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
     apt-get update && ACCEPT_EULA=Y apt-get install -y mssql-tools msodbcsql17 && \
@@ -19,25 +21,35 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Instala el paquete mssql-django
 RUN pip install --no-cache-dir mssql-django
-RUN mkdir /code
 
-COPY . /code/
+# Crea el directorio de trabajo y de configuraciones de Supervisor
+RUN mkdir /code
+RUN mkdir -p /etc/supervisor/conf.d
+
+RUN mkdir -p /var/run/supervisor
+
+# Copia el archivo requirements.txt al directorio de trabajo
 COPY ./requirements.txt /code/
 
+# Establece el directorio de trabajo
 WORKDIR /code
 
-COPY my_cron /code/my_cron
-COPY root /var/spool/cron/crontabs/root
-
-
+# Instala dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Permisos y configuración de cron
-RUN chmod +x /code/my_cron && touch /var/log/my_cron.log && chmod 666 /var/log/my_cron.log
+# Copia el resto del código de la aplicación a /code
+COPY . /code/
 
-# CMD crond -l 2 -f
-# Iniciar cron y luego el servidor Django
-CMD cron && python manage.py runserver 0.0.0.0:8080
+# Copia los archivos de configuración de Supervisor
+COPY supervisord.conf /etc/supervisor/supervisord.conf
+COPY django_script.conf /etc/supervisor/conf.d/django_script.conf
 
+# Expone el puerto para la aplicación Django
 EXPOSE 8080
+
+# ENV DJANGO_SETTINGS_MODULE=biblioteca.settings
+
+# Ejecuta supervisord con el archivo de configuración principal
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
