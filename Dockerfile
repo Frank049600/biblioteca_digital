@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED 1
 ENV DEBIAN_FRONTEND noninteractive
 
 # Añade odbcinst.ini
-ADD odbcinst.ini /etc/
+COPY odbcinst.ini /etc/
 
 # Instala dependencias del sistema
 RUN apt-get update -y && \
@@ -46,10 +46,11 @@ COPY . /code/
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY django_script.conf /etc/supervisor/conf.d/django_script.conf
 
+COPY init.sh /code/init.sh
+RUN chmod +x /code/init.sh
+
 # Expone el puerto para la aplicación Django
 EXPOSE 8080
 
-# ENV DJANGO_SETTINGS_MODULE=biblioteca.settings
-
 # Ejecuta supervisord con el archivo de configuración principal
-CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/code/init.sh"]
