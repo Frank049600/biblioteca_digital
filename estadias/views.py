@@ -198,20 +198,3 @@ def get_alumno(request):
         except Exception as a:
             print(f"Algo salio mal: {a}")
     return JsonResponse({'error': 'Matricula no proporcionada'}, status=400)
-
-
-# def borrar_archivos_pdf():
-#     carpeta = settings.MEDIA_ROOT
-#     for archivo in os.listdir(carpeta):
-#         if archivo.endswith('.pdf'):
-#             os.remove(os.path.join(carpeta, archivo))
-#             print(f'Archivo borrado: {archivo}')
-#
-# # if __name__ == '__main__':
-# # Programar la tarea para que se ejecute una vez al día
-# # schedule.every(24).hours.do(borrar_archivos_pdf)
-# schedule.every(1).minutes.do(borrar_archivos_pdf)
-# #
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)  # Esperar un segundo entre verificaciones

@@ -3,6 +3,7 @@ from static.utils import dd
 from almacen.models import acervo_model
 from sito.models import Persona
 from static.helpers import *
+from inicio.report_csv import csv
 
 # Create your views here.
 @groups_required('Administrador')
@@ -66,5 +67,7 @@ def index_inicio(request):
     }
     return render(request, 'index_inicio.html', { "data": data })
 
-def report():
-    print('report')
+def report(request):
+    csv()
+
+    return redirect('inicio')
