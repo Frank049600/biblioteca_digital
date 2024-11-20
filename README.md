@@ -16,6 +16,7 @@ Sistema de Gestión de Biblioteca de la Universidad Tecnológica de Salamanca
 - Ejecutar migraciones `docker compose run biblioteca_uts python manage.py migrate`
 - Crear superusuario **`docker compose run biblioteca_uts python manage.py createsuperuser`**
 - Configurar archivo **`.env`** si es necesario.
+- Crar carpeta "media" a nivel del archivo requirements.txt
 
 ## Abrir proyecto
 
