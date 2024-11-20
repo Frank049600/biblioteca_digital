@@ -1,10 +1,17 @@
 from django.core.management.base import BaseCommand
-from estadias.tem_delete import borrar_archivos_pdf
+import time
+import os
+from django.conf import settings
+from datetime import datetime
+import math
+import pytz
 
 class Command(BaseCommand):
     help = 'Descripción del comando'
 
     def handle(self, *args, **kwargs):
-        # Coloca aquí el código que deseas ejecutar
-        print("Ejecutando el script personalizado")
-        borrar_archivos_pdf()
+        carpeta = settings.MEDIA_ROOT
+        for archivo in os.listdir(carpeta):
+            if archivo.endswith('.pdf'):
+                os.remove(os.path.join(carpeta, archivo))
+                print(f'Archivo borrado: {archivo}')
