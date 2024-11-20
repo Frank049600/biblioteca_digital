@@ -12,16 +12,15 @@ if (states != 'undefined') {
         },
         accessibility: {
             announceNewData: {
-                enabled: true
+                enabled: false
             },
         },
-
         plotOptions: {
             series: {
                 borderRadius: 5,
                 dataLabels: [{
                     enabled: true,
-                    distance: 15,
+                    distance: '15%',
                     format: '{point.name}'
                 }, {
                     enabled: true,
@@ -34,18 +33,17 @@ if (states != 'undefined') {
                     format: '{point.y:.0f}',
                     style: {
                         fontSize: '0.9em',
-                        textOutline: 'none'
+                        textOutline: 'none',
+                        textDecoration: 'none'
                     }
                 }]
             }
         },
-
         tooltip: {
             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
             pointFormat: '<span style="color:{point.color}">{point.name}</span>: ' +
                 '<b>{point.y:.0f}</b> libro(s)<br/>'
         },
-
         series: [
             {
                 name: 'Estatus',
@@ -91,7 +89,7 @@ if (libros != 'undefined' && discos != 'undefined') {
         },
         title: {
             align: 'left',
-            text: 'Gráfica de comparación'
+            text: 'Tipo de ejemplar'
         },
         subtitle: {
             align: 'left',
@@ -109,7 +107,6 @@ if (libros != 'undefined' && discos != 'undefined') {
             title: {
                 text: 'Total de elementos'
             }
-
         },
         legend: {
             enabled: false
@@ -121,15 +118,18 @@ if (libros != 'undefined' && discos != 'undefined') {
                     enabled: true,
                     format: '{point.y:.0f}'
                 }
+            },
+            text: {
+              style: {
+                textDecoration: 'none'
+              }
             }
         },
-
         tooltip: {
             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
             pointFormat: '<span style="color:{point.color}">{point.name}</span>: ' +
                 '<b>{point.y:.0f}</b> en total<br/>'
         },
-
         series: [
             {
                 data: [
@@ -163,7 +163,7 @@ Highcharts.chart('adqui_colum', {
     },
     title: {
         align: 'left',
-        text: 'Gráfica de comparación'
+        text: 'Tipo de adquisición'
     },
     subtitle: {
         align: 'left',
@@ -181,7 +181,6 @@ Highcharts.chart('adqui_colum', {
         title: {
             text: 'Total de elementos'
         }
-
     },
     legend: {
         enabled: false
@@ -193,15 +192,18 @@ Highcharts.chart('adqui_colum', {
                 enabled: true,
                 format: '{point.y:.0f}'
             }
+        },
+        text: {
+          style: {
+            textDecoration: 'none'
+          }
         }
     },
-
     tooltip: {
         headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
         pointFormat: '<span style="color:{point.color}">{point.name}</span>: ' +
             '<b>{point.y:.0f}</b> en total<br/>'
     },
-
     series: [
         {
             data: [

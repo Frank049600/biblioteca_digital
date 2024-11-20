@@ -52,3 +52,7 @@
     -moz-box-shadow: -1px 4px 24px 4px rgba(0, 0, 0, 0.75);
     box-shadow: -1px 4px 24px 4px rgba(0, 0, 0, 0.75);
 }
+
+#home #chartColumAdqui {
+    text-decoration: none;
+}
