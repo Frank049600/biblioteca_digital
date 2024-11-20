@@ -1,0 +1,77 @@
+[33mcommit 7bacab29ddd74284df32c6f7c06cf6bffe328517[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: frank049600 <paco049600@gmail.com>
+Date:   Tue Nov 19 21:50:33 2024 -0600
+
+    modificación02
+
+[33mcommit 889c2a355786f19e04f1aeaa7cb74649e5c77514[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: frank049600 <paco049600@gmail.com>
+Date:   Tue Nov 19 21:07:53 2024 -0600
+
+    modificación 01
+
+[33mcommit 244af809f53a080fde183978560a856b8de780d0[m[33m ([m[1;31morigin/Diana[m[33m)[m
+Merge: 3ab9949 4423df0
+Author: Frank049600 <122402705+Frank049600@users.noreply.github.com>
+Date:   Wed Nov 13 02:23:30 2024 -0600
+
+    Merge pull request #2 from Frank049600/frank
+    
+    cambio prueba
+
+[33mcommit 4423df0c3758b893e28a8ab0322f31a9023e16e5[m[33m ([m[1;31morigin/frank[m[33m)[m
+Author: Francisco <paco049600@gmail.com>
+Date:   Wed Nov 13 02:21:42 2024 -0600
+
+    cambio prueba
+
+[33mcommit 3ab99492dbcb1f76e3c767e0b279ff13ff5ef2f0[m
+Merge: 6f0cbc1 4b2f96a
+Author: Frank049600 <122402705+Frank049600@users.noreply.github.com>
+Date:   Wed Nov 13 02:20:01 2024 -0600
+
+    Merge pull request #1 from Frank049600/frank
+    
+    Frank
+
+[33mcommit 4b2f96a02a900c154e55afd3da7818788669b188[m
+Author: Francisco <paco049600@gmail.com>
+Date:   Wed Nov 13 02:17:32 2024 -0600
+
+    Supervisord
+
+[33mcommit 07a04a090578b118b7aba7b7327a0681dadb2c3b[m
+Author: Francisco <paco049600@gmail.com>
+Date:   Sun Nov 10 19:38:18 2024 -0600
+
+    agrega cron
+
+[33mcommit e28ec7b64f141197c3e291e60ee8f7b69d53c4b5[m
+Author: Francisco <paco049600@gmail.com>
+Date:   Sun Nov 3 23:10:41 2024 -0600
+
+    Se agregarón decoradores
+
+[33mcommit 6f0cbc1b51136c6ff22f082e1d7e218b82023709[m
+Author: Frank <frank@frank-ubuntu.mshome.net>
+Date:   Thu Oct 31 15:59:32 2024 -0600
+
+    cambios nuevo SO
+
+[33mcommit fc25fab32bff18334dfe3e8d52b55fd67a50b6bc[m
+Author: Francisco Hernandez <paco049600@gmail.com>
+Date:   Mon Oct 21 00:07:59 2024 -0600
+
+    Renderización de PDF con base64
+
+[33mcommit 4656ed83c8f70135ce04a1417c6c43f9fb616fe3[m
+Author: Francisco Hernandez <paco049600@gmail.com>
+Date:   Sun Oct 20 22:12:38 2024 -0600
+
+    primer commit
+
+[33mcommit fc055d6a5e732ca01dca87d82fab878ce12730d6[m
+Author: Frank049600 <122402705+Frank049600@users.noreply.github.com>
+Date:   Sun Oct 20 21:58:07 2024 -0600
+
+    Initial commit
