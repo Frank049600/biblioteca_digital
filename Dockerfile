@@ -3,6 +3,7 @@ FROM python:3.12.1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV DEBIAN_FRONTEND noninteractive
+USER root
 
 # Añade odbcinst.ini
 COPY odbcinst.ini /etc/
@@ -53,4 +54,5 @@ RUN chmod +x /code/init.sh
 EXPOSE 8080
 
 # Ejecuta supervisord con el archivo de configuración principal
-CMD ["/code/init.sh"]
+CMD ["bash", "/code/init.sh"]
+

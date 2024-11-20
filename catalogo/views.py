@@ -2,6 +2,7 @@ from django.shortcuts import render
 from static.helpers import *
 
 # Create your views here.
+@login_required
 @groups_required('Administrador', 'Docente', 'Alumno')
 def catalago_View(request):
     side_code = 400

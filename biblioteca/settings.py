@@ -152,7 +152,7 @@ DATABASES = {
         'NAME': env('DB_NAME_SITO'),
         'USER': env('DB_USER_SITO'),
         'PASSWORD': '$A7$P#p?KHdb',
-        # 'PASSWORD': DB_PASS_SITO,
+        # 'PASSWORD': env(DB_PASS_SITO),
         'HOST': env('DB_HOST_SITO'),
         'PORT': env('DB_PORT_SITO'),
         'OPTIONS':  {

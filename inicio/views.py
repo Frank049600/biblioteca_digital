@@ -6,6 +6,7 @@ from static.helpers import *
 
 # Create your views here.
 @groups_required('Administrador')
+@login_required
 def index_inicio(request):
     # Se asigna el código para el focus en el sidebar
     side_code = 100
@@ -64,3 +65,6 @@ def index_inicio(request):
         "value_adqui": value_adqui
     }
     return render(request, 'index_inicio.html', { "data": data })
+
+def report():
+    print('report')

@@ -42,6 +42,7 @@ def get_fullname_grupo(request):
         "name": name
     }
 
+@login_required
 @groups_required('Alumno', 'Docente')
 def index_proyectos(request):
     form = estadias_form()
@@ -54,6 +55,7 @@ def index_proyectos(request):
     side_code = 300
     return render(request,'index_proyectos.html',{"reporte":reporte, "form":form,"side_code":side_code})
 
+@login_required
 @groups_required('Alumno', 'Docente')
 def estadias_registro(request):
     if request.method == 'POST':
@@ -121,6 +123,7 @@ def temporary_file_base_64(base_64_input):
     return path_temp
 
 # Función para mostrar file report
+@login_required
 @groups_required('Alumno', 'Docente')
 def view_report(request, report_rute):
     try:
@@ -166,6 +169,8 @@ def servir_pdf(request, report_rute):
     response = FileResponse(open(file_path, 'rb'), content_type='application/pdf')
     response['Content-Disposition'] = 'inline; filename="mi_documento.pdf"'
     return response
+
+@login_required
 @groups_required('Alumno', 'Docente')
 # Función de búsqueda para retorno de información por búsqueda con matricula
 def get_alumno(request):
