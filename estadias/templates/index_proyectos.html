@@ -31,7 +31,7 @@
             <div class="col-xl-6 align-self-center">
                 <h5 class="text-bold">Concentrado de Proyectos</h5>
             </div>
-            {% if grupo == 'Alumno' %}
+            {% if grupo != 'Alumno' %}
             <div class="col-xl-6">
                 <a type="button" id="btnPlusBook" class="btn float-right" data-bs-toggle="modal"
                     data-bs-target="#modal_registro">Registrar Proyecto<i class="fas fa-plus ml-1"></i>
@@ -54,7 +54,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{ grupo }}
                     {% for p in reporte %}
                     <tr data-report="{{ p.reporte }}">
                         <td>{{p.proyecto}}</td>
@@ -65,7 +64,7 @@
                         <td>{{p.empresa}}</td>
                         <td>{{p.carrera}}</td>
                         <td class="text-center">
-                            <a href="{% url 'view_report' p.reporte %}" data-bs-toggle="tooltip" data-bs-placement="top"
+                            <a href="{% url 'view_report' p.reporte %}" onclick="actualizarEstadia(['{{ user }}','{{ p.reporte }}','{{ p.id }}'])" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Ver reporte"><i class="fas fa-file-pdf" style="color: #cf2121;"></i></a>
                             <!--a type="button" id="reporte_edit" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Editar reporte"><i class="fas fa-edit text-info"></i></a-->

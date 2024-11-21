@@ -205,3 +205,47 @@ $('#modal_registro').on('hidden.bs.modal', function () {
     $('input[name=asesor_orga]').val('');
     $('input[name=reporte]').val('');
 })
+
+
+function actualizarEstadia(estadiaId) {
+    
+    $.ajax({
+        url: '/insert_consult/',
+        data: { "user_id": estadiaId[0], "name_reporte": estadiaId[1], "id_reporte": estadiaId[2] },
+        type: 'POST',
+        headers: {
+            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value, // Incluye el token CSRF
+        },
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+    
+    // const formData = new FormData();
+    // formData.append("id", estadiaId);
+
+    // fetch("/actualizar-estadia/", {
+    //     method: "POST",
+    //     body: formData,
+    //     headers: {
+    //         "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value, // Incluye el token CSRF
+    //     },
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //     if (data.success) {
+    //         alert(data.message); // Mensaje de éxito
+    //     } else {
+    //         alert(data.message); // Mensaje de error
+    //     }
+    // })
+    // .catch(error => {
+    //     console.error("Error:", error);
+    // });
+}
+
+// Ejemplo de llamada a la función
+// actualizarEstadia(1); // Reemplaza "1" por el ID del registro a actualizar

@@ -7,7 +7,7 @@ from estadias.views import index_proyectos as proyectos
 from django.contrib.auth.decorators import login_required
 from login.views import Login, logoutUser
 from estadias.views import estadias_registro
-from estadias.views import view_report, servir_pdf, get_alumno
+from estadias.views import view_report, servir_pdf, get_alumno, insert_consult
 from usuario.views import login_view
 from catalogo.views import catalago_View
 
@@ -29,7 +29,8 @@ urlpatterns = [
     path('edit_acervo/', login_required(edit_acervo), name='edit_acervo'),
 
     path('estadias_registro/',login_required(estadias_registro)),
-    path('get_alumno/', get_alumno, name='get_alumno'),
+    path('get_alumno/', login_required(get_alumno), name='get_alumno'),
+    path('insert_consult/', login_required(insert_consult), name='insert_consult'),
 
     path('view_report/<report_rute>', login_required(view_report), name='view_report'),
     path('view_report/<report_rute>', login_required(servir_pdf), name='servir_pdf'),

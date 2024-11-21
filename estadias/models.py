@@ -7,6 +7,7 @@ class LongTextField(models.TextField):
         if connection.vendor == 'mysql':
             return 'LONGTEXT'
         return super().db_type(connection)
+
 class model_estadias(models.Model):
 
    proyecto=models.CharField(max_length=255)
@@ -34,6 +35,7 @@ class model_estadias(models.Model):
    # reporte = models.FileField('Reporte',null=True,blank=True)
    reporte=models.CharField(max_length=255,null=True)
    base64 = LongTextField('Reporte',null=True,blank=True)
+   fecha_registro = models.DateField(verbose_name="Fecha de registro", null=True, blank=True)
 
    def _str_(self):
         return self.alumno
@@ -42,3 +44,16 @@ class model_estadias(models.Model):
         verbose_name="estadía"
         verbose_name_plural='estadías'
 
+
+class register_view(models.Model):
+     id_reporte = models.IntegerField(null=True)
+     matricula=models.IntegerField(null=True)
+     consultas = models.IntegerField(null=True)
+     fecha_consulta = models.DateField(verbose_name="Fecha de consulta", null=True, blank=True)
+
+     def _str_(self):
+          return self.matricula
+
+     class Meta:
+          verbose_name="consulta"
+          verbose_name_plural='consultas'
