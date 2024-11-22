@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from static.utils import dd
 from almacen.models import acervo_model
+from estadias.models import register_view, model_estadias
 from sito.models import Persona
 from static.helpers import *
 from inicio.report_csv import csv
@@ -55,6 +56,12 @@ def index_inicio(request):
         name_cole.append(con)
     for c in range(0, len(name_cole)):
         value_adqui.append(conteo_adqui[name_cole[c]])
+
+    """ infor de registro """
+    ctrl_info = register_view.objects.all()
+    ctrl_view = ctrl_view_report(ctrl_info)
+    """ fin """
+
     data = {
         "total_book": total_book,
         "states": states[0],
@@ -63,9 +70,23 @@ def index_inicio(request):
         "cant_libros":format_libro,
         "cant_discos": format_disco,
         "name_cole": name_cole,
-        "value_adqui": value_adqui
+        "value_adqui": value_adqui,
+        "ctrl_view": ctrl_view
     }
     return render(request, 'index_inicio.html', { "data": data })
+
+def ctrl_view_report(info):
+    data = {}
+    data_all = []
+    for ctrl in info:
+        data = {
+            "persona": ctrl.matricula,
+            "reporte": model_estadias.objects.get(id=ctrl.id_reporte).proyecto,
+            "fecha_consulta": ctrl.fecha_consulta
+        }
+        data_all.append(data)
+    
+    return data_all
 
 def report(request):
     csv()
