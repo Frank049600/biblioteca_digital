@@ -147,18 +147,18 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
-    #  'sito': {
-    #    'ENGINE': 'mssql',
-    #    'NAME': env('DB_NAME_SITO'),
-    #    'USER': env('DB_USER_SITO'),
-    #    'PASSWORD': '$A7$P#p?KHdb',
-    #    # 'PASSWORD': env(DB_PASS_SITO),
-    #    'HOST': env('DB_HOST_SITO'),
-    #    'PORT': env('DB_PORT_SITO'),
-    #    'OPTIONS':  {
-    #        'driver': 'ODBC Driver 17 for SQL Server'
-    #    }
-    #}
+      'sito': {
+        'ENGINE': 'mssql',
+        'NAME': env('DB_NAME_SITO'),
+        'USER': env('DB_USER_SITO'),
+        'PASSWORD': '$A7$P#p?KHdb',
+        # 'PASSWORD': env(DB_PASS_SITO),
+        'HOST': env('DB_HOST_SITO'),
+        'PORT': env('DB_PORT_SITO'),
+        'OPTIONS':  {
+            'driver': 'ODBC Driver 17 for SQL Server'
+        }
+    }
 }
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
