@@ -7,7 +7,6 @@
 {% endblock %}
 <!-- Content Header (Page header) -->
 <div id="home">
-    {% if grupo == 'Administrador' %}
     <section class="content-header mt-5">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -71,19 +70,15 @@
                             <th class="text-center">Persona</th>
                             <th class="text-center">Reporte</th>
                             <th class="text-center">Fecha</th>
-                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for ctrl in data.ctrl_view %}
                         <tr>
-                            <td class="text-right">{{ctrl.persona}}</td>
-                            <td class="text-left">{{ctrl.reporte}}</td>
-                            <td class="text-left">{{ctrl.fecha_consulta}}</td>
-                            <td class="text-center">
-                                <a type="button" id="more_info" data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Consulta completa"><i class="fas fa-eye text-success"></i></a>
-                            </td>
+                            <td class="text-center" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ ctrl.fullname }}" style="cursor: pointer;">{{ctrl.persona}}</td>
+                            <td class="text-center">{{ctrl.reporte}}</td>
+                            <td class="text-center">{{ctrl.fecha_consulta}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -113,11 +108,6 @@
             </div>
         </div>
     </section>
-    {% else %}
-    <section class="content-header" id="bg_init" style="background-image: url('static/img/fondo_biblioteca.webp');">
-        <img class="rounded mx-auto d-block" src="{% static 'img/fondo_biblioteca.jpg' %}" width="70%" alt="">
-    </section>
-    {% endif %}
 </div>
 {% endblock %}
 {% block js %}

@@ -32,4 +32,4 @@ class estadias_form(forms.ModelForm):
 
     class Meta:
         model = model_estadias
-        fields = ('proyecto', 'matricula','alumno' ,'asesor_academico' ,'generacion','empresa','asesor_orga','carrera')
+        fields = ('proyecto', 'matricula','alumno' ,'asesor_academico' ,'generacion','empresa','asesor_orga','carrera', 'reporte_file')

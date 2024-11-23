@@ -15,6 +15,7 @@ import base64
 import tempfile
 import time
 from django.utils.timezone import localtime
+from django.utils.timezone import now
 
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -57,10 +58,11 @@ def index_proyectos(request):
     return render(request,'index_proyectos.html',{"reporte":reporte, "form":form,"side_code":side_code})
 
 @login_required
-@groups_required('Alumno', 'Docente')
+@groups_required('Alumno', 'Docente', 'Administrador')
 def estadias_registro(request):
     if request.method == 'POST':
         form = estadias_form(request.POST, request.FILES)
+        print(form)
         if form.is_valid():
             proyecto = form.cleaned_data['proyecto']
             matricula = form.cleaned_data['matricula']
@@ -74,9 +76,9 @@ def estadias_registro(request):
 
             # Llamado de función para convertir documento a base64
             base64 = convert_base64(form.cleaned_data['reporte_file'])
-            fecha_registro = localtime().date()
+            fecha_registro = now().replace(microsecond=0)
 
-            proyectos=model_estadias.objects.create(
+            model_estadias.objects.create(
                     proyecto = proyecto,
                     matricula = matricula,
                     alumno = alumno,
@@ -89,16 +91,16 @@ def estadias_registro(request):
                     base64 = base64,
                     fecha_registro = fecha_registro
             )
-            messages.add_message(request, messages.SUCCESS, 'Registro agregado')
+            messages.add_message(request, messages.SUCCESS, 'Registro agregado correctamente.')
             return redirect('proyectos')
-            # return redirect('proyectos')
         else:
-            # Si el formulario no es válido, vuelve a renderizar el formulario con errores
-            form = estadias_form()
+            # Si el formulario no es válido, renderiza el formulario con errores
+            messages.add_message(request, messages.ERROR, 'Por favor, corrija los errores en el formulario.')
     else:
         form = estadias_form()
-        messages.add_message(request, messages.ERROR, '¡Algo salio mal!')
-        return redirect('proyectos')
+
+    # Renderiza la página con el formulario
+    return render(request, 'index_proyectos.html', {'form': form})
 
 # Función para convertir documento a base64
 def convert_base64(doc):

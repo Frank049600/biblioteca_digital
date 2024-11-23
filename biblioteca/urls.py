@@ -34,8 +34,6 @@ urlpatterns = [
 
     path('view_report/<report_rute>', login_required(view_report), name='view_report'),
     path('view_report/<report_rute>', login_required(servir_pdf), name='servir_pdf'),
-    # path para borrado de archivos pdf
-    # path('delete_pdf/', login_required(delete_pdf), name='delete_pdf'),
 
     # aplicación de sesión
     path('session-security/', include('session_security.urls')),
