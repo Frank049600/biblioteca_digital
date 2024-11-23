@@ -47,7 +47,7 @@
             {% for p in listado %}
             <!--tr data-report="{{ p.reporte }}"-->
             <tr data-titulo="{{p.titulo}}" data-autor="{{p.autor}}" data-edicion="{{p.edicion}}"
-            data-colocacion="{{p.colocacion}}">
+            data-colocacion="{{p.colocacion}}" data-persona="{{user}}">
               <td>{{p.titulo}}</td>
               <td>{{p.autor}}</td>
               <td>{{p.edicion}}</td>

@@ -44,6 +44,7 @@ def get_alumno(request):
 def prestamo_registro(request):
     if request.method == 'POST':
         form = catalogo_form(request.POST)
+        print(form)
         if form.is_valid():
             nom_libro = form.cleaned_data['nom_libro']
             nom_autor = form.cleaned_data['nom_autor']
@@ -53,6 +54,7 @@ def prestamo_registro(request):
             matricula = form.cleaned_data['matricula']
             nom_alumno = form.cleaned_data['nom_alumno']
             carrera_grupo = form.cleaned_data['carrera_grupo']
+            tipoP = form.cleaned_data['tipoP']
 
             catalago_View=model_catalogo.objects.create(
                     nom_libro = nom_libro,
@@ -62,15 +64,18 @@ def prestamo_registro(request):
                     cantidad = cantidad,
                     matricula = matricula,
                     nom_alumno = nom_alumno,
-                    carrera_grupo = carrera_grupo
+                    carrera_grupo = carrera_grupo,
+                    tipoP = tipoP
             )
             messages.add_message(request, messages.SUCCESS, 'Prestamo Solicitado')
+            # Redirigir a la vista deseada
             return redirect('catalago_View')
-            # return redirect('proyectos')
         else:
             # Si el formulario no es válido, vuelve a renderizar el formulario con errores
-            form = catalogo_form()
+            messages.add_message(request, messages.ERROR, '¡Por favor, corrija los errores del formulario!')
+            return redirect('catalago_View')
     else:
+        # Si no es un POST, se asume que es un GET
         form = catalogo_form()
         messages.add_message(request, messages.ERROR, '¡Algo salio mal!')
         return redirect('catalago_View')

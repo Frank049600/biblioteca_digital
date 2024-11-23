@@ -91,7 +91,17 @@
                                     <a href="{% url 'catalago_View' %}" class="nav-link">
                                         {% endif %}
                                         <i class="fas fa-book"></i>
-                                        <p>Prestamos</p>
+                                        <p>Catalogo Libros</p>
+                                    </a>
+                            </li>
+                            <li class="nav-item">
+                                {% if side_code == 400 %}
+                                <a href="{% url 'prestamo_registro' %}" class="nav-link active">
+                                    {% else %}
+                                    <a href="{% url 'prestamo_registro' %}" class="nav-link">
+                                        {% endif %}
+                                        <i class="fas fa-book"></i>
+                                        <p>Prestamos Libros</p>
                                     </a>
                             </li>
                         </ul>

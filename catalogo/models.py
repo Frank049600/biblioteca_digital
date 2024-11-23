@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 # from django_mysql.models import LongTextField
 
 class LongTextField(models.TextField):
@@ -16,6 +17,8 @@ class model_catalogo(models.Model):
    matricula=models.IntegerField()
    nom_alumno=models.CharField(max_length=255)
    carrera_grupo=models.CharField(max_length=255)
+   tipoP = models.CharField(max_length=5, null=True)
+   #tipoP = models.CharField(max_length=5, verbose_name="Tipo de Prestamo", choices=format.choices, default=format.EXTERNO, null=True, blank=True)
 
    def _str_(self):
         return self.prestamos
