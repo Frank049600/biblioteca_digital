@@ -9,7 +9,7 @@ from login.views import Login, logoutUser
 from estadias.views import estadias_registro
 from estadias.views import view_report, servir_pdf, get_alumno, insert_consult
 from usuario.views import login_view
-from catalogo.views import catalago_View
+from catalogo.views import catalago_View, prestamo_registro
 
 from django.conf import settings
 from django.views.static import serve
@@ -42,6 +42,7 @@ urlpatterns = [
 
     # Aplicación de catalogo
     path('catalago_View', login_required(catalago_View), name='catalago_View'),
+    path('prestamo_registro/', login_required(prestamo_registro), name='prestamo_registro'),
 
     # Generación de reporte
     path('report', login_required(report), name='report'),
