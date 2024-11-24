@@ -140,46 +140,29 @@ def view_report(request, report_rute):
     except Exception as v:
         print(f"Error en al generar vista de PDF: {v}")
 
+@login_required
 def insert_consult(request):
     try:
         user_id = request.POST.get('user_id')
         name_reporte = request.POST.get('name_reporte')
-        reporte = request.POST.get('id_reporte')
-
-        """ Se registra la consulta en base de datos """
-        # estadia = model_estadias.objects.get(id=id_reporte)
-        # # Incrementa el número de consultas
-        # estadia.consultas = (estadia.consultas or 0) + 1
-        # # Actualiza la fecha de consulta a la fecha actual
-        # estadia.fecha_consulta = localtime().date()
-        # # Guarda los cambios
-        # estadia.save()
-        """ Fin de guardado """
+        ref_reporte = request.POST.get('id_reporte')
 
         if request.method == 'POST':
-            id_reporte = reporte
+            id_reporte = ref_reporte
             matricula = user_id
             consultas = 1
-            fecha_consulta = localtime().date()
+            fecha_consulta = now().replace(microsecond=0)
 
-            estadias = register_view.objects.create(
+            register_view.objects.create(
                 id_reporte = id_reporte,
                 matricula = matricula,
                 consultas = consultas,
                 fecha_consulta = fecha_consulta
             )
-            # messages.add_message(request, messages.SUCCESS, 'Registro agregado')
-            # return redirect('estadias')
-        # else:
-        #     form = estadias_form()
-        #     messages.add_message(request, messages.ERROR, '¡Algo salio mal!')
-        #     return redirect('estadias')
-
-        # Retorna una respuesta JSON con los datos relevantes
         data = {
             "success": True,
             "message": "Registro actualizado exitosamente.",
-            "id": reporte,
+            "name_reporte": name_reporte,
             "consultas": consultas,
             "fecha_consulta": fecha_consulta.strftime("%d/%m/%Y"),
         }

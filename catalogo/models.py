@@ -6,6 +6,7 @@ class LongTextField(models.TextField):
         if connection.vendor == 'mysql':
             return 'LONGTEXT'
         return super().db_type(connection)
+        
 class model_catalogo(models.Model):
 
    nom_libro=models.CharField(max_length=255)

@@ -34,12 +34,10 @@ class model_estadias(models.Model):
 
 
 class register_view(models.Model):
-     # id_reporte = models.IntegerField(null=True)
-     id_reporte = models.ForeignKey(model_estadias, on_delete=models.CASCADE, null=True)
+     id_reporte = models.IntegerField(null=True)
      matricula=models.IntegerField(null=True)
      consultas = models.IntegerField(null=True)
      fecha_consulta = models.DateTimeField(verbose_name="Fecha de consulta", null=True, blank=True)
-     # fecha_consulta = models.DateField(verbose_name="Fecha de consulta", null=True, blank=True)
 
      def __str__(self):
           return str(self.matricula)

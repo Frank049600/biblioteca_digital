@@ -47,7 +47,7 @@
                 <div class="col-xl-6">
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3>0</h3>
+                            <h3>{{ data.total_prestamos }}</h3>
                             <p>Libros prestados</p>
                         </div>
                         <div class="icon">
@@ -60,7 +60,7 @@
             </div>
             <div id="contentTitle" class="row">
                 <div class="col-xl-6 align-self-center">
-                    <h5 class="text-bold">Control de visualizaciones para reportes de estadía</h5>
+                    <h5 class="text-bold">Visualizaciones de reportes</h5>
                 </div>
             </div>
             <div class="table-responsive bg-white p-2">
@@ -69,6 +69,7 @@
                         <tr>
                             <th class="text-center">Persona</th>
                             <th class="text-center">Reporte</th>
+                            <th class="text-center">Carrera</th>
                             <th class="text-center">Fecha</th>
                         </tr>
                     </thead>
@@ -78,6 +79,7 @@
                             <td class="text-center" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="{{ ctrl.fullname }}" style="cursor: pointer;">{{ctrl.persona}}</td>
                             <td class="text-center">{{ctrl.reporte}}</td>
+                            <td class="text-center">{{ctrl.carrera}}</td>
                             <td class="text-center">{{ctrl.fecha_consulta}}</td>
                         </tr>
                         {% endfor %}
