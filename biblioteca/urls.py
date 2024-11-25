@@ -43,7 +43,7 @@ urlpatterns = [
     path('prestamo_registro/', login_required(prestamo_registro), name='prestamo_registro'),
 
     # Generación de reporte
-    path('report', login_required(report), name='report'),
+    path('report/', login_required(report), name='report'),
 ]
 
 urlpatterns += [

@@ -4,8 +4,9 @@ from almacen.models import acervo_model
 from estadias.models import register_view, model_estadias
 from sito.models import Persona, Usuario
 from static.helpers import *
-from inicio.report_csv import csv
+from .report_xlsx import generate_report
 from catalogo.models import model_catalogo
+from datetime import datetime
 
 # Create your views here.
 # @groups_required('Administrador')
@@ -137,7 +138,30 @@ def ctrl_view_report(info):
     
     return data_all
 
-def report(request):
-    csv()
+def format_month(m):
+    format = {
+        "1": "ENERO",
+        "2": "FEBRERO",
+        "3": "MARZO",
+        "4": "ABRIL",
+        "5": "MAYO",
+        "6": "JUNIO",
+        "7": "JULIO",
+        "8": "AGOSTO",
+        "9": "SEPTIEMBRE",
+        "10": "OCTUBRE",
+        "11": "NOVIEMBRE",
+        "12": "DICIEMBRE"
+    }
+    return format[m]
 
-    return redirect('inicio')
+def report(request):
+    date = datetime.now()
+    year_month = date.strftime('%m %Y')
+    cut = year_month.split(' ')
+    
+    data = {
+        "ciclo": format_month(cut[0]) + ' ' + cut[1]
+    }
+
+    return generate_report(data)

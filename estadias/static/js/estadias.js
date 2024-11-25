@@ -127,7 +127,6 @@ $('#modal_registro').on('hidden.bs.modal', function () {
 
 
 function actualizarEstadia(estadiaId) {
-    alert('entra: ' + estadiaId);
     $.ajax({
         url: '/insert_consult/',
         data: { "user_id": estadiaId[0], "name_reporte": estadiaId[1], "id_reporte": estadiaId[2] },
