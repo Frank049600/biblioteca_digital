@@ -1,0 +1,73 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block title%}Catalogo{%endblock%}
+{%block content%}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/catalogo.css' %}">
+{% endblock %}
+
+<div id="vista_prestamos">
+    <section class="content-header mt-5">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Catalogo Libros</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'inicio' %}"><i class="fas fa-home color-info"></i></a>
+                </li>
+                <li class="breadcrumb-item text-black">Prestamos Libros</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <div class="content mx-4 pb-4">
+        <div id="contentTitle" class="row">
+          <div class="col-xl-6 align-self-center">
+            <h5 class="text-bold">Libros</h5>
+          </div>
+        </div>
+        <div class="table-responsive bg-white p-2">
+          <table id="prestamoTable" class="cell-border stripe" style="width:100%">
+            <thead>
+              <tr>
+                <th class="text-center">Nombre Alumno</th>
+                <th class="text-center">Matricula</th>
+                <th class="text-center">Carrera y Grupo</th>
+                <th class="text-center">Nombre Libro</th>
+                <th class="text-center">Autor</th>
+                <th class="text-center">Colocación</th>
+                <th class="text-center">Cantidad</th>
+                <th class="text-center">Tipo Prestamo</th>
+                <th class="text-center">Días restantes de prestamo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in listado %}
+              <!--tr data-report="{{ p.reporte }}"-->
+              <tr data-titulo="{{p.titulo}}" data-autor="{{p.autor}}" data-edicion="{{p.edicion}}"
+              data-colocacion="{{p.colocacion}}" data-persona="{{user}}">
+                <td>{{p.nom_alumno}}</td>
+                <td>{{p.matricula}}</td>
+                <td>{{p.carrera_grupo}}</td>
+                <td>{{p.nom_libro}}</td>
+                <td>{{p.nom_autor}}</td>
+                <td>{{p.colocacion}}</td>
+                <td>{{p.cantidad}}</td>
+                <td>{{p.tipoP}}</td>
+                <td>{{p.fechaP}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+</div>
+
+{%endblock%}
+{% block js %}
+<script src="{% static 'js/catalogo.js' %}"></script>
+{% endblock %}

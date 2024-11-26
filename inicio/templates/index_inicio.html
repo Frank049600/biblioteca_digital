@@ -7,7 +7,6 @@
 {% endblock %}
 <!-- Content Header (Page header) -->
 <div id="home">
-    {% if grupo == 'Administrador' %}
     <section class="content-header mt-5">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -83,11 +82,7 @@
             </div>
         </div>
     </section>
-    {% else %}
-    <section class="content-header" id="bg_init" style="background-image: url('static/img/fondo_biblioteca.webp');">
-        <img class="rounded mx-auto d-block" src="{% static 'img/fondo_biblioteca.jpg' %}" width="70%" alt="">
-    </section>
-    {% endif %}
+
 </div>
 {% endblock %}
 {% block js %}

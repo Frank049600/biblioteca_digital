@@ -3,6 +3,7 @@ from almacen.models import acervo_model
 from catalogo.models import model_catalogo
 from django.contrib import messages
 from .forms import catalogo_form
+from django.utils.timezone import now
 
 # Create your views here.
 def catalago_View(request):
@@ -10,6 +11,15 @@ def catalago_View(request):
     side_code = 400
     listado = acervo_model.objects.all()
     return render(request, 'index_catalogo.html', {"side_code": side_code, "listado":listado, "form":form})
+
+def prestamos_View(request):
+    side_code = 401
+    listado = model_catalogo.objects.all()
+
+    #for f in listado:
+    #    fecha_limite = f.fechaP
+
+    return render(request, 'index_prestamos.html', {"side_code": side_code, "listado":listado})
 
 def get_alumno(request):
     print("Entra")
@@ -55,6 +65,7 @@ def prestamo_registro(request):
             nom_alumno = form.cleaned_data['nom_alumno']
             carrera_grupo = form.cleaned_data['carrera_grupo']
             tipoP = form.cleaned_data['tipoP']
+            fechaP = now().replace(microsecond=0)
 
             catalago_View=model_catalogo.objects.create(
                     nom_libro = nom_libro,
@@ -65,7 +76,8 @@ def prestamo_registro(request):
                     matricula = matricula,
                     nom_alumno = nom_alumno,
                     carrera_grupo = carrera_grupo,
-                    tipoP = tipoP
+                    tipoP = tipoP,
+                    fechaP = fechaP
             )
             messages.add_message(request, messages.SUCCESS, 'Prestamo Solicitado')
             # Redirigir a la vista deseada
