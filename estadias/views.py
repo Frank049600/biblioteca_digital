@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import model_estadias
+from .models import model_estadias, register_view
 from .forms import estadias_form
 import os
 from django.http import FileResponse
@@ -14,6 +14,8 @@ from django.http import JsonResponse
 import base64
 import tempfile
 import time
+from django.utils.timezone import localtime
+from django.utils.timezone import now
 
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -56,10 +58,11 @@ def index_proyectos(request):
     return render(request,'index_proyectos.html',{"reporte":reporte, "form":form,"side_code":side_code})
 
 @login_required
-@groups_required('Alumno', 'Docente')
+@groups_required('Alumno', 'Docente', 'Administrador')
 def estadias_registro(request):
     if request.method == 'POST':
         form = estadias_form(request.POST, request.FILES)
+        print(form)
         if form.is_valid():
             proyecto = form.cleaned_data['proyecto']
             matricula = form.cleaned_data['matricula']
@@ -71,14 +74,11 @@ def estadias_registro(request):
             carrera = form.cleaned_data['carrera']
             name_ref = file_new_name(alumno, form.cleaned_data['reporte_file'].name)
 
-            # Archivo reporte
-            # fs = FileSystemStorage()
-            # response_file = fs.save(name_ref, form.cleaned_data['reporte_file'])
-
             # Llamado de función para convertir documento a base64
             base64 = convert_base64(form.cleaned_data['reporte_file'])
+            fecha_registro = now().replace(microsecond=0)
 
-            proyectos=model_estadias.objects.create(
+            model_estadias.objects.create(
                     proyecto = proyecto,
                     matricula = matricula,
                     alumno = alumno,
@@ -88,18 +88,19 @@ def estadias_registro(request):
                     asesor_orga = asesor_orga,
                     carrera = carrera,
                     reporte = name_ref,
-                    base64 = base64
+                    base64 = base64,
+                    fecha_registro = fecha_registro
             )
-            messages.add_message(request, messages.SUCCESS, 'Registro agregado')
+            messages.add_message(request, messages.SUCCESS, 'Registro agregado correctamente.')
             return redirect('proyectos')
-            # return redirect('proyectos')
         else:
-            # Si el formulario no es válido, vuelve a renderizar el formulario con errores
-            form = estadias_form()
+            # Si el formulario no es válido, renderiza el formulario con errores
+            messages.add_message(request, messages.ERROR, 'Por favor, corrija los errores en el formulario.')
     else:
         form = estadias_form()
-        messages.add_message(request, messages.ERROR, '¡Algo salio mal!')
-        return redirect('proyectos')
+
+    # Renderiza la página con el formulario
+    return render(request, 'index_proyectos.html', {'form': form})
 
 # Función para convertir documento a base64
 def convert_base64(doc):
@@ -139,30 +140,42 @@ def view_report(request, report_rute):
     except Exception as v:
         print(f"Error en al generar vista de PDF: {v}")
 
-# Función para el borrado de los archivos temporales.
-# def delete_pdf(request):
-#     try:
-#         # Se obtiene el dato que llega de JavaScript
-#         url_delete = request.GET.get('rute_pdf')
-#         # Valida que 'url_delete' no sea None
-#         if not url_delete:
-#             return JsonResponse({"status": "error", "message": "Ruta del PDF no proporcionada"}, status=400)
-#         # Se quita el texto '/media/' para evitar duplicidad
-#         url = url_delete.split('/media/')
-#         # Se obtiene la ruta completa
-#         ruta = os.path.join(settings.MEDIA_ROOT, url[1])
-#         print(ruta)
-#         # Se valida que exista el documento
-#         if os.path.exists(ruta):
-#             # Si existe se realiza el borrado del archivo
-#             os.remove(ruta)
-#             return JsonResponse({"status": "success", "message": "PDF eliminado correctamente."})
-#         else:
-#             return JsonResponse({"status": "error", "message": "El archivo no existe en el servidor."}, status=404)
-#     except Exception as d:
-#         # Regresa un mensaje de error en caso de excepción
-#         return JsonResponse({"status": "error", "message": f"Error al eliminar el archivo: {str(d)}"}, status=500)
+@login_required
+def insert_consult(request):
+    try:
+        user_id = request.POST.get('user_id')
+        name_reporte = request.POST.get('name_reporte')
+        ref_reporte = request.POST.get('id_reporte')
 
+        if request.method == 'POST':
+            id_reporte = ref_reporte
+            matricula = user_id
+            consultas = 1
+            fecha_consulta = now().replace(microsecond=0)
+
+            register_view.objects.create(
+                id_reporte = id_reporte,
+                matricula = matricula,
+                consultas = consultas,
+                fecha_consulta = fecha_consulta
+            )
+        data = {
+            "success": True,
+            "message": "Registro actualizado exitosamente.",
+            "name_reporte": name_reporte,
+            "consultas": consultas,
+            "fecha_consulta": fecha_consulta.strftime("%d/%m/%Y"),
+        }
+
+        return JsonResponse(data)
+
+    except register_view.DoesNotExist:
+        return JsonResponse({"success": False, "message": "El registro no existe."}, status=404)
+
+    except Exception as a:
+        # Imprime el error para depuración y devuelve una respuesta de error
+        print(f"Algo salió mal: {a}")
+        return JsonResponse({"success": False, "message": "Error al procesar la solicitud."}, status=500)
 
 def servir_pdf(request, report_rute):
     file_path = os.path.join(settings.MEDIA_ROOT, report_rute)
@@ -198,20 +211,3 @@ def get_alumno(request):
         except Exception as a:
             print(f"Algo salio mal: {a}")
     return JsonResponse({'error': 'Matricula no proporcionada'}, status=400)
-
-
-# def borrar_archivos_pdf():
-#     carpeta = settings.MEDIA_ROOT
-#     for archivo in os.listdir(carpeta):
-#         if archivo.endswith('.pdf'):
-#             os.remove(os.path.join(carpeta, archivo))
-#             print(f'Archivo borrado: {archivo}')
-#
-# # if __name__ == '__main__':
-# # Programar la tarea para que se ejecute una vez al día
-# # schedule.every(24).hours.do(borrar_archivos_pdf)
-# schedule.every(1).minutes.do(borrar_archivos_pdf)
-# #
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)  # Esperar un segundo entre verificaciones

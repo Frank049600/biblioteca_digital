@@ -7,38 +7,41 @@ class LongTextField(models.TextField):
         if connection.vendor == 'mysql':
             return 'LONGTEXT'
         return super().db_type(connection)
+
 class model_estadias(models.Model):
 
-   proyecto=models.CharField(max_length=255)
-   matricula=models.IntegerField()
-   alumno=models.CharField(max_length=255)
-   asesor_academico=models.CharField(max_length=255)
-   generacion=models.CharField(max_length=255)
-   empresa=models.CharField(max_length=255)
-   asesor_orga=models.CharField(max_length=255)
-   ELECCION_CARRERA = (
-        ("ADC","ADC"),
-        ("MET", "MET"),
-        ("QAI", "QAI"),
-        ("PIA", "PIA"),
-        ("QAM", "QAM"),
-        ("ERC","ERC"),
-        ("IDGS","IDGS"),
-        ("ITEA","ITEA"),
-        ("IMET","IMET"),
-        ("IER","IER"),
-        ("ISIP","ISIP"),
-        ("IPQ","IPQ"),
-        ("LGCH","LGCH"))
-   carrera=models.CharField(max_length=20)
-   # reporte = models.FileField('Reporte',null=True,blank=True)
-   reporte=models.CharField(max_length=255,null=True)
-   base64 = LongTextField('Reporte',null=True,blank=True)
+     proyecto=models.CharField(max_length=255)
+     matricula=models.IntegerField()
+     alumno=models.CharField(max_length=255)
+     asesor_academico=models.CharField(max_length=255)
+     generacion=models.CharField(max_length=255)
+     empresa=models.CharField(max_length=255)
+     asesor_orga=models.CharField(max_length=255)
+     carrera = models.CharField(max_length=255)
+     reporte=models.CharField(max_length=255,null=True)
+     base64 = LongTextField('Reporte',null=True,blank=True)
+     fecha_registro = models.DateTimeField(verbose_name="Fecha de registro", null=True, blank=True)
 
-   def _str_(self):
-        return self.alumno
+     def __str__(self):
+          return self.alumno
 
-   class Meta:
-        verbose_name="estadía"
-        verbose_name_plural='estadías'
+     class Meta:
+          verbose_name="estadía"
+          verbose_name_plural='estadías'
+          constraints = [
+               models.UniqueConstraint(fields=['matricula', 'proyecto'], name='unique_matricula_proyecto')
+          ]
 
+
+class register_view(models.Model):
+     id_reporte = models.IntegerField(null=True)
+     matricula=models.IntegerField(null=True)
+     consultas = models.IntegerField(null=True)
+     fecha_consulta = models.DateTimeField(verbose_name="Fecha de consulta", null=True, blank=True)
+
+     def __str__(self):
+          return str(self.matricula)
+
+     class Meta:
+          verbose_name="consulta"
+          verbose_name_plural='consultas'

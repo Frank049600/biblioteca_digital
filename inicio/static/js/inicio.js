@@ -1,3 +1,6 @@
+// Llama función para DataTable
+datatable('tbl_prestamo_es');
+
 // Creación de gráfica de pastel
 // Se obtienen los estados registrados
 let states = $('#chartPie').data('states');
@@ -235,3 +238,22 @@ Highcharts.chart('adqui_colum', {
         }
     ]
 });
+
+// $('#btn_report').on('click', function (e) {
+//     e.preventDefault()
+//     Swal.fire({
+//         "title": '¿Descargar reporte?',
+//         "icon": 'question',
+//         "showCancelButton": true,
+//         "cancelButtonText": "Cancelar",
+//         "confirmButtonText": "Confirmar",
+//         "reverseButtons": true,
+//         "confirmButtonColor": "#28a745",
+//     }).then(function (result) {
+//             if (result.isConfirmed) {
+//                 // Envía la colocación del registro a eliminar
+//                 // location.href = '/report/'
+//                 $('#btn_report').submit()
+//             }
+//         })
+// })

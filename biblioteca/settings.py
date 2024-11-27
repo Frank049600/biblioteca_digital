@@ -184,7 +184,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'es-mx'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Mexico_City'
 
 USE_I18N = True
 
@@ -214,6 +215,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Utilización de Crontab
-CRONJOBS = [
-    ('*/1 * * * *', 'estadias.cron.hi')
-]
+# CRONJOBS = [
+#     ('*/1 * * * *', 'estadias.cron.hi')
+# ]

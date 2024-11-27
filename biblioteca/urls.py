@@ -7,9 +7,9 @@ from estadias.views import index_proyectos as proyectos
 from django.contrib.auth.decorators import login_required
 from login.views import Login, logoutUser
 from estadias.views import estadias_registro
-from estadias.views import view_report, servir_pdf, get_alumno
+from estadias.views import view_report, servir_pdf, get_alumno, insert_consult
 from usuario.views import login_view
-from catalogo.views import catalago_View, prestamos_View
+from catalogo.views import catalago_View, prestamos_View, prestamo_registro
 
 from django.conf import settings
 from django.views.static import serve
@@ -29,23 +29,22 @@ urlpatterns = [
     path('edit_acervo/', login_required(edit_acervo), name='edit_acervo'),
 
     path('estadias_registro/',login_required(estadias_registro)),
-    path('get_alumno/', get_alumno, name='get_alumno'),
+    path('get_alumno/', login_required(get_alumno), name='get_alumno'),
+    path('insert_consult/', login_required(insert_consult), name='insert_consult'),
 
     path('view_report/<report_rute>', login_required(view_report), name='view_report'),
     path('view_report/<report_rute>', login_required(servir_pdf), name='servir_pdf'),
-    # path para borrado de archivos pdf
-    # path('delete_pdf/', login_required(delete_pdf), name='delete_pdf'),
 
     # aplicación de sesión
     path('session-security/', include('session_security.urls')),
 
     # Aplicación de catalogo
     path('catalago_View', login_required(catalago_View), name='catalago_View'),
-    #path('prestamo_registro/', login_required(prestamo_registro), name='prestamo_registro'),
+    path('prestamo_registro/', login_required(prestamo_registro), name='prestamo_registro'),
     path('prestamos_View/', login_required(prestamos_View), name='prestamos_View'),
 
     # Generación de reporte
-    path('report', login_required(report), name='report'),
+    path('report/', login_required(report), name='report'),
 ]
 
 urlpatterns += [

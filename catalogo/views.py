@@ -53,8 +53,6 @@ def prestamos_View(request):
             
         data_all.append(data)
 
-    print(json.dumps(data_all, sort_keys=True, indent=4))
-
     return render(request, 'index_prestamos.html', {"side_code": side_code, "data_all": data_all})
 
 def get_alumno(request):
