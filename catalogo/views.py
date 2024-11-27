@@ -4,6 +4,9 @@ from catalogo.models import model_catalogo
 from django.contrib import messages
 from .forms import catalogo_form
 from django.utils.timezone import now
+import json
+
+from static.helpers import *
 
 # Create your views here.
 def catalago_View(request):
@@ -12,14 +15,47 @@ def catalago_View(request):
     listado = acervo_model.objects.all()
     return render(request, 'index_catalogo.html', {"side_code": side_code, "listado":listado, "form":form})
 
+@login_required
+@groups_required('Administrador')
 def prestamos_View(request):
     side_code = 401
     listado = model_catalogo.objects.all()
 
-    #for f in listado:
-    #    fecha_limite = f.fechaP
+    dias_permitidos = 6
+    data = {}
+    data_all = []
+    cont = 0
 
-    return render(request, 'index_prestamos.html', {"side_code": side_code, "listado":listado})
+    for f in listado:
+        data = {
+            "nom_alumno": f.nom_alumno,
+            "matricula": f.matricula,
+            "carrera_grupo": f.carrera_grupo,
+            "nom_libro": f.nom_libro,
+            "nom_autor": f.nom_autor,
+            "colocacion": f.colocacion,
+            "cantidad": f.cantidad,
+            "tipoP": f.tipoP,
+        }   
+
+        if f.tipoP == 'Externo':
+            fecha_limite = f.fechaP
+            # Fecha actual en la zona horaria configurada
+            ahora = now().replace(microsecond=0)
+            # Calculamos la diferencia entre las fechas
+            diferencia = ahora - fecha_limite
+            # Obtener el número de días de la diferencia
+            dias_transcurridos = diferencia.days
+
+            dias_restantes = dias_permitidos - dias_transcurridos
+
+            data["dias_restantes"] = dias_restantes
+            
+        data_all.append(data)
+
+    print(json.dumps(data_all, sort_keys=True, indent=4))
+
+    return render(request, 'index_prestamos.html', {"side_code": side_code, "data_all": data_all})
 
 def get_alumno(request):
     print("Entra")

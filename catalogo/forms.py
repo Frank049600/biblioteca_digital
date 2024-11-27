@@ -4,8 +4,8 @@ from .models import model_catalogo
 class catalogo_form(forms.ModelForm):
 
     format = [
-            ('ext','Externo'),
-            ('inter','Interno')
+            ('Externo','Externo'),
+            ('Interno','Interno')
             ]
 
     nom_libro = forms.CharField(label='Nombre del libro', required=True, max_length=255, widget=forms.TextInput (attrs={'class':'form-control','placeholder':'Ingrese el nombre del libro', 'readonly':True}))

@@ -94,6 +94,8 @@
                                         <p>Catalogo Libros</p>
                                     </a>
                             </li>
+
+                            {% if grupo != 'Alumno' and grupo != 'Docente'%}
                             <li class="nav-item">
                                 {% if side_code == 401 %}
                                 <a href="{% url 'prestamos_View' %}" class="nav-link active">
@@ -102,6 +104,7 @@
                                         {% endif %}
                                         <i class="fas fa-book"></i>
                                         <p>Prestamos Libros</p>
+                            {% endif %}
                                     </a>
                             </li>
                         </ul>
