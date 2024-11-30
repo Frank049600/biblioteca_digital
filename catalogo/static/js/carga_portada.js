@@ -1,0 +1,90 @@
+function create_struc(id, titulo, edicion, anio, autor) {
+    let struct = '<div id="registro-'+ id +'" class="mb-3 border border-top-1">'
+        + '<label for="proyecto">Nombre del libro</label>'
+        + '<div class="input-group mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text"><i class="fas fa-book-open"></i></span>'
+        + '</div>'
+        + '<input type="text" class="form-control" id="title_portada" name="titulo-'+ id +'" value="'+ titulo +'" placeholder="Titulo del libro" readonly>'
+        + '</div>'
+        + '<label for="proyecto">Autor</label>'
+        + '<div class="input-group mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text"><i class="fas fa-book-open"></i></span>'
+        + '</div>'
+        + '<input type="text" class="form-control" id="title_portada" name="autor-'+ id +'" value="'+ autor +'" placeholder="Autor del libro" readonly>'
+        + '</div>'
+        + '<div class="row">'
+        + '<div class="col-xl-6">'
+        + '<label for="edito">Edición</label>'
+        + '<div class="input-group mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text"><i class="fas fa-bookmark"></i></span>'
+        + '</div>'
+        + '<input type="text" class="form-control" id="edicion_portada" name="edicion-'+ id +'" value="'+ edicion +'" placeholder="Edición" readonly>'
+        + '</div>'
+        + '</div>'
+        + '<div class="col-xl-6">'
+        + '<label for="edito">Año</label>'
+        + '<div class="input-group mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text"><i class="fas fa-bookmark"></i></span>'
+        + '</div>'
+        + '<input type="text" class="form-control" id="anio_portada" name="anio-'+ id +'" value="'+ anio +'" placeholder="Año del libro" readonly>'
+        + '</div>'
+        + '</div>'
+        + '</div>'
+        + '<input type="file" name="img_portada-'+ id +'" accept="image/png, image/jpeg, image/jpg" class="form-control">'
+        + '</div>'
+
+    return struct;
+}
+
+function delete_struc(cancel = false) {
+    $('#prt_books').children().fadeOut(300, function () {
+        $(this).remove(); // Elimina después de desvanecerse
+    });
+    $('#pack_btns').attr('style', 'display:none')
+    if (cancel) {
+        $('#inp_colocacion').val('')
+    }
+}
+
+$('#btn_search_portada').on('click', function () {
+    delete_struc()
+    colocacion = $('input[name=colocacion').val();
+    $.ajax({
+        url: '/search_book/',
+        data: { "colocacion": colocacion },
+        type: 'GET',
+        success: function (response) {
+            // Muestra los botones
+            $('#pack_btns').attr('style', 'display:block')
+            let container = $('#prt_books');
+            let data = response.books;
+            let registroIdCounter = 1; // Para IDs únicos
+
+            data.forEach(bookArray => {
+                let titulo = bookArray.titulo;
+                let autor = bookArray.autor;
+                let anio = bookArray.anio;
+                let edicion = bookArray.edicion;
+                
+                // container.append(create_struc(registroIdCounter++, titulo, edicion, anio, autor));
+                // Añade al contenedor con animación
+                let newElement = $(create_struc(registroIdCounter++, titulo, edicion, anio, autor));
+                newElement.css('opacity', 0); // Inicialmente invisible
+                container.append(newElement);
+                newElement.animate({ opacity: 1 }, 800); // Aparece lentamente
+            });
+
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+});
+
+
+// Función para realizar salto de input con Enter
+tabIndex_form('', true);

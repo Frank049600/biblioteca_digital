@@ -24,9 +24,9 @@ $('#modal_catalogo').on('shown.bs.modal', function () {
                 $('input[name=nom_alumno]').val('');
                 $('input[name=carrera_grupo]').val('');
             }
-        })
+        });
     }
-})
+});
 
 $('#modal_catalogo').on('hidden.bs.modal', function () {
     $('#msg_search').attr('style', 'display:none');
@@ -40,7 +40,7 @@ $('#modal_catalogo').on('hidden.bs.modal', function () {
     $('input[name=matricula]').val('');
     $('input[name=nom_alumno]').val('');
     $('input[name=carrera_grupo]').val('');
-})
+});
 
 $('#catalogoTable').on('click', 'tbody tr td a#btnPedidoBook', function () {
     let data = $(this).closest('tr').data()
@@ -49,8 +49,7 @@ $('#catalogoTable').on('click', 'tbody tr td a#btnPedidoBook', function () {
     $('input[name=nom_autor]').val(data.autor);
     $('input[name=edicion]').val(data.edicion);
     $('input[name=colocacion]').val(data.colocacion);
-})
-
+});
 
 // Función para realizar salto de input con Enter
 tabIndex_form('modal_catalogo', true);

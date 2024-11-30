@@ -5,6 +5,9 @@ from django.contrib import messages
 from .forms import catalogo_form
 from django.utils.timezone import now
 import json
+import base64
+from django.http import JsonResponse
+from django.utils.timezone import now
 
 from static.helpers import *
 
@@ -56,9 +59,7 @@ def prestamos_View(request):
     return render(request, 'index_prestamos.html', {"side_code": side_code, "data_all": data_all})
 
 def get_alumno(request):
-    print("Entra")
     matricula = request.GET.get('matricula')
-    print(matricula)
     if matricula:
         cve_persona = ''
         try:
@@ -78,7 +79,7 @@ def get_alumno(request):
                 "nombre_carrera": carrera.nombre,
                 "generacion": generacion.generacion
             }
-            print(data['nombre'])
+            # print(data['nombre'])
             return JsonResponse(data)
         except Exception as a:
             print(f"Algo salio mal: {a}")
@@ -126,3 +127,113 @@ def prestamo_registro(request):
         messages.add_message(request, messages.ERROR, '¡Algo salio mal!')
         return redirect('catalago_View')
 
+# Función para convertir documento a base64
+def convert_base64(doc):
+    # Se convierte el pdf en formato base64
+    # Lee el documento que llega en formulario
+    file = doc.read()
+    # Convierte el documento en base64
+    encoded_string = base64.b64encode(file)
+    return encoded_string.decode('utf-8')
+
+def temporary_image_base64(base_64_input):
+    # base64_string = base_64_input.strip().split(',')[1]
+    decoded_bytes = base64.b64decode(base_64_input)
+    file_temp, path_temp = tempfile.mkstemp(suffix=".webp", dir=settings.MEDIA_ROOT + "/")
+    try:
+        with os.fdopen(file_temp, 'wb') as tmp:
+            tmp.write(decoded_bytes)
+    except Exception as e:
+        os.remove(path_temp)
+        raise e
+    return path_temp
+
+@login_required
+@groups_required('Alumno', 'Docente')
+def view_book(request, report_rute):
+    try:
+        id_reporte = model_estadias.objects.filter(reporte=report_rute).first()
+        # Se crea el archivo temporal y se obtiene la ruta
+        name_temp = temporary_file_base_64(id_reporte.base64)
+        # Se separan los datos no necesarios
+        ruta = name_temp.split('/code')[1]
+
+# Caga la vista con la información del acervo
+def cargar_portada(request):
+    form = catalogo_form()
+    return render(request, 'cargar_portada.html', {"form":form})
+
+# Función que realiza la edición del elemento con la imagen de portada
+def edit_portada(request):
+    if request.method == 'POST':
+        data = {}
+        cont = 1
+        colocacion = ''
+        # Se almacena la imagen entrante con el nombre del libro que le corresponde.
+        for r in request.FILES:
+            data[cont] = [r, request.POST.get(f"titulo-{cont}")]
+            cont += 1
+
+        # Se realiza el guardado de la imagen con el libro indicado
+        for d in range(len(data)):
+            # print(data[d+1][1]) # Se obtiene el nombre del libro
+
+            # return redirect('cargar_portada')
+            colocacion = request.POST.get('colocacion')  # Obtén la colocación del formulario
+            nueva_portada = request.FILES[data[d+1][0]]  # Obtén el archivo subido
+
+            if not colocacion or not nueva_portada:
+                messages.error(request, 'Falta información: colocación o archivo de portada.')
+                return redirect('cargar_portada')  # Redirige con un mensaje de error
+
+            # Buscar el registro en la base de datos por `colocacion`
+            acervo_update = acervo_model.objects.filter(colocacion=colocacion, titulo=data[d+1][1]).first()
+
+            if acervo_update:
+                # Almacenar el nuevo archivo de portada}
+                acervo_update.base64 = convert_base64(nueva_portada)
+                acervo_update.fechaedicion = now().replace(microsecond=0)
+                acervo_update.save()
+                
+            else:
+                messages.error(request, 'No se encontró un registro con la colocación proporcionada.')
+                return redirect('cargar_portada')  # Redirige con un mensaje de error
+        messages.success(request, 'Portada actualizada exitosamente.')
+        return redirect('cargar_portada')  # Redirige al éxito
+    else:
+        messages.error(request, 'Solicitud inválida.')
+        return redirect('cargar_portada')
+
+
+def search_book(request):
+    get_colocacion = request.GET.get('colocacion')
+    if get_colocacion:
+        try:
+            book_data = {}
+            data_all = []
+            # book = acervo_model.objects.get(colocacion=str(get_colocacion))
+            book = acervo_model.objects.all()
+            for b in book:
+                if b.colocacion == get_colocacion:
+                    book_data = {
+                        'colocacion': b.colocacion,
+                        'titulo': b.titulo,  # Replace with actual fields of your model
+                        'autor': b.autor,
+                        'anio': b.anio,
+                        'edicion': b.edicion
+                        # Add other fields as needed
+                    }
+                    data_all.append(book_data)
+            # Return the data as a JSON response
+            return JsonResponse({'status': 'success', 'books': data_all})
+
+        except acervo_model.DoesNotExist:
+            # Handle case where the book is not found
+            return JsonResponse({'status': 'error', 'message': 'Book not found'}, status=404)
+
+        except Exception as e:
+            # Handle any other errors
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    # If no 'colocacion' was provided in the GET request
+    return JsonResponse({'status': 'error', 'message': 'No colocacion provided'}, status=400)

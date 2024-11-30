@@ -1,8 +1,15 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+class LongTextField(models.TextField):
+    def db_type(self, connection):
+        if connection.vendor == 'mysql':
+            return 'LONGTEXT'
+        return super().db_type(connection)
+
 # Create your models here.
 class acervo_model(models.Model):
+    
     class state(models.TextChoices):
         EXCELENTE = 'EXC', _('Excelente')
         BUENO = 'BUE', _('Bueno')
@@ -23,6 +30,7 @@ class acervo_model(models.Model):
     adqui = models.CharField(max_length=20,verbose_name="Tipo de adquisición", null=True, blank=True)
     estado = models.CharField(max_length=3, verbose_name="Estado", choices=state.choices, default=state.EXCELENTE, null=True, blank=True)
     formato = models.CharField(max_length=5, verbose_name="formato", choices=format.choices, default=format.LIBRO, null=True, blank=True)
+    base64 = LongTextField('Portada',null=True,blank=True)
     fecharegistro = models.DateField(verbose_name="Fecha de Registro", null=True, blank=True)
     fechaedicion = models.DateField(verbose_name="Fecha de actualización", null=True, blank=True)
 

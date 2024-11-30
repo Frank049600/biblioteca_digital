@@ -36,6 +36,7 @@ def acervo_registro(request):
             estado = form.cleaned_data['estado']
             fecharegistro = datetime.now()
             fechaedicion = datetime.now()
+            
             acervo = acervo_model.objects.create(
                     titulo = titulo,
                     autor = autor,
