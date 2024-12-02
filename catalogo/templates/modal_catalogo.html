@@ -16,37 +16,25 @@
                   {% csrf_token %}
                     <div class="row mb-2">
                         <div class="col-xl-8">
-                            <label for="proyecto">Nombre del libro</label>
+                          <span class="text-bold">Datos del libro</span>
+                          <div class="border-top">
+                            <label class="text-muted" for="proyecto">Nombre del libro</label>
                             <div class="input-group mb-3">
                               <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-book-open"></i></span>
                               </div>
                               {{ form.nom_libro }}
                             </div>
-                        
-                            <div class="row">
-                              <div class="col-xl-6">
-                                <label for="edic">Nombre del Autor</label>
-                                <div class="input-group mb-3">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                  </div>
-                                  {{ form.nom_autor }}
-                                </div>
+                            <label class="text-muted" for="edic">Nombre del Autor</label>
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
                               </div>
-                              <div class="col-xl-6">
-                                <label for="edito">Edición</label>
-                                <div class="input-group mb-3">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-bookmark"></i></span>
-                                  </div>
-                                  {{ form.edicion }}
-                                </div>
-                              </div>
+                              {{ form.nom_autor }}
                             </div>
                             <div class="row">
                               <div class="col-xl-6">
-                                <label for="edic">Colocación</label>
+                                <label class="text-muted" for="edic">Colocación</label>
                                 <div class="input-group mb-3">
                                   <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-book"></i></span>
@@ -55,36 +43,30 @@
                                 </div>
                               </div>
                               <div class="col-xl-6">
-                                <label for="edito">Cantidad</label>
+                                <label class="text-muted" for="edito">Edición</label>
                                 <div class="input-group mb-3">
                                   <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-book"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-bookmark"></i></span>
                                   </div>
-                                  {{ form.cantidad }}
+                                  {{ form.edicion }}
                                 </div>
                               </div>
                             </div>
-                            <div class="row">
-                              <label for="matricula">Matricula</label>
-                              <div class="input-group mb-3 col-6">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text"><i class="fas fa-user-graduate"></i></span>
-                                </div>
-                                {{ form.matricula }}
-                              </div>
-                            </div>
+                          </div>
+                          <span class="text-bold mt-3">Datos del solicitante</span>
+                          <div class="border-top">
                             <div class="row">
                               <div class="col-xl-6">
-                                <label for="edic">Alumno</label>
+                                <label class="text-muted" for="matricula">Matricula</label>
                                 <div class="input-group mb-3">
                                   <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-user-graduate"></i></span>
                                   </div>
-                                  {{ form.nom_alumno }}
+                                  {{ form.matricula }}
                                 </div>
                               </div>
                               <div class="col-xl-6">
-                                <label for="edito">Carrera</label>
+                                <label class="text-muted" for="edito">Carrera</label>
                                 <div class="input-group mb-3">
                                   <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-book"></i></span>
@@ -93,9 +75,32 @@
                                 </div>
                               </div>
                             </div>
+                            <label class="text-muted" for="edic">Alumno</label>
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                              </div>
+                              {{ form.nom_alumno }}
+                            </div>
+                          </div>
+                          <span class="text-bold">Datos del prestamo</span>
+                          <div class="border-top">
                             <div class="row">
                               <div class="col-xl-6">
-                                <label for="formato">Tipo de Prestamo</label>
+                                <label class="text-muted" for="edito">Cantidad</label>
+                                <div class="input-group mb-3">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-book"></i></span>
+                                  </div>
+                                  {{ form.cantidad }}
+                                </div>
+                              </div>
+                              <div class="col-xl-6">
+                                <label class="text-muted" for="formato">Tipo de Prestamo 
+                                  <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="{{data_prestamo}}">
+                                  </i>
+                                </label>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-eye"></i></span>
@@ -104,13 +109,17 @@
                                 </div>
                               </div>
                             </div>
+                          </div>  
                         </div>
                         <div class="col-xl-4">
-                            <img src="{% static 'img/generic_portada.jpg' %}" alt="portada_libro" class="img-fluid" style="max-width: 100%; height: auto;">
+                          <span class="text-bold">Portada</span>
+                          <div class="border-top mt-2">
+                            <img alt="portada_libro" id="content_portada" class="img-fluid" style="max-width: 100%; height: auto;">
+                          </div>
                         </div>
                     </div>
                     <button type="submit" id="btnSendEstadias" class="btn float-right ml-1"
-                        style="background-color: #0a3d62; color: white">Realizar Prestamo</button>
+                        style="background-color: #0a3d62; color: white">Solicitar Prestamo</button>
                     <button type="button" class="btn btn-default float-right" data-bs-dismiss="modal"
                         id="close_modal_estadia">Cancelar</button>
                 </form>

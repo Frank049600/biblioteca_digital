@@ -14,7 +14,7 @@
           <div class="card-body">
             <form action="/estadias_registro/" method="POST" enctype="multipart/form-data" id="tbl_addproyecto">
               {% csrf_token %}
-              <label for="proyecto">Proyecto</label>
+              <label class="text-muted" for="proyecto">Proyecto</label>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fas fa-heading"></i></span>
@@ -22,7 +22,7 @@
                 {{ form.proyecto }}
               </div>
               <div class="row">
-                <label for="matricula">Matricula</label>
+                <label class="text-muted" for="matricula">Matricula</label>
                 <div class="input-group mb-3 col-6">
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-user-graduate"></i></span>
@@ -42,7 +42,7 @@
               </div>
               <div class="row">
                 <div class="col-xl-6">
-                  <label for="alumno">Alumno</label>
+                  <label class="text-muted" for="alumno">Alumno</label>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fas fa-user-graduate"></i></span>
@@ -51,7 +51,7 @@
                   </div>
                 </div>
                 <div class="col-xl-6">
-                  <label for="typeAdq">Carrera</label>
+                  <label class="text-muted" for="typeAdq">Carrera</label>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fas fa-address-card"></i></span>
@@ -62,7 +62,7 @@
               </div>
               <div class="row">
                 <div class="col-xl-6">
-                  <label for="edito">Asesor Académico</label>
+                  <label class="text-muted" for="edito">Asesor Académico</label>
                   <div class="input-group mb-3" id="data_academico" data-academico="{{ persona }}">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fas fa-chalkboard-teacher"></i></span>
@@ -71,7 +71,7 @@
                   </div>
                 </div>
                 <div class=" col-xl-6">
-                  <label for="anio">Generación</label>
+                  <label class="text-muted" for="anio">Generación</label>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
@@ -82,7 +82,7 @@
               </div>
               <div class="row">
                 <div class="col-xl-6">
-                  <label for="edic">Empresa</label>
+                  <label class="text-muted" for="edic">Empresa</label>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fas fa-building"></i></span>
@@ -91,7 +91,7 @@
                   </div>
                 </div>
                 <div class="col-xl-6">
-                  <label for="edito">Asesor Organizacional</label>
+                  <label class="text-muted" for="edito">Asesor Organizacional</label>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
@@ -100,7 +100,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <label class="form-label" name="reporte" for="customFile">Reporte estadías</label>
+                  <label class="text-muted" class="form-label" name="reporte" for="customFile">Reporte estadías</label>
                   <!--input type="file" accept=".pdf" name="reporte_file" class="form-control mb-5" id="customFile" /-->
                   {{ form.reporte_file }}
                 </div>

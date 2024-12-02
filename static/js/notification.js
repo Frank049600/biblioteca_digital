@@ -28,6 +28,26 @@ const register_deleteSwal = (title, coloca, text, icon, rute) => {
         })
 }
 
+const register_entrega = (title, coloca, text, icon, rute) => {
+    Swal.fire({
+        "title": 'colocación - ' + coloca,
+        "text": text,
+        "icon": icon,
+        "showCancelButton": true,
+        //"allowOutsideClick": false,
+        "cancelButtonText": "Cancelar",
+        "confirmButtonText": "Marcar/entregado",
+        "reverseButtons": true,
+        "confirmButtonColor": "#28a745",
+    })
+        .then(function (result) {
+            if (result.isConfirmed) {
+                // Envía la colocación del registro a eliminar
+                location.href = rute + coloca
+            }
+        })
+}
+
 const action_alert = (text) => {
     Swal.fire({
         title: '¡Acción no permitida!',

@@ -28,6 +28,33 @@ $('#modal_catalogo').on('shown.bs.modal', function () {
     }
 });
 
+$('#catalogoTable').on('click', 'tbody tr td a#btnPedidoBook', function () {
+    let data = $(this).closest('tr').data()
+    let portada = 'data:image/png;base64,';
+    // Convierte la imagen
+    portada_base64 = data.base64 != 'None' ? portada + data.base64 : portada + default_img()
+    
+    $('#content_portada').attr("src",portada_base64);
+    $('input[name=nom_libro]').val(data.titulo);
+    $('input[name=nom_autor]').val(data.autor);
+    $('input[name=edicion]').val(data.edicion);
+    $('input[name=colocacion]').val(data.colocacion);
+});
+
+// Función para el borrado de elementos
+
+$('#prestamoTable').on('click', 'tbody td a#delivered', function (e) {
+    let data = $(this).closest('#info_book').data(),
+        coloca = data['colocacion'],
+        title = data['titulo'],
+        text = "¿Marcar como entregado",
+        icon = "warning",
+        rute = '/book_delivered/'
+    console.log(coloca);
+    // Llama el SweetAlert del script notification
+    register_entrega(title, coloca, text, icon, rute)
+})
+
 $('#modal_catalogo').on('hidden.bs.modal', function () {
     $('#msg_search').attr('style', 'display:none');
     $('#msg_error').attr('style', 'display:none');
@@ -40,15 +67,7 @@ $('#modal_catalogo').on('hidden.bs.modal', function () {
     $('input[name=matricula]').val('');
     $('input[name=nom_alumno]').val('');
     $('input[name=carrera_grupo]').val('');
-});
-
-$('#catalogoTable').on('click', 'tbody tr td a#btnPedidoBook', function () {
-    let data = $(this).closest('tr').data()
-//    console.log(data)
-    $('input[name=nom_libro]').val(data.titulo);
-    $('input[name=nom_autor]').val(data.autor);
-    $('input[name=edicion]').val(data.edicion);
-    $('input[name=colocacion]').val(data.colocacion);
+    $('#content_portada').attr("src","#");
 });
 
 // Función para realizar salto de input con Enter

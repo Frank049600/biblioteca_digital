@@ -9,7 +9,7 @@ from login.views import Login, logoutUser
 from estadias.views import estadias_registro
 from estadias.views import view_report, servir_pdf, get_alumno, insert_consult
 from usuario.views import login_view
-from catalogo.views import catalago_View, prestamos_View, prestamo_registro, cargar_portada, search_book, edit_portada, view_book
+from catalogo.views import catalago_View, prestamos_View, prestamo_registro, cargar_portada, search_book, edit_portada, view_book, book_delivered
 
 from django.conf import settings
 from django.views.static import serve
@@ -43,6 +43,7 @@ urlpatterns = [
     path('search_book/', login_required(search_book), name='search_book'),
     path('edit_portada/', login_required(edit_portada), name='edit_portada'),
     path('view_book/', login_required(view_book), name='view_book'),
+    path('book_delivered/<id_delivered>', login_required(book_delivered), name='book_delivered'),
     # Generación de reporte xlsx
     path('report/', login_required(report), name='report'),
 ]

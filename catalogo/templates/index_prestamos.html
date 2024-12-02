@@ -34,7 +34,6 @@
           <table id="prestamoTable" class="cell-border stripe" style="width:100%">
             <thead>
               <tr>
-                <th class="text-center">Nombre Alumno</th>
                 <th class="text-center">Matricula</th>
                 <th class="text-center">Carrera y Grupo</th>
                 <th class="text-center">Nombre Libro</th>
@@ -43,13 +42,14 @@
                 <th class="text-center">Cantidad</th>
                 <th class="text-center">Tipo Prestamo</th>
                 <th class="text-center">Días restantes de prestamo</th>
+                <th class="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {% for p in data_all %}
-              <tr>
-                <td>{{p.nom_alumno}}</td>
-                <td>{{p.matricula}}</td>
+              <tr id="info_book" data-id="{{p.id}}" data-id="{{p.titulo}}" data-id="{{p.colocacion}}">
+                <td data-bs-toggle="tooltip" data-bs-placement="top"
+                title="{{p.nom_alumno}}">{{p.matricula}}</td>
                 <td>{{p.carrera_grupo}}</td>
                 <td>{{p.nom_libro}}</td>
                 <td>{{p.nom_autor}}</td>
@@ -57,22 +57,31 @@
                 <td>{{p.cantidad}}</td>
                 <td>{{p.tipoP}}</td>
                 <td class="text-center">
-                  {% if p.dias_restantes %}
-                    {% if p.dias_restantes >= 4 and p.dias_restantes <= 6 %}
-                    <i class="fas fa-circle" style="color:#2ed255; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="{{p.dias_restantes}}"></i>
-                    {% endif %}
-                    {% if p.dias_restantes >= 1 and p.dias_restantes <= 3 %}
-                    <i class="fas fa-circle" style="color:#ede057; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="{{p.dias_restantes}}"></i>
-                    {% endif %}
-                    {% if p.dias_restantes <= 0 %}
-                    <i class="fas fa-circle" style="color:#ff0000; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Sobrepaso los días de prestamo"></i>
+                  {% if p.entrega != 'Entregado' %}
+                    {% if p.dias_restantes %}
+                      {% if p.dias_restantes >= 4 and p.dias_restantes <= 6 %}
+                      <i class="fas fa-circle" style="color:#2ed255; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
+                      title="{{p.dias_restantes}}"></i>
+                      {% endif %}
+                      {% if p.dias_restantes >= 1 and p.dias_restantes <= 3 %}
+                      <i class="fas fa-circle" style="color:#ede057; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
+                      title="{{p.dias_restantes}}"></i>
+                      {% endif %}
+                      {% if p.dias_restantes <= 0 %}
+                      <i class="fas fa-circle" style="color:#ff0000; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
+                      title="Sobrepaso los días de prestamo"></i>
+                      {% endif %}
+                    {% else %}
+                    <span>N/A</span>
                     {% endif %}
                   {% else %}
-                  <span>N/A</span>
+                  <span class="text-bold text-success">Entregado</span>
                   {% endif %}
+                </td>
+                <td class="text-center">
+                  <a id="delivered" type="button"><i class="fas fa-truck-loading text-info" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="marcar/entregado"></i>
+                  </a>
                 </td>
               </tr>
               {% endfor %}
