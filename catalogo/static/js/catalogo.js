@@ -44,15 +44,28 @@ $('#catalogoTable').on('click', 'tbody tr td a#btnPedidoBook', function () {
 // Función para el borrado de elementos
 
 $('#prestamoTable').on('click', 'tbody td a#delivered', function (e) {
-    let data = $(this).closest('#info_book').data(),
-        coloca = data['colocacion'],
-        title = data['titulo'],
-        text = "¿Marcar como entregado",
-        icon = "warning",
-        rute = '/book_delivered/'
-    console.log(coloca);
+    let data = $(this).closest('#info_book').data();
+    let cve_prestamo = data['cve_prestamo'];
+    let entrega = data['entrega'].trim().toLowerCase();
+    let text = entrega == "no/entregado" ? "¿Marcar como entregado?" : "¿Marcar como NO entregado?";
+    let btn = entrega == "no/entregado" ? "Marcar/entregado" : "Marcar/No entregado";
+    let btn_color = entrega == "no/entregado" ? "#28a745" : "#DC4C64"; // verde(success) - rojo(danger)
+    let icon = "warning";
+    let rute = '/book_delivered/';
     // Llama el SweetAlert del script notification
-    register_entrega(title, coloca, text, icon, rute)
+    register_entrega(cve_prestamo, text, btn, btn_color, icon, rute, entrega);
+});
+
+// Valida que todos los campos esten llenos antes de mandar el formulario
+$('#btnSendEstadias').on('click', function (event) {
+    let matricula = $('input[name=matricula]').val(),
+        nom_alumno = $('input[name=nom_alumno]').val(),
+        carrera_grupo = $('input[name=carrera_grupo]').val();
+
+    if(matricula == '' && nom_alumno == '' && carrera_grupo == ''){
+        event.preventDefault();
+    }
+
 })
 
 $('#modal_catalogo').on('hidden.bs.modal', function () {

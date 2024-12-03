@@ -13,7 +13,7 @@ class model_catalogo(models.Model):
         N_ENTREGADO = 'No/entregado', _('No/entregado')
         ENTREGADO = 'Entregado', _('Entregado')
     
-
+    cve_prestamo=models.CharField(max_length=255, null=True)
     nom_libro=models.CharField(max_length=255)
     nom_autor=models.CharField(max_length=255)
     edicion=models.CharField(max_length=255)

@@ -19,6 +19,7 @@ def catalago_View(request):
     listado = acervo_model.objects.all()
     return render(request, 'index_catalogo.html', {"side_code": side_code, "listado":listado, "form":form, "data_prestamo": data_prestamo})
 
+# Genera la vista para la tabla de prestamos
 @groups_required('Administrador')
 def prestamos_View(request):
     side_code = 401
@@ -32,6 +33,7 @@ def prestamos_View(request):
     for f in listado:
         data = {
             "id": f.id,
+            "cve_prestamo": f.cve_prestamo,
             "nom_alumno": f.nom_alumno,
             "matricula": f.matricula,
             "carrera_grupo": f.carrera_grupo,
@@ -41,6 +43,7 @@ def prestamos_View(request):
             "cantidad": f.cantidad,
             "tipoP": f.tipoP,
             "entrega": f.entrega,
+            "fechaP": f.fechaP,
         }   
 
         if f.tipoP == 'Externo':
@@ -60,6 +63,7 @@ def prestamos_View(request):
     # print(json.dumps(data_all, sort_keys=False, indent=2))
     return render(request, 'index_prestamos.html', {"side_code": side_code, "data_all": data_all})
 
+# obtiene datos de la persona por medio de su matricula o cve
 def get_alumno(request):
     matricula = request.GET.get('matricula')
     if matricula:
@@ -87,46 +91,94 @@ def get_alumno(request):
             print(f"Algo salio mal: {a}")
     return JsonResponse({'error': 'Matricula no proporcionada'}, status=400)
 
+# Genera clave unica para prestamo
+def create_cve(fullname, colocacion):
+    cont = 1
+    iniciales = ''
+    coloca = ''
+    # Valida que lleguen los datos
+    if fullname and colocacion:
+        # Obtiene las iniciales del nombre completo
+        iniciales = "".join([palabra[0].upper() for palabra in fullname.split()])
+        # Obtiene la colocación sin espacios
+        coloca = colocacion.replace(" ", "")
+        # Genera un bluque de busqueda
+        while True:
+            # Genera una sola clave
+            cve = iniciales + coloca + str(cont)
+            # Raliza una busqueda en base de datos
+            cve_exist = model_catalogo.objects.filter(cve_prestamo=cve).first()
+            if cve_exist:
+                # Si ya existe la clave, realiza un incremento en un dato y repite
+                cont += 1
+                continue
+            else:
+                # Si la clave es unica, se rompe el bucle
+                break
+        return cve
 
+# Función para registrar prestamos
 def prestamo_registro(request):
-    if request.method == 'POST':
-        form = catalogo_form(request.POST)
-        print(form)
-        if form.is_valid():
-            nom_libro = form.cleaned_data['nom_libro']
-            nom_autor = form.cleaned_data['nom_autor']
-            edicion = form.cleaned_data['edicion']
-            colocacion = form.cleaned_data['colocacion']
-            cantidad = form.cleaned_data['cantidad']
-            matricula = form.cleaned_data['matricula']
-            nom_alumno = form.cleaned_data['nom_alumno']
-            carrera_grupo = form.cleaned_data['carrera_grupo']
-            tipoP = form.cleaned_data['tipoP']
-            fechaP = now().replace(microsecond=0)
+    try:
+        if request.method == 'POST':
+            form = catalogo_form(request.POST)
+            if form.is_valid():
+                # Se obtiene el número de libros existentes
+                exist_book = acervo_model.objects.filter(titulo=form.cleaned_data['nom_libro'], colocacion=form.cleaned_data['colocacion']).first()
+                if exist_book and exist_book.cant > 0:
+                    if form.cleaned_data['cantidad'] > exist_book.cant:
+                        # Redirigir a la vista deseada
+                        messages.add_message(request, messages.INFO, 'La solicitud excedió la cantidad de libros')
+                        return redirect('catalago_View')
+                    # Si la cantidad de los libros es mayor a 0, se realiza el prestamo
+                    cve_prestamo = create_cve(form.cleaned_data['nom_alumno'], form.cleaned_data['colocacion'])
+                    nom_libro = form.cleaned_data['nom_libro']
+                    nom_autor = form.cleaned_data['nom_autor']
+                    edicion = form.cleaned_data['edicion']
+                    colocacion = form.cleaned_data['colocacion']
+                    cantidad = form.cleaned_data['cantidad']
+                    matricula = form.cleaned_data['matricula']
+                    nom_alumno = form.cleaned_data['nom_alumno']
+                    carrera_grupo = form.cleaned_data['carrera_grupo']
+                    tipoP = form.cleaned_data['tipoP']
+                    fechaP = now().replace(microsecond=0)
 
-            catalago_View=model_catalogo.objects.create(
-                    nom_libro = nom_libro,
-                    nom_autor = nom_autor,
-                    edicion = edicion,
-                    colocacion = colocacion,
-                    cantidad = cantidad,
-                    matricula = matricula,
-                    nom_alumno = nom_alumno,
-                    carrera_grupo = carrera_grupo,
-                    tipoP = tipoP,
-                    fechaP = fechaP
-            )
-            messages.add_message(request, messages.SUCCESS, 'Prestamo Solicitado')
-            # Redirigir a la vista deseada
-            return redirect('catalago_View')
+                    catalago_View=model_catalogo.objects.create(
+                            cve_prestamo = cve_prestamo,
+                            nom_libro = nom_libro,
+                            nom_autor = nom_autor,
+                            edicion = edicion,
+                            colocacion = colocacion,
+                            cantidad = cantidad,
+                            matricula = matricula,
+                            nom_alumno = nom_alumno,
+                            carrera_grupo = carrera_grupo,
+                            tipoP = tipoP,
+                            fechaP = fechaP
+                    )
+                    # Se genera una redución de ejemplares en el acervo
+                    exist_book.cant = exist_book.cant - form.cleaned_data['cantidad']
+                    exist_book.save()
+
+                    messages.add_message(request, messages.SUCCESS, 'Prestamo Solicitado')
+                    # Redirigir a la vista deseada
+                    return redirect('catalago_View')
+                else:
+                    messages.add_message(request, messages.INFO, 'Ejemplar agotado')
+                    # Redirigir a la vista deseada
+                    return redirect('catalago_View')
+            else:
+                # Si el formulario no es válido, vuelve a renderizar el formulario con errores
+                messages.add_message(request, messages.ERROR, '¡Por favor, corrija los errores del formulario!')
+                return redirect('catalago_View')
         else:
-            # Si el formulario no es válido, vuelve a renderizar el formulario con errores
-            messages.add_message(request, messages.ERROR, '¡Por favor, corrija los errores del formulario!')
+            # Si no es un POST, se asume que es un GET
+            form = catalogo_form()
+            messages.add_message(request, messages.ERROR, '¡Algo salio mal!')
             return redirect('catalago_View')
-    else:
-        # Si no es un POST, se asume que es un GET
-        form = catalogo_form()
-        messages.add_message(request, messages.ERROR, '¡Algo salio mal!')
+    except Exception as p:
+        print(p)
+        messages.add_message(request, messages.ERROR, '¡El proceso no se pudo realizar!')
         return redirect('catalago_View')
 
 # Función para convertir documento a base64
@@ -139,54 +191,7 @@ def convert_base64(img):
     except Exception as e:
         raise Exception(f"Error al convertir la imagen a Base64: {e}")
 
-def temporary_image_base64_2(base_64_input, titulo, colocacion):
-    # base64_string = base_64_input.strip().split(',')[1]
-    decoded_bytes = base64.b64decode(base_64_input)
-    file_temp, path_temp = tempfile.mkstemp(suffix=".webp", dir=settings.MEDIA_ROOT + "/")
-    try:
-        with os.fdopen(file_temp, 'wb') as tmp:
-            tmp.write(decoded_bytes)
-    except Exception as e:
-        os.remove(path_temp)
-        raise e
-    return path_temp
-
-def temporary_image_base64(base_64_input, titulo, colocacion):
-    """
-    Convierte un string Base64 a una imagen y la guarda en una carpeta específica.
-    
-    Args:
-        base64_string (str): El string en formato Base64.
-        nombre_archivo (str): El nombre con el que se guardará la imagen (incluye la extensión).
-        carpeta_destino (str): La ruta relativa dentro del proyecto donde se guardará la imagen.
-    
-    Returns:
-        str: Ruta relativa al archivo guardado.
-    """
-    # Decodifica el string Base64
-    try:
-        # formato, imgstr = base64_string.split(';base64,')
-        # extension = formato.split('/')[1]  # Extrae la extensión de la imagen
-        img_data = base64.b64decode(base_64_input)
-    except Exception as e:
-        raise ValueError("El string Base64 no tiene el formato esperado.") from e
-    
-    # Ruta completa donde se guardará la imagen
-    ruta_carpeta = os.path.join(settings.BASE_DIR, 'static/img')
-    if not os.path.exists(ruta_carpeta):
-        os.makedirs(ruta_carpeta)  # Crea la carpeta si no existe
-    
-    ruta_archivo = os.path.join(ruta_carpeta, f"{nombre_archivo}.{extension}")
-    
-    # Guarda la imagen
-    with open(ruta_archivo, "wb") as archivo:
-        archivo.write(img_data)
-    
-    # Retorna la ruta relativa al archivo guardado
-    return os.path.join(carpeta_destino, f"{nombre_archivo}.{extension}")
-
-# Función para converti de base64 a imagen y presentarla
-@groups_required('Alumno', 'Docente', 'Administrador')
+# Función para convertir de base64 a imagen y presentarla
 def view_book(request, base64):
     try:
         # Se obtienen los datos entrantes
@@ -253,53 +258,110 @@ def edit_portada(request):
         messages.add_message(request, messages.ERROR, 'Solicitud inválida.')
         return redirect('cargar_portada')
 
+# Se buscan lo libro por colocación
 def search_book(request):
     get_colocacion = request.GET.get('colocacion')
     if get_colocacion:
         try:
             book_data = {}
             data_all = []
-            # book = acervo_model.objects.get(colocacion=str(get_colocacion))
             book = acervo_model.objects.all()
             for b in book:
                 if b.colocacion == get_colocacion:
                     book_data = {
                         'colocacion': b.colocacion,
-                        'titulo': b.titulo,  # Replace with actual fields of your model
+                        'titulo': b.titulo, 
                         'autor': b.autor,
                         'anio': b.anio,
                         'edicion': b.edicion
-                        # Add other fields as needed
                     }
                     data_all.append(book_data)
-            # Return the data as a JSON response
             return JsonResponse({'status': 'success', 'books': data_all})
 
         except acervo_model.DoesNotExist:
-            # Handle case where the book is not found
             return JsonResponse({'status': 'error', 'message': 'Book not found'}, status=404)
 
         except Exception as e:
-            # Handle any other errors
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-
-    # If no 'colocacion' was provided in the GET request
-    return JsonResponse({'status': 'error', 'message': 'No colocacion provided'}, status=400)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'No colocacion provided'}, status=400)
 
 # Cambia el estado de la entrega de los libros
-def book_delivered(request, id_delivered):
+def book_delivered(request, cve):
     try:
-        book = model_catalogo.objects.filter(id=id_delivered).first()
+        book = model_catalogo.objects.filter(cve_prestamo=cve).first()
         if book:
-            book.entrega = 'Entregado'
-            book.fechaE = localtime(now())
+            # Se realiza el aumento de la cantidad en el acervo (si el libro se entrega)
+            if book.entrega == 'No/entregado':
+                ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
+                if ref_catalogo:
+                    ref_catalogo.cant = ref_catalogo.cant + book.cantidad
+                    ref_catalogo.save()
+            # Se realiza la disminución de la cantidad en el acervo (si se corrige el estado)
+            if book.entrega == 'Entregado':
+                ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
+                if ref_catalogo:
+                    ref_catalogo.cant = ref_catalogo.cant - book.cantidad
+                    ref_catalogo.save()
+
+            book.fechaE = now().replace(microsecond=0) if book.entrega == 'No/entregado' else None
+            book.entrega = 'Entregado' if book.entrega == 'No/entregado' else 'No/entregado'
             book.save()
 
-            messages.add_message(request, messages.SUCCESS, 'Libro entregado.')
+            messages.add_message(request, messages.SUCCESS, 'Estado de libro cambiado.')
             return redirect('prestamos_View')
         else:
             messages.add_message(request, messages.ERROR, '¡Algo salio mal!.')
             return redirect('prestamos_View')
     except Exception as b:
+        print(b)
         messages.add_message(request, messages.ERROR, 'No se pudo realizar la acción.')
         return redirect('prestamos_View')
+
+# Vista, retorna todos los libros solicitados por persona
+def get_book_for_person(request):
+    side_code = 403
+    try:
+        ref_matricula = str(request.user)
+        ref_persona = model_catalogo.objects.filter(matricula=ref_matricula)
+
+        dias_permitidos = 6
+        data = {}
+        data_all = []
+        cont = 0
+
+        for f in ref_persona:
+            data = {
+                "id": f.id,
+                "cve_prestamo": f.cve_prestamo,
+                "nom_alumno": f.nom_alumno,
+                "matricula": f.matricula,
+                "carrera_grupo": f.carrera_grupo,
+                "nom_libro": f.nom_libro,
+                "nom_autor": f.nom_autor,
+                "edicion": f.edicion,
+                "colocacion": f.colocacion,
+                "cantidad": f.cantidad,
+                "tipoP": f.tipoP,
+                "entrega": f.entrega,
+            }   
+
+            if f.tipoP == 'Externo':
+                fecha_limite = f.fechaP
+                # Fecha actual en la zona horaria configurada
+                ahora = now().replace(microsecond=0)
+                # Calculamos la diferencia entre las fechas
+                diferencia = ahora - fecha_limite
+                # Obtener el número de días de la diferencia
+                dias_transcurridos = diferencia.days
+
+                dias_restantes = dias_permitidos - dias_transcurridos
+
+                data["dias_restantes"] = dias_restantes
+                
+            data_all.append(data)
+        return render(request, 'libros_pedidos.html', { "side_code": side_code, "data_all": data_all})
+    except Exception as g:
+        print(g)
+        messages.add_message(request, messages.ERROR, 'No se encontro información.')
+        return redirect('inicio')

@@ -4,7 +4,7 @@ const estadia_alert = (title, text, icon) => {
         icon: icon,
         text: text,
         showConfirmButton: false,
-        timer: 2100
+        timer: 3000
     })
 }
 
@@ -28,22 +28,22 @@ const register_deleteSwal = (title, coloca, text, icon, rute) => {
         })
 }
 
-const register_entrega = (title, coloca, text, icon, rute) => {
+const register_entrega = (cve_prestamo, text, btn, btn_color, icon, rute, entrega) => {
     Swal.fire({
-        "title": 'colocación - ' + coloca,
+        "title": cve_prestamo,
         "text": text,
         "icon": icon,
         "showCancelButton": true,
         //"allowOutsideClick": false,
         "cancelButtonText": "Cancelar",
-        "confirmButtonText": "Marcar/entregado",
+        "confirmButtonText": btn,
         "reverseButtons": true,
-        "confirmButtonColor": "#28a745",
+        "confirmButtonColor": btn_color,
     })
         .then(function (result) {
             if (result.isConfirmed) {
                 // Envía la colocación del registro a eliminar
-                location.href = rute + coloca
+                location.href = rute + cve_prestamo
             }
         })
 }

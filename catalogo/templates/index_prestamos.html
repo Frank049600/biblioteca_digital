@@ -34,10 +34,10 @@
           <table id="prestamoTable" class="cell-border stripe" style="width:100%">
             <thead>
               <tr>
+                <th class="text-center">Clave prestamo</th>
                 <th class="text-center">Matricula</th>
                 <th class="text-center">Carrera y Grupo</th>
                 <th class="text-center">Nombre Libro</th>
-                <th class="text-center">Autor</th>
                 <th class="text-center">Colocación</th>
                 <th class="text-center">Cantidad</th>
                 <th class="text-center">Tipo Prestamo</th>
@@ -47,12 +47,13 @@
             </thead>
             <tbody>
               {% for p in data_all %}
-              <tr id="info_book" data-id="{{p.id}}" data-id="{{p.titulo}}" data-id="{{p.colocacion}}">
+              <tr id="info_book" data-cve_prestamo="{{p.cve_prestamo}}" data-coloca="{{p.colocacion}}" data-matricula="{{p.matricula}}" data-entrega="{{p.entrega}}">
+                <td data-bs-toggle="tooltip" data-bs-placement="top"
+                title="{{p.fechaP}}">{{p.cve_prestamo}}</td>
                 <td data-bs-toggle="tooltip" data-bs-placement="top"
                 title="{{p.nom_alumno}}">{{p.matricula}}</td>
                 <td>{{p.carrera_grupo}}</td>
                 <td>{{p.nom_libro}}</td>
-                <td>{{p.nom_autor}}</td>
                 <td>{{p.colocacion}}</td>
                 <td>{{p.cantidad}}</td>
                 <td>{{p.tipoP}}</td>
@@ -71,6 +72,8 @@
                       <i class="fas fa-circle" style="color:#ff0000; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
                       title="Sobrepaso los días de prestamo"></i>
                       {% endif %}
+                    {% elif p.dias_restantes == 0 %}
+                    <span class="text-bold text-info">Último día</span>
                     {% else %}
                     <span>N/A</span>
                     {% endif %}
