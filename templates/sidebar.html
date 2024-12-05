@@ -22,17 +22,11 @@
                     <span>{{ user }}</span>
                 </li>
                 <li>
-                    <div class="row">
-                        {% if grupo == 'Alumno' %}
-                        <div class="col-xl-6">
-                            <span>{{ grupo }}</span>
+                    <div class="row d-flex flex-column justify-content-center align-items-center">
+                        <div class="col-xl-12">
+                            <i class="fab fa-readme brand-image elevation-3" style="opacity: .8"></i>
+                            <span class="brand-text font-weight-light">"Un lector vive mil vidas <br> antes de morir"</span>
                         </div>
-                        <div class="col-xl-6">
-                            <span>{{ grupo_name }}</span>
-                        </div>
-                        {% else %}
-                        <span>{{ grupo }}</span>
-                        {% endif %}
                     </div>
                 </li>
             </ul>
@@ -56,7 +50,7 @@
                         </a>
                 </li>
                 <!-- Sección de Acervo -->
-                {% if grupo != 'Alumno' and grupo != 'Docente'%}
+                {% if 'Administrador' in grupo_control %}
                 <li class="nav-item">
                     {% if side_code == 200 %}
                     <a href="{% url 'acervo' %}" class="nav-link active">
@@ -72,7 +66,7 @@
                 {% endif %}
                 <!-- Sección de Libros -->
                 <li class="nav-item">
-                    {% if side_code == 400 %}
+                    {% if side_code == 400 or side_code == 401 %}
                     <a href="#" class="nav-link active">
                         {% else %}
                         <a href="#" class="nav-link">
@@ -91,22 +85,41 @@
                                     <a href="{% url 'catalago_View' %}" class="nav-link">
                                         {% endif %}
                                         <i class="fas fa-book"></i>
-                                        <p>Catalogo Libros</p>
+                                        <p>Catalogo</p>
                                     </a>
                             </li>
-
-                            {% if grupo != 'Alumno' and grupo != 'Docente'%}
+                            <li class="nav-item">
+                                {% if side_code == 403 %}
+                                <a href="{% url 'get_book_for_person' %}" class="nav-link active">
+                                    {% else %}
+                                    <a href="{% url 'get_book_for_person' %}" class="nav-link">
+                                        {% endif %}
+                                        <i class="fas fa-list-ul"></i>
+                                        <p>Libros pedidos</p>
+                                    </a>
+                            </li>
+                            {% if 'Administrador' in grupo_control %}
                             <li class="nav-item">
                                 {% if side_code == 401 %}
                                 <a href="{% url 'prestamos_View' %}" class="nav-link active">
                                     {% else %}
                                     <a href="{% url 'prestamos_View' %}" class="nav-link">
                                         {% endif %}
-                                        <i class="fas fa-book"></i>
-                                        <p>Prestamos Libros</p>
-                            {% endif %}
+                                        <i class="fas fa-clipboard-list"></i>
+                                        <p>Registro de prestamos</p>
                                     </a>
                             </li>
+                            <li class="nav-item">
+                                {% if side_code == 402 %}
+                                <a href="{% url 'cargar_portada' %}" class="nav-link active">
+                                    {% else %}
+                                    <a href="{% url 'cargar_portada' %}" class="nav-link">
+                                        {% endif %}
+                                        <i class="fas fa-file-upload"></i>
+                                        <p>Cargar portada</p>
+                                    </a>
+                            </li>
+                            {% endif %}
                         </ul>
                 </li>
                 <!-- Sección de Estadías -->

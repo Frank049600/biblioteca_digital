@@ -90,6 +90,7 @@
         <script src="{% static 'js/notification.js' %}"></script>
         <script src="{% static 'js/tabindex.js' %}"></script>
         <script src="{% static 'js/datatable.js' %}"></script>
+        <script src="{% static 'js/img_default_base64.js' %}"></script>
         <!-- PDF.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.5.141/pdf.min.js"></script>
         <!-- Tooltip (configuración) (etiquetas para los botones)-->
@@ -110,8 +111,8 @@
                 title: '{% if message.tags %}{{ message.tags|title }}{% else %}Mensaje{% endif %}',
                 text: '{{ message }}',
                 icon: icons['{{ message.tags|title }}'],
-                showConfirmButton: false,
-                timer: 2100
+                showConfirmButton: true,
+                confirmButtonColor: '#28a745'
             });
         </script>
         {% endfor %}

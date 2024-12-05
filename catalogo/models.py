@@ -1,8 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-# from django_mysql.models import LongTextField
-
 class LongTextField(models.TextField):
     def db_type(self, connection):
         if connection.vendor == 'mysql':
@@ -11,21 +9,27 @@ class LongTextField(models.TextField):
         
 class model_catalogo(models.Model):
 
-   nom_libro=models.CharField(max_length=255)
-   nom_autor=models.CharField(max_length=255)
-   edicion=models.CharField(max_length=255)
-   colocacion=models.CharField(max_length=255)
-   cantidad=models.IntegerField()
-   matricula=models.IntegerField()
-   nom_alumno=models.CharField(max_length=255)
-   carrera_grupo=models.CharField(max_length=255)
-   tipoP = models.CharField(max_length=255, null=True)
-   fechaP = models.DateTimeField(verbose_name='fechaP', null=True)
-   #tipoP = models.CharField(max_length=5, verbose_name="Tipo de Prestamo", choices=format.choices, default=format.EXTERNO, null=True, blank=True)
+    class state_entrega(models.TextChoices):
+        N_ENTREGADO = 'No/entregado', _('No/entregado')
+        ENTREGADO = 'Entregado', _('Entregado')
+    
+    cve_prestamo=models.CharField(max_length=255, null=True)
+    nom_libro=models.CharField(max_length=255)
+    nom_autor=models.CharField(max_length=255)
+    edicion=models.CharField(max_length=255)
+    colocacion=models.CharField(max_length=255)
+    cantidad=models.IntegerField()
+    matricula=models.IntegerField()
+    nom_alumno=models.CharField(max_length=255)
+    carrera_grupo=models.CharField(max_length=255)
+    tipoP = models.CharField(max_length=255, null=True)
+    fechaP = models.DateTimeField(verbose_name='Fecha prestamo', null=True, blank=True)
+    entrega = models.CharField(max_length=255, verbose_name="Tipo de entrega", choices=state_entrega.choices, default=state_entrega.N_ENTREGADO, null=True, blank=True)
+    fechaE = models.DateTimeField(verbose_name='Fecha entrega', null=True, blank=True)
 
-   def _str_(self):
+    def _str_(self):
         return self.prestamos
 
-   class Meta:
+    class Meta:
         verbose_name="prestamos"
         verbose_name_plural='prestamos'

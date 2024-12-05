@@ -17,7 +17,7 @@
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{% url 'inicio' %}"><i class="fas fa-home color-info"></i></a>
                 </li>
-                <li class="breadcrumb-item text-black">Prestamos Libros</li>
+                <li class="breadcrumb-item text-black">Prestamo Libros</li>
               </ol>
             </div>
           </div>
@@ -34,45 +34,61 @@
           <table id="prestamoTable" class="cell-border stripe" style="width:100%">
             <thead>
               <tr>
-                <th class="text-center">Nombre Alumno</th>
+                <th class="text-center">Clave prestamo</th>
                 <th class="text-center">Matricula</th>
                 <th class="text-center">Carrera y Grupo</th>
                 <th class="text-center">Nombre Libro</th>
-                <th class="text-center">Autor</th>
                 <th class="text-center">Colocación</th>
                 <th class="text-center">Cantidad</th>
                 <th class="text-center">Tipo Prestamo</th>
                 <th class="text-center">Días restantes de prestamo</th>
+                <th class="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {% for p in data_all %}
-              <tr>
-                <td>{{p.nom_alumno}}</td>
-                <td>{{p.matricula}}</td>
+              <tr id="info_book" data-cve_prestamo="{{p.cve_prestamo}}" data-coloca="{{p.colocacion}}" data-matricula="{{p.matricula}}" data-entrega="{{p.entrega}}" data-cantidad="{{p.cantidad}}">
+                <td data-bs-toggle="tooltip" data-bs-placement="top"
+                title="{{p.fechaP}}">{{p.cve_prestamo}}</td>
+                <td data-bs-toggle="tooltip" data-bs-placement="top"
+                title="{{p.nom_alumno}}">{{p.matricula}}</td>
                 <td>{{p.carrera_grupo}}</td>
                 <td>{{p.nom_libro}}</td>
-                <td>{{p.nom_autor}}</td>
                 <td>{{p.colocacion}}</td>
                 <td>{{p.cantidad}}</td>
                 <td>{{p.tipoP}}</td>
                 <td class="text-center">
-                  {% if p.dias_restantes %}
-                    {% if p.dias_restantes >= 4 and p.dias_restantes <= 6 %}
-                    <i class="fas fa-circle" style="color:#2ed255; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="{{p.dias_restantes}}"></i>
-                    {% endif %}
-                    {% if p.dias_restantes >= 1 and p.dias_restantes <= 3 %}
-                    <i class="fas fa-circle" style="color:#ede057; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="{{p.dias_restantes}}"></i>
-                    {% endif %}
-                    {% if p.dias_restantes <= 0 %}
-                    <i class="fas fa-circle" style="color:#ff0000; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Sobrepaso los días de prestamo"></i>
+                  {% if p.entrega != 'Entregado' %}
+                    {% if p.dias_restantes %}
+                      {% if p.dias_restantes >= 4 and p.dias_restantes <= 6 %}
+                      <i class="fas fa-circle" style="color:#2ed255; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
+                      title="{{p.dias_restantes}}"></i>
+                      {% endif %}
+                      {% if p.dias_restantes >= 1 and p.dias_restantes <= 3 %}
+                      <i class="fas fa-circle" style="color:#ede057; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
+                      title="{{p.dias_restantes}}"></i>
+                      {% endif %}
+                      {% if p.dias_restantes <= 0 %}
+                      <i class="fas fa-circle" style="color:#ff0000; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
+                      title="Sobrepaso los días de prestamo"></i>
+                      {% endif %}
+                    {% elif p.dias_restantes == 0 %}
+                    <span class="text-bold text-info">Último día</span>
+                    {% else %}
+                    <span>N/A</span>
                     {% endif %}
                   {% else %}
-                  <span>N/A</span>
+                  <span class="text-bold text-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                  title="{{p.fechaE}}">Entregado</span>
                   {% endif %}
+                </td>
+                <td class="text-center">
+                  <a id="delivered" type="button"><i class="fas fa-truck-loading text-info" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Marcar/Entregado"></i>
+                  </a>
+                  <a id="renew_again" type="button"><i class="fas fa-undo-alt text-success pl-2" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Renovar prestamo"></i>
+                  </a>
                 </td>
               </tr>
               {% endfor %}

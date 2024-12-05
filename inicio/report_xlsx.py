@@ -37,10 +37,10 @@ def reporte_info(sheet, data):
 
 def table_acervo(sheet, data):
     # Unión de celdas
-    sheet.merge_cells('A15:I15')
-    sheet['B15'].font = Font(color = 'FFFFFF', bold=True, size=12)
-    sheet['B15'].fill = PatternFill('solid', start_color="d3c905")
-    sheet['B15'] = 'REPORTE GENERAL DE ACERVO BIBLIOGRÁFICO: ' + data['ciclo']
+    sheet.merge_cells('A11:H11')
+    sheet['A11'].font = Font(color = '000000', bold=True, size=12)
+    sheet['A11'].fill = PatternFill('solid', start_color="d3c905")
+    sheet['A11'] = 'REPORTE GENERAL DE ACERVO BIBLIOGRÁFICO: ' + data['ciclo']
 
 def create_excel(data):
     """
@@ -53,8 +53,8 @@ def create_excel(data):
     # Inserta la imagen en el encabezado
     insert_header_image(sheet)
     # Inserta información
-    reporte_info(sheet, data)
-    # table_acervo(sheet, data)
+    # reporte_info(sheet, data)
+    table_acervo(sheet, data)
 
     return book
 

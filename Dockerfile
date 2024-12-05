@@ -50,6 +50,9 @@ COPY django_script.conf /etc/supervisor/conf.d/django_script.conf
 COPY init.sh /code/init.sh
 RUN chmod +x /code/init.sh
 
+RUN ln -sf /usr/share/zoneinfo/America/Mexico_City /etc/localtime && \
+    echo "America/Mexico_City" > /etc/timezone
+
 # Expone el puerto para la aplicación Django
 EXPOSE 8080
 

@@ -39,28 +39,24 @@
               <th class="text-center">Edición</th>
               <th class="text-center">Cantidad</th>
               <th class="text-center">Colocación</th>
-              <th class="text-center">Estatus</th>
-              <th class="text-center">Prestamo</th>
+              <th class="text-center">Acción</th>
             </tr>
           </thead>
           <tbody>
             {% for p in listado %}
             <!--tr data-report="{{ p.reporte }}"-->
             <tr data-titulo="{{p.titulo}}" data-autor="{{p.autor}}" data-edicion="{{p.edicion}}"
-            data-colocacion="{{p.colocacion}}" data-persona="{{user}}">
+            data-colocacion="{{p.colocacion}}" data-persona="{{user}}" data-base64="{{p.base64}}">
               <td>{{p.titulo}}</td>
               <td>{{p.autor}}</td>
               <td>{{p.edicion}}</td>
               <td>{{p.cant}}</td>
               <td>{{p.colocacion}}</td>
-              <td>{{p.estado}}</td>
               <td class="text-center">
                 <a type="button" id="btnPedidoBook" class="btn float-center" data-bs-toggle="modal"
-                  data-bs-target="#modal_catalogo" data-bs-toggle="tooltip" data-bs-placement="top"
-                  title="Prestamo"><i class="fas fa-book ml-1"></i>
+                  data-bs-target="#modal_catalogo" data-bs-placement="top"
+                  title="Realizar prestamo"><i class="fas fa-book ml-1"></i>
                 </a>
-                <!--a type="button" id="reporte_edit" data-bs-toggle="tooltip" data-bs-placement="top"
-                                  title="Editar reporte"><i class="fas fa-edit text-info"></i></a-->
               </td>
             </tr>
             {% endfor %}

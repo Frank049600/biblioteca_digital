@@ -28,89 +28,117 @@ def add_group_name_to_contex(view_class):
         user = self.request.user
         print(user)
 
-
-# Create your views here.
-# def modal_registro(request):
-#     return render(request, 'modal_registro.html')
+# Función que obtiene todos los grupos de control y el nombre del usuario registrado
 def get_fullname_grupo(request):
     user = request.user
     cve = Usuario.objects.get(login=user)
     persona = Persona.objects.get(cve_persona=cve.cve_persona)
     group = group_permission(request, True)
     name = persona.nombre + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno
-
     return {
-        "group": group,
+        "group": group['grupo_control'],
         "name": name
     }
 
-@login_required
-@groups_required('Alumno', 'Docente')
+# Index principal
 def index_proyectos(request):
     form = estadias_form()
-    fullname = get_fullname_grupo(request)['name']
-    flag = True
-    if get_fullname_grupo(request)['group'] == '27 Docentes':
-        flag = False
-
-    reporte = model_estadias.objects.all() if flag else model_estadias.objects.filter(asesor_academico=fullname)
+    # Código para control de pestañas en sidebar
     side_code = 300
+    # fullname = get_fullname_grupo(request)['name']
+    # flag = True
+    # if '32 Tutoreo - Tutor' in get_fullname_grupo(request)['group']:
+    #     flag = False
+    #     reporte = model_estadias.objects.filter(asesor_academico=fullname)
+    #     reporte_all = model_estadias.objects.all()
+    #     return render(request,'index_proyectos.html',{"reporte":reporte, "reporte_all":reporte_all, "form":form,"side_code":side_code})
+    
+    reporte = model_estadias.objects.all()
     return render(request,'index_proyectos.html',{"reporte":reporte, "form":form,"side_code":side_code})
 
-@login_required
-@groups_required('Alumno', 'Docente', 'Administrador')
+@groups_required('32 Tutoreo - Tutor', 'Administrador')
 def estadias_registro(request):
-    if request.method == 'POST':
-        form = estadias_form(request.POST, request.FILES)
-        print(form)
-        if form.is_valid():
-            proyecto = form.cleaned_data['proyecto']
-            matricula = form.cleaned_data['matricula']
-            alumno = form.cleaned_data['alumno']
-            asesor_academico = form.cleaned_data['asesor_academico']
-            generacion = form.cleaned_data['generacion']
-            empresa = form.cleaned_data['empresa']
-            asesor_orga = form.cleaned_data['asesor_orga']
-            carrera = form.cleaned_data['carrera']
-            name_ref = file_new_name(alumno, form.cleaned_data['reporte_file'].name)
+    try:
+        if request.method == 'POST':
+            form = estadias_form(request.POST, request.FILES)
+            if form.is_valid():
+                # Datos validados desde el formulario
+                matricula = form.cleaned_data['matricula']
+                proyecto = form.cleaned_data['proyecto']
+                generacion = form.cleaned_data['generacion']
+                alumno = form.cleaned_data['alumno']
+                asesor_academico = form.cleaned_data['asesor_academico']
+                empresa = form.cleaned_data['empresa']
+                asesor_orga = form.cleaned_data['asesor_orga']
+                carrera = form.cleaned_data['carrera']
+                archivo = form.cleaned_data['reporte_file']
+                # Validar existencia de proyectos
+                exist_proyect = model_estadias.objects.filter(
+                    matricula=matricula, 
+                    proyecto=proyecto, 
+                    generacion=generacion
+                )
+                if exist_proyect.exists():
+                    messages.add_message(request, messages.INFO, 'Este proyecto ya fue registrado con el mismo alumno')
+                    return redirect('proyectos')
 
-            # Llamado de función para convertir documento a base64
-            base64 = convert_base64(form.cleaned_data['reporte_file'])
-            fecha_registro = now().replace(microsecond=0)
+                exist_name_proyect = model_estadias.objects.filter(proyecto=proyecto)
+                if exist_name_proyect.exists():
+                    messages.add_message(request, messages.INFO, 'Ya existe un proyecto con este nombre')
+                    return redirect('proyectos')
 
-            model_estadias.objects.create(
-                    proyecto = proyecto,
-                    matricula = matricula,
-                    alumno = alumno,
-                    asesor_academico = asesor_academico,
-                    generacion = generacion,
-                    empresa = empresa,
-                    asesor_orga = asesor_orga,
-                    carrera = carrera,
-                    reporte = name_ref,
-                    base64 = base64,
-                    fecha_registro = fecha_registro
-            )
-            messages.add_message(request, messages.SUCCESS, 'Registro agregado correctamente.')
-            return redirect('proyectos')
+                # Validar archivo antes de procesarlo
+                if not archivo:
+                    messages.add_message(request, messages.ERROR, 'Debe subir un archivo válido.')
+                    return redirect('proyectos')
+
+                # Procesar archivo y datos
+                name_ref = file_new_name(alumno, archivo.name)
+                base64_file = convert_base64(archivo)
+                fecha_registro = now().replace(microsecond=0)
+
+                # Crear registro
+                model_estadias.objects.create(
+                    proyecto=proyecto,
+                    matricula=matricula,
+                    alumno=alumno,
+                    asesor_academico=asesor_academico,
+                    generacion=generacion,
+                    empresa=empresa,
+                    asesor_orga=asesor_orga,
+                    carrera=carrera,
+                    reporte=name_ref,
+                    base64=base64_file,
+                    fecha_registro=fecha_registro
+                )
+                messages.add_message(request, messages.SUCCESS, 'Registro agregado correctamente')
+                return redirect('proyectos')
+            else:
+                # Mostrar errores del formulario
+                print(form.errors)
+                messages.add_message(request, messages.ERROR, 'Por favor, corrija los errores en el formulario')
         else:
-            # Si el formulario no es válido, renderiza el formulario con errores
-            messages.add_message(request, messages.ERROR, 'Por favor, corrija los errores en el formulario.')
-    else:
-        form = estadias_form()
+            form = estadias_form()
 
-    # Renderiza la página con el formulario
-    return render(request, 'index_proyectos.html', {'form': form})
+        return render(request, 'index_proyectos.html', {'form': form})
+    except AttributeError as e:
+        print(f"Error específico: {e}")
+        return HttpResponse("Error relacionado con atributos de archivo.", status=400)
+    except Exception as re:
+        print(f"Algo salió mal: {re}")
+        return HttpResponse("Ocurrió un error inesperado.", status=500)
 
 # Función para convertir documento a base64
-def convert_base64(doc):
-    # Se convierte el pdf en formato base64
-    # Lee el documento que llega en formulario
-    file = doc.read()
-    # Convierte el documento en base64
-    encoded_string = base64.b64encode(file)
-    return encoded_string.decode('utf-8')
+def convert_base64(file):
+    try:
+        if not hasattr(file, 'read'):
+            raise ValueError("El archivo no es válido o no tiene datos para leer.")
+        return base64.b64encode(file.read()).decode('utf-8')
+    except Exception as e:
+        print(f"Error al convertir archivo a base64: {e}")
+        return None
 
+# Crea el archivo temporal para la visualización del mismo
 def temporary_file_base_64(base_64_input):
     # base64_string = base_64_input.strip().split(',')[1]
     decoded_bytes = base64.b64decode(base_64_input)
@@ -124,8 +152,6 @@ def temporary_file_base_64(base_64_input):
     return path_temp
 
 # Función para mostrar file report
-@login_required
-@groups_required('Alumno', 'Docente')
 def view_report(request, report_rute):
     try:
         # Código de ubicación para sidebar
@@ -140,7 +166,6 @@ def view_report(request, report_rute):
     except Exception as v:
         print(f"Error en al generar vista de PDF: {v}")
 
-@login_required
 def insert_consult(request):
     try:
         user_id = request.POST.get('user_id')
@@ -183,8 +208,7 @@ def servir_pdf(request, report_rute):
     response['Content-Disposition'] = 'inline; filename="mi_documento.pdf"'
     return response
 
-@login_required
-@groups_required('Alumno', 'Docente')
+@groups_required('32 Tutoreo - Tutor', 'Administrador')
 # Función de búsqueda para retorno de información por búsqueda con matricula
 def get_alumno(request):
     matricula = request.GET.get('matricula')

@@ -9,8 +9,6 @@ from catalogo.models import model_catalogo
 from datetime import datetime
 
 # Create your views here.
-# @groups_required('Administrador')
-@login_required
 def index_inicio(request):
     # Se asigna el código para el focus en el sidebar
     side_code = 100
