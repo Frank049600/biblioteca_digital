@@ -31,8 +31,8 @@ class acervo_model(models.Model):
     estado = models.CharField(max_length=3, verbose_name="Estado", choices=state.choices, default=state.EXCELENTE, null=True, blank=True)
     formato = models.CharField(max_length=5, verbose_name="formato", choices=format.choices, default=format.LIBRO, null=True, blank=True)
     base64 = LongTextField('Portada',null=True,blank=True)
-    fecharegistro = models.DateField(verbose_name="Fecha de Registro", null=True, blank=True)
-    fechaedicion = models.DateField(verbose_name="Fecha de actualización", null=True, blank=True)
+    fecharegistro = models.DateTimeField(verbose_name='Fecha de registro', null=True, blank=True)
+    fechaedicion = models.DateTimeField(verbose_name='Fecha de actualiación', null=True, blank=True)
 
     def _str_(self):
         return self.titulo
