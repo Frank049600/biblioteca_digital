@@ -111,8 +111,8 @@
                 title: '{% if message.tags %}{{ message.tags|title }}{% else %}Mensaje{% endif %}',
                 text: '{{ message }}',
                 icon: icons['{{ message.tags|title }}'],
-                showConfirmButton: false,
-                timer: 3000
+                showConfirmButton: true,
+                confirmButtonColor: '#28a745'
             });
         </script>
         {% endfor %}

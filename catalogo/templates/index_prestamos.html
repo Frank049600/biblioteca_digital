@@ -47,7 +47,7 @@
             </thead>
             <tbody>
               {% for p in data_all %}
-              <tr id="info_book" data-cve_prestamo="{{p.cve_prestamo}}" data-coloca="{{p.colocacion}}" data-matricula="{{p.matricula}}" data-entrega="{{p.entrega}}">
+              <tr id="info_book" data-cve_prestamo="{{p.cve_prestamo}}" data-coloca="{{p.colocacion}}" data-matricula="{{p.matricula}}" data-entrega="{{p.entrega}}" data-cantidad="{{p.cantidad}}">
                 <td data-bs-toggle="tooltip" data-bs-placement="top"
                 title="{{p.fechaP}}">{{p.cve_prestamo}}</td>
                 <td data-bs-toggle="tooltip" data-bs-placement="top"
@@ -78,12 +78,16 @@
                     <span>N/A</span>
                     {% endif %}
                   {% else %}
-                  <span class="text-bold text-success">Entregado</span>
+                  <span class="text-bold text-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                  title="{{p.fechaE}}">Entregado</span>
                   {% endif %}
                 </td>
                 <td class="text-center">
                   <a id="delivered" type="button"><i class="fas fa-truck-loading text-info" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="marcar/entregado"></i>
+                    title="Marcar/Entregado"></i>
+                  </a>
+                  <a id="renew_again" type="button"><i class="fas fa-undo-alt text-success pl-2" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Renovar prestamo"></i>
                   </a>
                 </td>
               </tr>

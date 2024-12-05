@@ -23,9 +23,9 @@ class model_catalogo(models.Model):
     nom_alumno=models.CharField(max_length=255)
     carrera_grupo=models.CharField(max_length=255)
     tipoP = models.CharField(max_length=255, null=True)
-    fechaP = models.DateTimeField(verbose_name='Fecha prestamo', null=True)
+    fechaP = models.DateTimeField(verbose_name='Fecha prestamo', null=True, blank=True)
     entrega = models.CharField(max_length=255, verbose_name="Tipo de entrega", choices=state_entrega.choices, default=state_entrega.N_ENTREGADO, null=True, blank=True)
-    fechaE = models.DateTimeField(verbose_name='Fecha entrega', null=True)
+    fechaE = models.DateTimeField(verbose_name='Fecha entrega', null=True, blank=True)
 
     def _str_(self):
         return self.prestamos

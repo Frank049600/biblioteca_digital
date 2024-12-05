@@ -9,7 +9,7 @@ $('#modal_catalogo').on('shown.bs.modal', function () {
     if (matricula != '') {
         $('#msg_search').attr('style', 'display:block')
         $.ajax({
-            url: '/get_alumno/',
+            url: '/get_personas_p/',
             data: { "matricula": matricula },
             type: 'GET',
             success: function (response) {
@@ -42,7 +42,6 @@ $('#catalogoTable').on('click', 'tbody tr td a#btnPedidoBook', function () {
 });
 
 // Función para el borrado de elementos
-
 $('#prestamoTable').on('click', 'tbody td a#delivered', function (e) {
     let data = $(this).closest('#info_book').data();
     let cve_prestamo = data['cve_prestamo'];
@@ -54,6 +53,21 @@ $('#prestamoTable').on('click', 'tbody td a#delivered', function (e) {
     let rute = '/book_delivered/';
     // Llama el SweetAlert del script notification
     register_entrega(cve_prestamo, text, btn, btn_color, icon, rute, entrega);
+});
+
+// Función para renovar el prestamo del libro
+$('#prestamoTable').on('click', 'tbody td a#renew_again', function (e) {
+    let data = $(this).closest('#info_book').data();
+    let cve_prestamo = data['cve_prestamo'];
+    let cantidad = data['cantidad'];
+    let entrega = data['entrega'].trim().toLowerCase();
+    let text = "¿Renovar prestamos?";
+    let btn = "Renovar";
+    let btn_color = "#28a745";
+    let icon = "warning";
+    let rute = '/renew_again/';
+    // Llama el SweetAlert del script notification
+    register_entrega(cve_prestamo, text, btn, btn_color, icon, rute, entrega, cantidad);
 });
 
 // Valida que todos los campos esten llenos antes de mandar el formulario

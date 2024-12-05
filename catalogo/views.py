@@ -7,11 +7,11 @@ import json
 import base64
 from django.http import JsonResponse
 from django.utils.timezone import now, localtime
+from sito.models import Alumno, AlumnoGrupo, Grupo, Carrera, Usuario, Persona, Periodo, Docente
 
 from static.helpers import *
 
 # Create your views here.
-@groups_required('Alumno', 'Docente', 'Administrador')
 def catalago_View(request):
     data_prestamo = 'Interno: Prestamo dentro de la universidad. Externo: Prestamo fuera de las universidad, con 6 días permitidos como límite.'
     form = catalogo_form()
@@ -44,6 +44,7 @@ def prestamos_View(request):
             "tipoP": f.tipoP,
             "entrega": f.entrega,
             "fechaP": f.fechaP,
+            "fechaE": f.fechaE,
         }   
 
         if f.tipoP == 'Externo':
@@ -88,7 +89,30 @@ def get_alumno(request):
             # print(data['nombre'])
             return JsonResponse(data)
         except Exception as a:
-            print(f"Algo salio mal: {a}")
+            # alumno_grupo = get_object_or_404(AlumnoGrupo, matricula=matricula)
+            docentes = Docente.objects.filter(cve_docente=matricula).first()
+            cve_persona = Usuario.objects.get(login=matricula)
+            persona = Persona.objects.get(cve_persona=cve_persona.cve_persona)
+
+            #  alumno_grupo = AlumnoGrupo.objects.filter(matricula=matricula).values_list('cve_grupo', flat=True)
+            #  cve_grupo = alumno_grupo[len(alumno_grupo) - 1]
+            #  grupo = Grupo.objects.get(cve_grupo=cve_grupo)
+            #  carrera = Carrera.objects.get(nombre=grupo.cve_carrera)
+            #  generacion = Alumno.objects.get(matricula=matricula)
+            #  cve_persona = Usuario.objects.get(login=matricula)
+            #  persona = Persona.objects.get(cve_persona=cve_persona.cve_persona)
+            data = {
+                "nombre": persona.nombre,
+                "apellido_paterno": persona.apellido_paterno,
+                "apellido_materno": persona.apellido_materno,
+                "nombre_grupo": "N/A",
+                "nombre_carrera": "N/A",
+                "generacion": "N/A"
+            }
+            # print(data['nombre'])
+            return JsonResponse(data)
+        except Exception as b:
+            print(f"Algo salio mal: {b}")
     return JsonResponse({'error': 'Matricula no proporcionada'}, status=400)
 
 # Genera clave unica para prestamo
@@ -162,7 +186,7 @@ def prestamo_registro(request):
 
                     messages.add_message(request, messages.SUCCESS, 'Prestamo Solicitado')
                     # Redirigir a la vista deseada
-                    return redirect('catalago_View')
+                    return redirect('get_book_for_person')
                 else:
                     messages.add_message(request, messages.INFO, 'Ejemplar agotado')
                     # Redirigir a la vista deseada
@@ -365,3 +389,37 @@ def get_book_for_person(request):
         print(g)
         messages.add_message(request, messages.ERROR, 'No se encontro información.')
         return redirect('inicio')
+
+# Cambia el estado de la entrega de los libros
+def renew_again(request, cve, cant):
+    try:
+        book = model_catalogo.objects.filter(cve_prestamo=cve).first()
+        if book:
+            # Valida la cantidad de libros que se solicitan renovar
+            cant = int(cant)
+            if cant < book.cantidad:
+                diferencia = book.cantidad - cant
+                # Se obtiene la referencia del libro en el acervo
+                ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
+                if ref_catalogo:
+                    # Se aumenta la diferencia en la cantidad total
+                    ref_catalogo.cant = ref_catalogo.cant + diferencia
+                    ref_catalogo.save()
+                # Sere realiza el ajuste de libros en el catalogo
+                book.cantidad = book.cantidad - diferencia
+                book.save()
+
+            book.fechaP = now().replace(microsecond=0)
+            book.fechaE = None
+            book.entrega = 'No/entregado'
+            book.save()
+
+            messages.add_message(request, messages.SUCCESS, 'Renovación exitosa.')
+            return redirect('prestamos_View')
+        else:
+            messages.add_message(request, messages.ERROR, '¡Algo salio mal!.')
+            return redirect('prestamos_View')
+    except Exception as b:
+        print(b)
+        messages.add_message(request, messages.ERROR, 'No se pudo realizar la acción.')
+        return redirect('prestamos_View')

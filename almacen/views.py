@@ -10,7 +10,6 @@ from sistema.models import UsuarioAcceso, UsuarioManager
 from static.helpers import *
 
 # Create your views here.
-@login_required
 @groups_required('Administrador')
 def index_acervo(request):
         side_code = 200
@@ -18,7 +17,6 @@ def index_acervo(request):
         form = registro_form()
         return render(request, 'index_almacen.html', { "list_acervo": listado, "form":form, "side_code":side_code})
 
-@login_required
 @groups_required('Administrador')
 def acervo_registro(request):
     if request.method == 'POST':
@@ -62,7 +60,6 @@ def acervo_registro(request):
         messages.add_message(request, messages.ERROR, '¡Algo salio mal!')
         return redirect('acervo')
 
-@login_required
 @groups_required('Administrador')
 def delete_acervo(request, col):
         acervo_delete = acervo_model.objects.filter(colocacion=col).first()
@@ -70,7 +67,6 @@ def delete_acervo(request, col):
         messages.success(request, 'Registro Eliminado')
         return redirect(to="acervo")
 
-@login_required
 @groups_required('Administrador')
 def edit_register(request, col):
       register = acervo_model.objects.filter(colocacion=col).first()
@@ -78,7 +74,6 @@ def edit_register(request, col):
       return redirect(reverse('acervo')+'?'+{"register":register})
       # return redirect(request, 'index_almacen.html', { "id_edit": register, "list_acervo": listado})
 
-@login_required
 @groups_required('Administrador')
 def edit_acervo(request):
     if request.method == 'POST':

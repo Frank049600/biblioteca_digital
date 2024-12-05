@@ -22,17 +22,11 @@
                     <span>{{ user }}</span>
                 </li>
                 <li>
-                    <div class="row">
-                        {% if grupo == 'Alumno' %}
-                        <div class="col-xl-6">
-                            <span>{{ grupo }}</span>
+                    <div class="row d-flex flex-column justify-content-center align-items-center">
+                        <div class="col-xl-12">
+                            <i class="fab fa-readme brand-image elevation-3" style="opacity: .8"></i>
+                            <span class="brand-text font-weight-light">"Un lector vive mil vidas <br> antes de morir"</span>
                         </div>
-                        <div class="col-xl-6">
-                            <span>{{ grupo_name }}</span>
-                        </div>
-                        {% else %}
-                        <span>{{ grupo }}</span>
-                        {% endif %}
                     </div>
                 </li>
             </ul>
@@ -56,7 +50,7 @@
                         </a>
                 </li>
                 <!-- Sección de Acervo -->
-                {% if grupo != 'Alumno' and grupo != 'Docente'%}
+                {% if 'Administrador' in grupo_control %}
                 <li class="nav-item">
                     {% if side_code == 200 %}
                     <a href="{% url 'acervo' %}" class="nav-link active">
@@ -104,7 +98,7 @@
                                         <p>Libros pedidos</p>
                                     </a>
                             </li>
-                            {% if grupo != 'Alumno' and grupo != 'Docente'%}
+                            {% if 'Administrador' in grupo_control %}
                             <li class="nav-item">
                                 {% if side_code == 401 %}
                                 <a href="{% url 'prestamos_View' %}" class="nav-link active">

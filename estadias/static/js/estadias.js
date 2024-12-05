@@ -111,6 +111,7 @@ $('#modal_registro').on('shown.bs.modal', function () {
     })
 })
 
+// Función para vaciar los campos en el modal
 $('#modal_registro').on('hidden.bs.modal', function () {
     $('#msg_search').attr('style', 'display:none');
     $('#msg_error').attr('style', 'display:none');

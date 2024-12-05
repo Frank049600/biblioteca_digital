@@ -128,7 +128,7 @@ TEMPLATES = [
                 'static.context_processors.user_permissions_and_groups',
                 'static.context_processors.group_permission',
                 'static.context_processors.get_alumnos_clase',
-                'static.context_processors.get_grupo',
+                # 'static.context_processors.get_grupo',
             ],
         },
     },
