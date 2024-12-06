@@ -8,6 +8,7 @@ from django.contrib import messages
 from sito.models import Persona
 from sistema.models import UsuarioAcceso, UsuarioManager
 from static.helpers import *
+from django.utils.timezone import now
 
 # Create your views here.
 @groups_required('Administrador')
@@ -20,6 +21,11 @@ def index_acervo(request):
 @groups_required('Administrador')
 def acervo_registro(request):
     if request.method == 'POST':
+        # Valida que la colocación no sea repetida
+        acervo_exist = acervo_model.objects.filter(colocacion=request.POST['colocacion'])
+        if acervo_exist:
+            messages.add_message(request, messages.INFO, 'Ya existe un elemento con esta colocación')
+            return redirect('acervo')
         form = registro_form(request.POST)
         if form.is_valid():
             titulo = form.cleaned_data['titulo']
@@ -32,8 +38,8 @@ def acervo_registro(request):
             adqui = form.cleaned_data['adqui']
             formato = form.cleaned_data['formato']
             estado = form.cleaned_data['estado']
-            fecharegistro = datetime.now()
-            fechaedicion = datetime.now()
+            fecharegistro = now().replace(microsecond=0)
+            fechaedicion = now().replace(microsecond=0)
             
             acervo = acervo_model.objects.create(
                     titulo = titulo,
@@ -80,17 +86,22 @@ def edit_acervo(request):
         form = registro_form(request.POST)
         if form.is_valid():
             acervo_update = acervo_model.objects.filter(colocacion=form.cleaned_data['colocacion']).first()
+            # Valida si existe la colocación ya registrada.
+            coloca_exist = acervo_model.objects.filter(colocacion=form.cleaned_data['colocacion']).exclude(id=acervo_update.id)
+            if coloca_exist:
+                messages.add_message(request, messages.INFO, 'La colocación ya existe')
+                return redirect('acervo')
             acervo_update.titulo = form.cleaned_data['titulo']
-            acervo_update.autor = form.cleaned_data['autor']
-            acervo_update.editorial = form.cleaned_data['editorial']
+            acervo_update.autor = form.cleaned_data['autor'] if request.POST['autor'] else ''
+            acervo_update.editorial = form.cleaned_data['editorial'] if request.POST['editorial'] else ''
             acervo_update.cant = form.cleaned_data['cant']
             acervo_update.colocacion = form.cleaned_data['colocacion']
-            acervo_update.edicion = form.cleaned_data['edicion']
-            acervo_update.anio = form.cleaned_data['anio']
-            acervo_update.adqui = form.cleaned_data['adqui']
-            acervo_update.estado = form.cleaned_data['estado']
-            acervo_update.formato = form.cleaned_data['formato']
-            acervo_update.fechaedicion = datetime.now()
+            acervo_update.edicion = form.cleaned_data['edicion'] if request.POST['edicion'] else ''
+            acervo_update.anio = form.cleaned_data['anio']  if request.POST['anio'] else ''
+            acervo_update.adqui = form.cleaned_data['adqui']  if request.POST['adqui'] else ''
+            acervo_update.estado = form.cleaned_data['estado']  if request.POST['estado'] else ''
+            acervo_update.formato = form.cleaned_data['formato']  if request.POST['formato'] else ''
+            acervo_update.fechaedicion = now().replace(microsecond=0)
             acervo_update.save()
             # Muestra un mensaje de éxito si no existe un problema
             # Retorna hacia Acervo

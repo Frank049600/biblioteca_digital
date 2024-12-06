@@ -54,7 +54,7 @@ MESSAGE_TAGS = {
     messages.ERROR: "Error",
     messages.SUCCESS: 'Éxito',
     messages.WARNING: 'Alerta',
-    messages.INFO: 'Info'
+    messages.INFO: 'Atención'
 }
 
 CUSTOM_MESSAGE_ICONS = {

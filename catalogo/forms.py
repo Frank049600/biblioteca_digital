@@ -12,7 +12,7 @@ class catalogo_form(forms.ModelForm):
     nom_autor = forms.CharField(label='Nombre del autor', required=False, max_length=255, widget=forms.TextInput (attrs={'class':'form-control','placeholder':'Ingrese el nombre del autor', 'readonly':True}))
     edicion = forms.CharField(label='Edición', required=False, max_length=255, widget=forms.TextInput (attrs={'class':'form-control','placeholder':'Edición', 'readonly':True}))
     colocacion = forms.CharField(label='Colocación', required=True, max_length=255, widget=forms.TextInput (attrs={'class':'form-control','placeholder':'Colocación', 'readonly':True}))
-    cantidad = forms.IntegerField(label='Cantidad', required=True, widget=forms.NumberInput (attrs={'class':'form-control','placeholder':'Cantidad de libros solicitados'}))
+    cantidad_i = forms.IntegerField(label='Cantidad inicial', required=True, widget=forms.NumberInput (attrs={'class':'form-control','placeholder':'Cantidad de libros solicitados'}))
     matricula = forms.IntegerField(label='Matricula', required=True, widget=forms.NumberInput (attrs={'class':'form-control','placeholder':'Cargando...', 'readonly':True}))
     nom_alumno = forms.CharField(label='Nombre del alumno', required=True, max_length=255, widget=forms.TextInput (attrs={'class':'form-control','placeholder':'Cargando...', 'readonly':True}))
     carrera_grupo = forms.CharField(label='Carrera', required=True, max_length=255, widget=forms.TextInput (attrs={'class':'form-control','placeholder':'Cargando...', 'readonly':True}))
@@ -20,4 +20,4 @@ class catalogo_form(forms.ModelForm):
 
     class Meta:
         model = model_catalogo
-        fields = ('nom_libro', 'nom_autor', 'edicion' ,'colocacion', 'cantidad', 'matricula', 'nom_alumno', 'carrera_grupo', 'tipoP')
+        fields = ('nom_libro', 'nom_autor', 'edicion' ,'colocacion', 'cantidad_i', 'matricula', 'nom_alumno', 'carrera_grupo', 'tipoP')

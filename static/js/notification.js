@@ -28,7 +28,7 @@ const register_deleteSwal = (title, coloca, text, icon, rute) => {
         })
 }
 
-const renew_again = (rute, cve_prestamo, cantidad) => {
+const renew_again = (rute, cve_prestamo, cantidad, entrega) => {
     // Generar las opciones dinámicamente según la cantidad de libros
     const inputOptions = {};
     for (let i = 1; i <= cantidad; i++) {
@@ -37,12 +37,13 @@ const renew_again = (rute, cve_prestamo, cantidad) => {
 
     // Mostrar el SweetAlert con las opciones dinámicas
     Swal.fire({
-        title: "Cantidad de libros para renovar",
+        title: "Cantidad de libros a renovar",
         input: "select",
         inputOptions: inputOptions,
         showCancelButton: true,
         confirmButtonText: "Renovar",
         confirmButtonColor: "#28a745",
+        reverseButtons: true,
         inputValidator: (value) => {
             return new Promise((resolve) => {
                 if (value) {
@@ -55,34 +56,57 @@ const renew_again = (rute, cve_prestamo, cantidad) => {
     }).then((result) => {
         if (result.isConfirmed) {
             // Swal.fire(`Usted seleccionó: ${inputOptions[result.value]}`);
-            location.href = rute + cve_prestamo + result.value
+            location.href = rute + cve_prestamo + '/' + result.value + '/' + entrega
         }
     });
 };
 
-const register_entrega = (cve_prestamo, text, btn, btn_color, icon, rute, entrega, cantidad = false) => {
+const register_renew = (cve_prestamo, title, btn, btn_color, icon, cantidad_i , cantidad_m, rute, entrega) => {
     Swal.fire({
-        "title": cve_prestamo,
-        "text": text,
-        "icon": icon,
-        "showCancelButton": true,
+        title: title,
+        text: cve_prestamo,
+        icon: icon,
+        showCancelButton: true,
         //"allowOutsideClick": false,
-        "cancelButtonText": "Cancelar",
-        "confirmButtonText": btn,
-        "reverseButtons": true,
-        "confirmButtonColor": btn_color,
+        cancelButtonText: "Cancelar",
+        confirmButtonText: btn,
+        reverseButtons: true,
+        confirmButtonColor: btn_color,
     })
         .then(function (result) {
             if (result.isConfirmed) {
                 // Envía la colocación del registro a eliminar
-                if (cantidad) {
-                    renew_again(rute, cve_prestamo, cantidad)
-                }
+                let cantidad;
+                if (entrega == 'Devuelto') {
+                    cantidad = cantidad_i
+                } 
                 else {
-                    location.href = rute + cve_prestamo
+                    cantidad = cantidad_m
                 }
+                renew_again(rute, cve_prestamo, cantidad, entrega);
+
             }
         })
+}
+
+const register_entrega = (cve_prestamo, text, btn, btn_color, icon, rute, entrega) => {
+    Swal.fire({
+        title: text,
+        text: cve_prestamo,
+        icon: icon,
+        showCancelButton: true,
+        //"allowOutsideClick": false,
+        cancelButtonText: "Cancelar",
+        confirmButtonText: btn,
+        reverseButtons: true,
+        confirmButtonColor: btn_color,
+    })
+        .then(function (result) {
+            if (result.isConfirmed) {
+                // Se envia la información a la ruta destinada para las acciones
+                location.href = rute + cve_prestamo + '/' + entrega
+            }
+        }); 
 }
 
 const action_alert = (text) => {

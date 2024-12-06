@@ -40,7 +40,8 @@ def prestamos_View(request):
             "nom_libro": f.nom_libro,
             "nom_autor": f.nom_autor,
             "colocacion": f.colocacion,
-            "cantidad": f.cantidad,
+            "cantidad_i": f.cantidad_i,
+            "cantidad_m": f.cantidad_m,
             "tipoP": f.tipoP,
             "entrega": f.entrega,
             "fechaP": f.fechaP,
@@ -93,14 +94,6 @@ def get_alumno(request):
             docentes = Docente.objects.filter(cve_docente=matricula).first()
             cve_persona = Usuario.objects.get(login=matricula)
             persona = Persona.objects.get(cve_persona=cve_persona.cve_persona)
-
-            #  alumno_grupo = AlumnoGrupo.objects.filter(matricula=matricula).values_list('cve_grupo', flat=True)
-            #  cve_grupo = alumno_grupo[len(alumno_grupo) - 1]
-            #  grupo = Grupo.objects.get(cve_grupo=cve_grupo)
-            #  carrera = Carrera.objects.get(nombre=grupo.cve_carrera)
-            #  generacion = Alumno.objects.get(matricula=matricula)
-            #  cve_persona = Usuario.objects.get(login=matricula)
-            #  persona = Persona.objects.get(cve_persona=cve_persona.cve_persona)
             data = {
                 "nombre": persona.nombre,
                 "apellido_paterno": persona.apellido_paterno,
@@ -141,7 +134,7 @@ def create_cve(fullname, colocacion):
                 break
         return cve
 
-# Función para registrar prestamos
+# Función registra prestamos
 def prestamo_registro(request):
     try:
         if request.method == 'POST':
@@ -150,7 +143,7 @@ def prestamo_registro(request):
                 # Se obtiene el número de libros existentes
                 exist_book = acervo_model.objects.filter(titulo=form.cleaned_data['nom_libro'], colocacion=form.cleaned_data['colocacion']).first()
                 if exist_book and exist_book.cant > 0:
-                    if form.cleaned_data['cantidad'] > exist_book.cant:
+                    if form.cleaned_data['cantidad_i'] > exist_book.cant:
                         # Redirigir a la vista deseada
                         messages.add_message(request, messages.INFO, 'La solicitud excedió la cantidad de libros')
                         return redirect('catalago_View')
@@ -160,11 +153,13 @@ def prestamo_registro(request):
                     nom_autor = form.cleaned_data['nom_autor']
                     edicion = form.cleaned_data['edicion']
                     colocacion = form.cleaned_data['colocacion']
-                    cantidad = form.cleaned_data['cantidad']
+                    cantidad_i = form.cleaned_data['cantidad_i']
+                    cantidad_m = form.cleaned_data['cantidad_i']
                     matricula = form.cleaned_data['matricula']
                     nom_alumno = form.cleaned_data['nom_alumno']
                     carrera_grupo = form.cleaned_data['carrera_grupo']
                     tipoP = form.cleaned_data['tipoP']
+                    entrega = 'Proceso'
                     fechaP = now().replace(microsecond=0)
 
                     catalago_View=model_catalogo.objects.create(
@@ -173,15 +168,17 @@ def prestamo_registro(request):
                             nom_autor = nom_autor,
                             edicion = edicion,
                             colocacion = colocacion,
-                            cantidad = cantidad,
+                            cantidad_i = cantidad_i,
+                            cantidad_m = cantidad_m,
                             matricula = matricula,
                             nom_alumno = nom_alumno,
                             carrera_grupo = carrera_grupo,
                             tipoP = tipoP,
+                            entrega = entrega,
                             fechaP = fechaP
                     )
                     # Se genera una redución de ejemplares en el acervo
-                    exist_book.cant = exist_book.cant - form.cleaned_data['cantidad']
+                    exist_book.cant = exist_book.cant - cantidad_i
                     exist_book.save()
 
                     messages.add_message(request, messages.SUCCESS, 'Prestamo Solicitado')
@@ -234,7 +231,7 @@ def view_book(request, base64):
     except Exception as vi:
         return redirect('catalago_View')
 
-# Caga la vista con la información del acervo
+# Carga la vista con la información del acervo
 @groups_required('Administrador')
 def cargar_portada(request):
     side_code = 402
@@ -311,25 +308,29 @@ def search_book(request):
         return JsonResponse({'status': 'error', 'message': 'No colocacion provided'}, status=400)
 
 # Cambia el estado de la entrega de los libros
-def book_delivered(request, cve):
+def book_delivered(request, cve, entrega):
     try:
         book = model_catalogo.objects.filter(cve_prestamo=cve).first()
         if book:
-            # Se realiza el aumento de la cantidad en el acervo (si el libro se entrega)
-            if book.entrega == 'No/entregado':
-                ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
-                if ref_catalogo:
-                    ref_catalogo.cant = ref_catalogo.cant + book.cantidad
-                    ref_catalogo.save()
+            # Cambio de estado al ser entregado al solicitante
+            if entrega == 'Proceso':
+                # Se actualizan los campos necesario en el registro de prestamos
+                book.entrega = 'Entregado'
+                book.fechaE = now().replace(microsecond=0)
             # Se realiza la disminución de la cantidad en el acervo (si se corrige el estado)
-            if book.entrega == 'Entregado':
+            if entrega == 'Entregado':
+                # Se actualizan los campos necesario en el registro de prestamos
                 ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
                 if ref_catalogo:
-                    ref_catalogo.cant = ref_catalogo.cant - book.cantidad
+                    ref_catalogo.cant = ref_catalogo.cant + book.cantidad_m
                     ref_catalogo.save()
-
-            book.fechaE = now().replace(microsecond=0) if book.entrega == 'No/entregado' else None
-            book.entrega = 'Entregado' if book.entrega == 'No/entregado' else 'No/entregado'
+                else:
+                    messages.add_message(request, messages.ERROR, 'No se encontro la referencia en acervo')
+                    return redirect('prestamos_View')
+                book.entrega = 'Devuelto'
+                book.fechaD = now().replace(microsecond=0)
+                book.cantidad_m = 0
+            # Se guardan los cambios en la tabla del catalago
             book.save()
 
             messages.add_message(request, messages.SUCCESS, 'Estado de libro cambiado.')
@@ -365,9 +366,12 @@ def get_book_for_person(request):
                 "nom_autor": f.nom_autor,
                 "edicion": f.edicion,
                 "colocacion": f.colocacion,
-                "cantidad": f.cantidad,
+                "cantidad_m": f.cantidad_m,
                 "tipoP": f.tipoP,
                 "entrega": f.entrega,
+                "fechaE": f.fechaE,
+                "fechaD": f.fechaD,
+                "fechaP": f.fechaP,
             }   
 
             if f.tipoP == 'Externo':
@@ -391,35 +395,71 @@ def get_book_for_person(request):
         return redirect('inicio')
 
 # Cambia el estado de la entrega de los libros
-def renew_again(request, cve, cant):
+def renew_again(request, cve, cant, entrega):
     try:
         book = model_catalogo.objects.filter(cve_prestamo=cve).first()
         if book:
             # Valida la cantidad de libros que se solicitan renovar
-            cant = int(cant)
-            if cant < book.cantidad:
-                diferencia = book.cantidad - cant
+            # cant = int(cant)
+            if cant < book.cantidad_m:
+                diferencia = book.cantidad_m - cant
                 # Se obtiene la referencia del libro en el acervo
                 ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
                 if ref_catalogo:
                     # Se aumenta la diferencia en la cantidad total
                     ref_catalogo.cant = ref_catalogo.cant + diferencia
                     ref_catalogo.save()
+                else:
+                    messages.add_message(request, messages.ERROR, 'No se encontro la referencia en acervo')
+                    return redirect('prestamos_View')
                 # Sere realiza el ajuste de libros en el catalogo
-                book.cantidad = book.cantidad - diferencia
-                book.save()
+                book.cantidad_m = book.cantidad_m - diferencia
+
+            if entrega != 'Devuelto':
+                book.fechaE = None
+                book.cantidad_m = cant
+                book.cantidad_i = cant
+
+            book.fechaP = now().replace(microsecond=0)
+            book.fechaD = None
+            book.entrega = 'Proceso'
+            book.save()
+
+            messages.add_message(request, messages.SUCCESS, 'Renovación exitosa')
+            return redirect('prestamos_View')
+        else:
+            messages.add_message(request, messages.ERROR, '¡Algo salio mal!')
+            return redirect('prestamos_View')
+    except Exception as b:
+        print(b)
+        messages.add_message(request, messages.ERROR, 'No se pudo realizar la acción')
+        return redirect('prestamos_View')
+
+def return_book(request, cve, cant):
+    try:
+        book = model_catalogo.objects.filter(cve_prestamo=cve).first()
+        if book:
+            # Valida la cantidad de libros que se solicitan renovar
+            cant = int(cant)
+            ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
+            if ref_catalogo:
+                # Se aumenta la diferencia en la cantidad total
+                ref_catalogo.cant = ref_catalogo.cant + cant
+                ref_catalogo.save()
+            # Sere realiza el ajuste de libros en el catalogo
+            book.cantidad_m = 0
 
             book.fechaP = now().replace(microsecond=0)
             book.fechaE = None
             book.entrega = 'No/entregado'
             book.save()
 
-            messages.add_message(request, messages.SUCCESS, 'Renovación exitosa.')
+            messages.add_message(request, messages.SUCCESS, 'Renovación exitosa')
             return redirect('prestamos_View')
         else:
-            messages.add_message(request, messages.ERROR, '¡Algo salio mal!.')
+            messages.add_message(request, messages.ERROR, '¡El elemento no se encontró!')
             return redirect('prestamos_View')
-    except Exception as b:
-        print(b)
-        messages.add_message(request, messages.ERROR, 'No se pudo realizar la acción.')
+    except Exception as r:
+        print(f"!Algo salio mal: {r}")
+        messages.add_message(request, messages.ERROR, 'No se pudo realizar la acción')
         return redirect('prestamos_View')

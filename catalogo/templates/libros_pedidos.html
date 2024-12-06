@@ -29,6 +29,10 @@
           <div class="col-xl-6 align-self-center">
             <h5 class="text-bold">Libros</h5>
           </div>
+          <div class="col-xl-6">
+            <a href="{% url 'catalago_View' %}" id="btnPlusBook" class="btn float-right">Solicitar libro<i class="fas fa-plus ml-1"></i>
+            </a>
+          </div>
         </div>
         <div class="table-responsive bg-white p-2">
           <table id="prestamoTable" class="cell-border stripe" style="width:100%">
@@ -52,10 +56,10 @@
                 <td>{{p.nom_autor}}</td>
                 <td>{{p.edicion}}</td>
                 <td>{{p.colocacion}}</td>
-                <td>{{p.cantidad}}</td>
+                <td>{{p.cantidad_m}}</td>
                 <td>{{p.tipoP}}</td>
                 <td class="text-center">
-                  {% if p.entrega != 'Entregado' %}
+                  {% if p.entrega == 'Entregado' %}
                     {% if p.dias_restantes %}
                       {% if p.dias_restantes >= 4 and p.dias_restantes <= 6 %}
                       <i class="fas fa-circle" style="color:#2ed255; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -70,12 +74,15 @@
                       title="Sobrepaso los días de prestamo"></i>
                       {% endif %}
                     {% elif p.dias_restantes == 0 %}
-                    <span class="text-bold text-info">Último día</span>
+                    <span class="text-bold text-warning">Último día</span>
                     {% else %}
                     <span>N/A</span>
                     {% endif %}
+                  {% elif p.entrega == 'Devuelto' %}
+                  <span class="text-bold text-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                  title="Devuelto: {{p.fechaD}}">Devuelto</span>
                   {% else %}
-                  <span class="text-bold text-success">Entregado</span>
+                  <span class="text-bold text-info">En proceso</span>
                   {% endif %}
                 </td>
               </tr>
