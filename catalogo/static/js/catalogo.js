@@ -53,7 +53,7 @@ $('#prestamoTable').on('click', 'tbody td a#delivered', function (e) {
     let icon = "question";
     let rute = '/book_delivered/';
     if (entrega == 'Devuelto') {
-        process_repeat();
+        process('¡Ya realizó este proceso!');
     }
     else {
         // Llama el SweetAlert del script notification
@@ -81,14 +81,42 @@ $('#prestamoTable').on('click', 'tbody td a#renew_again', function (e) {
 
 // Valida que todos los campos esten llenos antes de mandar el formulario
 $('#btnSendEstadias').on('click', function (event) {
+    // Declaración de variables
     let matricula = $('input[name=matricula]').val(),
+        titulo = $('input[name=nom_libro]').val(),
         nom_alumno = $('input[name=nom_alumno]').val(),
         colocacion = $('input[name=colocacion]').val(),
         cantidad = $('input[name=cantidad_i]').val(),
         carrera_grupo = $('input[name=carrera_grupo]').val();
-
+     // Obliga a esperar que la información este completa
     if(matricula == '' && nom_alumno == '' && carrera_grupo == ''){
         event.preventDefault();
+    }
+    // Valida cantidades negativas
+    if (cantidad < 0) {
+        event.preventDefault();
+        process('¡No puedes ingresar cantidades negativas!');
+    } 
+    else {
+        event.preventDefault();
+        data = {
+            "titulo": titulo,
+            "colocacion": colocacion,
+        }
+        $.ajax({
+            url: '/cant_for_search/',
+            data: data,
+            type: 'GET',
+            success: function (response) {
+                if (cantidad > response.cantidad) {
+                    process('Cantidad disponible: ' + response.cantidad);
+                } 
+                else {
+                    $('#tbl_registroP').submit()
+                }
+            },
+            error: function (error) { console.log(error); }
+        });
     }
 
 })
