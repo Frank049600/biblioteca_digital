@@ -118,3 +118,13 @@ const action_alert = (text) => {
         timer: 2100
     })
 }
+
+
+const process_repeat = () => {
+    Swal.fire({
+        title: '¡Ya realizó este proceso!',
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2100
+    })
+}

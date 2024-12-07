@@ -333,7 +333,7 @@ def book_delivered(request, cve, entrega):
             # Se guardan los cambios en la tabla del catalago
             book.save()
 
-            messages.add_message(request, messages.SUCCESS, 'Estado de libro cambiado.')
+            messages.add_message(request, messages.SUCCESS, 'Estado del prestamo cambiado')
             return redirect('prestamos_View')
         else:
             messages.add_message(request, messages.ERROR, '¡Algo salio mal!.')
@@ -343,7 +343,7 @@ def book_delivered(request, cve, entrega):
         messages.add_message(request, messages.ERROR, 'No se pudo realizar la acción.')
         return redirect('prestamos_View')
 
-# Vista, retorna todos los libros solicitados por persona
+# Vista, retorna todos los libros solicitados por el usuario
 def get_book_for_person(request):
     side_code = 403
     try:
@@ -399,34 +399,53 @@ def renew_again(request, cve, cant, entrega):
     try:
         book = model_catalogo.objects.filter(cve_prestamo=cve).first()
         if book:
-            # Valida la cantidad de libros que se solicitan renovar
-            # cant = int(cant)
-            if cant < book.cantidad_m:
-                diferencia = book.cantidad_m - cant
-                # Se obtiene la referencia del libro en el acervo
-                ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
-                if ref_catalogo:
-                    # Se aumenta la diferencia en la cantidad total
-                    ref_catalogo.cant = ref_catalogo.cant + diferencia
-                    ref_catalogo.save()
+            if entrega != 'Proceso':
+                # Valida la cantidad de libros que se solicitan renovar
+                # cant = int(cant)
+                if entrega != 'Devuelto':
+                    if cant < book.cantidad_m:
+                        print(f"Entra: {cant}")
+                        diferencia = book.cantidad_m - cant
+                        print(diferencia)
+                        # Se obtiene la referencia del libro en el acervo
+                        ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
+                        if ref_catalogo:
+                            # Se aumenta la diferencia en la cantidad total
+                            ref_catalogo.cant = ref_catalogo.cant + diferencia
+                            ref_catalogo.save()
+                        else:
+                            messages.add_message(request, messages.ERROR, 'No se encontro la referencia en acervo')
+                            return redirect('prestamos_View')
+                        # Sere realiza el ajuste de libros en el catalogo
+                        book.cantidad_m = book.cantidad_m - diferencia
                 else:
-                    messages.add_message(request, messages.ERROR, 'No se encontro la referencia en acervo')
-                    return redirect('prestamos_View')
-                # Sere realiza el ajuste de libros en el catalogo
-                book.cantidad_m = book.cantidad_m - diferencia
 
-            if entrega != 'Devuelto':
+                    # Se obtiene la referencia del libro en el acervo
+                    ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
+                    if ref_catalogo:
+                        # Se aumenta la diferencia en la cantidad total
+                        if cant > ref_catalogo.cant:
+                            messages.add_message(request, messages.INFO, 'La cantidad soicitada, ya no esta disponible')
+                            return redirect('prestamos_View')    
+                        ref_catalogo.cant = ref_catalogo.cant - cant
+                        ref_catalogo.save()
+                    else:
+                        messages.add_message(request, messages.ERROR, 'No se encontro la referencia en acervo')
+                        return redirect('prestamos_View')
+                    # Sere realiza el ajuste de libros en el catalogo
+                    book.cantidad_m = cant
+                    book.cantidad_i = cant
+                    book.fechaD = None
+                book.fechaP = now().replace(microsecond=0)
                 book.fechaE = None
-                book.cantidad_m = cant
-                book.cantidad_i = cant
+                book.entrega = 'Proceso'
+                book.save()
 
-            book.fechaP = now().replace(microsecond=0)
-            book.fechaD = None
-            book.entrega = 'Proceso'
-            book.save()
-
-            messages.add_message(request, messages.SUCCESS, 'Renovación exitosa')
-            return redirect('prestamos_View')
+                messages.add_message(request, messages.SUCCESS, 'Renovación exitosa')
+                return redirect('prestamos_View')
+            else:
+                messages.add_message(request, messages.INFO, 'El libro aún no ha sido entregado')
+                return redirect('prestamos_View')
         else:
             messages.add_message(request, messages.ERROR, '¡Algo salio mal!')
             return redirect('prestamos_View')

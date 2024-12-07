@@ -52,8 +52,13 @@ $('#prestamoTable').on('click', 'tbody td a#delivered', function (e) {
     let btn_color = entrega == "Proceso" ? "#28a745" : "#18632a";
     let icon = "question";
     let rute = '/book_delivered/';
-    // Llama el SweetAlert del script notification
-    register_entrega(cve_prestamo, text, btn, btn_color, icon, rute, entrega);
+    if (entrega == 'Devuelto') {
+        process_repeat();
+    }
+    else {
+        // Llama el SweetAlert del script notification
+        register_entrega(cve_prestamo, text, btn, btn_color, icon, rute, entrega);
+    }
 });
 
 // Función para renovar el prestamo del libro
