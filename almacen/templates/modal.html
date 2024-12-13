@@ -5,12 +5,12 @@
             <div class="modal-body">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Nueva adquisición</h3>
+                        <h3 class="card-title" id="title_modal">Nueva adquisición</h3>
                     </div>
                     <div class="card-body">
-                        {% if register %} {{ register }} {% endif %}
                         <form action="/acervo_registro/" id="tbl_addBook" method="POST">
                             {% csrf_token %}
+                            {{ form.id }}
                             <label class="text-muted" for="title">Titulo</label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">

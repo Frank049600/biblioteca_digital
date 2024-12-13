@@ -60,6 +60,26 @@ def index_proyectos(request):
 def estadias_registro(request):
     try:
         if request.method == 'POST':
+            # Validar existencia de proyectos
+            exist_proyect = model_estadias.objects.filter(
+                matricula=request.POST['matricula'], 
+                proyecto=request.POST['proyecto'], 
+                generacion=request.POST['generacion']
+            )
+            if exist_proyect:
+                messages.add_message(request, messages.INFO, 'Este proyecto ya fue registrado con el mismo alumno')
+                return redirect('proyectos')
+
+            exist_name_proyect = model_estadias.objects.filter(proyecto=request.POST['proyecto'])
+            if exist_name_proyect:
+                messages.add_message(request, messages.INFO, 'Ya existe un proyecto con este nombre')
+                return redirect('proyectos')
+
+            # Validar archivo antes de procesarlo
+            if not request.FILES['reporte_file']:
+                messages.add_message(request, messages.ERROR, 'Debe subir un archivo válido.')
+                return redirect('proyectos')
+            
             form = estadias_form(request.POST, request.FILES)
             if form.is_valid():
                 # Datos validados desde el formulario
@@ -72,26 +92,6 @@ def estadias_registro(request):
                 asesor_orga = form.cleaned_data['asesor_orga']
                 carrera = form.cleaned_data['carrera']
                 archivo = form.cleaned_data['reporte_file']
-                # Validar existencia de proyectos
-                exist_proyect = model_estadias.objects.filter(
-                    matricula=matricula, 
-                    proyecto=proyecto, 
-                    generacion=generacion
-                )
-                if exist_proyect.exists():
-                    messages.add_message(request, messages.INFO, 'Este proyecto ya fue registrado con el mismo alumno')
-                    return redirect('proyectos')
-
-                exist_name_proyect = model_estadias.objects.filter(proyecto=proyecto)
-                if exist_name_proyect.exists():
-                    messages.add_message(request, messages.INFO, 'Ya existe un proyecto con este nombre')
-                    return redirect('proyectos')
-
-                # Validar archivo antes de procesarlo
-                if not archivo:
-                    messages.add_message(request, messages.ERROR, 'Debe subir un archivo válido.')
-                    return redirect('proyectos')
-
                 # Procesar archivo y datos
                 name_ref = file_new_name(alumno, archivo.name)
                 base64_file = convert_base64(archivo)

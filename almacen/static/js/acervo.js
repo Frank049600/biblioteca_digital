@@ -8,14 +8,30 @@ $(document).ready(function () {
             'EXC': 'Excelente',
             'BUE': 'Bueno',
             'REG': 'Regular',
-            'MAL': 'Malo'
+            'MAL': 'Malo',
+            'Excelente': 'Excelente',
+            'Bueno': 'Bueno',
+            'Regular': 'Regular',
+            'Malo': 'Malo',
+            'book': 'Libro',
+            'disc': 'Disco',
+            'Libro': 'Libro',
+            'Disco': 'Disco'
         };
-        for (let i = 0; i < 4; i++) {
-            if (match[state.toString()] != undefined) {
-                state = match[state.toString()]
-            };
-        };
-        formato = formato == 'book' ? 'Libro' : (formato == 'disc' ? 'Disco' : '');
+        formato = match[formato] != 'undefined' ? match[formato] : formato;
+        state = match[state] != 'undefined' ? match[state] : state;
+        console.log(formato, state);
+        // for (let i = 0; i < match.length; i++) {
+        //     console.log('entra1');
+        //     if (match[state.toString()] != undefined) {
+        //         console.log('entra2');
+        //         state = match[state.toString()] 
+        //     };
+        //     if (match[formato.toString()] != undefined) {
+        //         formato = match[formato.toString()]
+        //     };
+        // };
+        // formato = formato == 'book' ? 'Libro' : (formato == 'disc' ? 'Disco' : '');
         let struct = '<div class="info-box mb-3" style="background-color: #3c6382; color: white;">'
             + '<span class="info-box-icon"><i class="fas fa-heading"></i></span>'
             + '<div class="info-box-content">'
@@ -129,7 +145,6 @@ $(document).ready(function () {
             type_adqui = data['adqui'],
             state = data['state'],
             formato = data['formato']
-
         // Se agrega todo el elemento html iterando la información obtenida
         $('#show_more').append(struct_modal(title, autor, editorial, cantidad, colocacion, edicion, año, type_adqui, state, formato));
 
@@ -177,21 +192,21 @@ $(document).ready(function () {
         // Se identifica el ID del modal
         let modal_inputs = $('#acervo_add')
         // Arreglo de nombre de los campos
-        let input_id = ['titulo', 'autor', 'editorial', 'anio', 'edicion', 'cant', 'colocacion', 'formato', 'adqui', 'estado']
+        let input_id = ['titulo', 'autor', 'editorial', 'anio', 'edicion', 'cant', 'colocacion', 'formato', 'adqui', 'estado', 'id']
         // codificación para los valores en los inputs SELECT
         decode_val = {
-            'Libro': 'book',
-            'Disco': 'disc',
-            'book': 'book',
-            'disc': 'disc',
-            'Excelente': 'EXC',
-            'Bueno': 'BUE',
-            'Regular': 'REG',
-            'Malo': 'MAL',
-            'EXC': 'EXC',
-            'BUE': 'BUE',
-            'REG': 'REG',
-            'MAL': 'MAL'
+            'Libro': 'Libro',
+            'Disco': 'Disco',
+            'book': 'Libro',
+            'disc': 'Disco',
+            'Excelente': 'Excelente',
+            'Bueno': 'Bueno',
+            'Regular': 'Regular',
+            'Malo': 'Malo',
+            'EXC': 'Excelente',
+            'BUE': 'Bueno',
+            'REG': 'Regular',
+            'MAL': 'Malo'
         }
         // Se asigna el valor a los input
         // $('#tbl_addBook #' + input_id[0])[0].value = moreInfo['title'] // Campo titulo
@@ -205,11 +220,13 @@ $(document).ready(function () {
         $('select[name="' + input_id[7] + '"]').val(decode_val[moreInfo['formato']]) // campo formato
         $('input[name="' + input_id[8] + '"]').val(moreInfo['adqui']) //Campo tipo de adquisición
         $('select[name="' + input_id[9] + '"]').val(decode_val[moreInfo['state']]) // Campo estado
+        $('input[name="' + input_id[10] + '"]').val(moreInfo['id']) // Campo Clave
         $('#acervo_add #tbl_addBook').attr('action', '/edit_acervo/')
         // Se abre el modal al final de la asignación de valores en los inputs
         modal_inputs.modal('show')
         $('#acervo_add #btnModalSend').attr('style', 'display: none')
         $('#acervo_add #btnModalUpdate').removeAttr('style', 'display: none;')
+        $('#acervo_add #title_modal').text('Editar ejemplar')
         // Al cerrar el modal se limpian todos los campos.
         modal_inputs.on('hidden.bs.modal', function () {
             for (let i = 0; i < 10; i++) {
@@ -218,15 +235,23 @@ $(document).ready(function () {
                     $('input[name="' + input_id[i] + '"]').val('')
                 }
                 //$('#tbl_addBook #' + input_id[7])[0].value = 'book'
-                $('select[name="' + input_id[7] + '"]').val('book')
+                $('select[name="' + input_id[7] + '"]').val('Libro')
                 //$('#tbl_addBook #' + input_id[9])[0].value = 'EXC'
-                $('select[name="' + input_id[9] + '"]').val('EXC')
+                $('select[name="' + input_id[9] + '"]').val('Excelente')
                 $('#acervo_add #btnModalUpdate').attr('style', 'display: none;')
                 $('#acervo_add #btnModalSend').removeAttr('style', 'display: none;')
                 $('#acervo_add #tbl_addBook').attr('action', '/acervo_registro/')
+                $('#acervo_add #title_modal').text('Nueva adquisición')
             }
         })
-    })
+    });
+
+    $('#btnModalSend, #btnModalUpdate').on('click', function (event) {
+        if ($('input[name="cant"]').val() <= 0) {
+            event.preventDefault();
+            process('¡Debes ingresar una cantidad mayor a 0!');
+        };
+    });
 
     // Función para realizar salto de input con Enter
     tabIndex_form('acervo_add');

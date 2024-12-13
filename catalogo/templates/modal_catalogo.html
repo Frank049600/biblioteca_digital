@@ -16,7 +16,7 @@
                   {% csrf_token %}
                     <div class="row mb-2">
                         <div class="col-xl-8">
-                          <span class="text-bold">Datos del libro</span>
+                          <span class="text-bold">Datos del ejemplar</span>
                           <div class="border-top">
                             <label class="text-muted" for="proyecto">Nombre del libro</label>
                             <div class="input-group mb-3">
@@ -75,7 +75,7 @@
                                 </div>
                               </div>
                             </div>
-                            <label class="text-muted" for="edic">Alumno</label>
+                            <label class="text-muted" for="edic">Nombre</label>
                             <div class="input-group mb-3">
                               <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -92,7 +92,7 @@
                                   <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-book"></i></span>
                                   </div>
-                                  {{ form.cantidad }}
+                                  {{ form.cantidad_i }}
                                 </div>
                               </div>
                               <div class="col-xl-6">

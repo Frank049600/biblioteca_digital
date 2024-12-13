@@ -37,9 +37,10 @@
               <th class="text-center">Titulo</th>
               <th class="text-center">Autor</th>
               <th class="text-center">Edición</th>
-              <th class="text-center">Cantidad</th>
+              <th class="text-center">Formato</th>
+              <th class="text-center">En existencia</th>
               <th class="text-center">Colocación</th>
-              <th class="text-center">Acción</th>
+              <th class="text-center">Solicitar</th>
             </tr>
           </thead>
           <tbody>
@@ -50,7 +51,12 @@
               <td>{{p.titulo}}</td>
               <td>{{p.autor}}</td>
               <td>{{p.edicion}}</td>
+              <td>{{p.formato}}</td>
+              {% if p.cant == 0 %}
+              <td><span class="text-bold text-danger">Agotado</span></td>
+              {% else %}
               <td>{{p.cant}}</td>
+              {% endif %}
               <td>{{p.colocacion}}</td>
               <td class="text-center">
                 <a type="button" id="btnPedidoBook" class="btn float-center" data-bs-toggle="modal"

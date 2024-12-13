@@ -45,39 +45,78 @@ $('#catalogoTable').on('click', 'tbody tr td a#btnPedidoBook', function () {
 $('#prestamoTable').on('click', 'tbody td a#delivered', function (e) {
     let data = $(this).closest('#info_book').data();
     let cve_prestamo = data['cve_prestamo'];
-    let entrega = data['entrega'].trim().toLowerCase();
-    let text = entrega == "no/entregado" ? "¿Marcar como entregado?" : "¿Marcar como NO entregado?";
-    let btn = entrega == "no/entregado" ? "Marcar/entregado" : "Marcar/No entregado";
-    let btn_color = entrega == "no/entregado" ? "#28a745" : "#DC4C64"; // verde(success) - rojo(danger)
-    let icon = "warning";
+    // let entrega = data['entrega'].trim().toLowerCase();
+    let entrega = data['entrega']
+    let text = entrega == "Proceso" ? "¿Marcar como entregado?" : "¿Marcar como devuelto?";
+    let btn = entrega == "Proceso" ? "Marcar/entregado" : "Marcar/devuelto";
+    let btn_color = entrega == "Proceso" ? "#28a745" : "#18632a";
+    let icon = "question";
     let rute = '/book_delivered/';
-    // Llama el SweetAlert del script notification
-    register_entrega(cve_prestamo, text, btn, btn_color, icon, rute, entrega);
+    if (entrega == 'Devuelto') {
+        process('¡Ya realizó este proceso!');
+    }
+    else {
+        // Llama el SweetAlert del script notification
+        register_entrega(cve_prestamo, text, btn, btn_color, icon, rute, entrega);
+    }
 });
 
 // Función para renovar el prestamo del libro
 $('#prestamoTable').on('click', 'tbody td a#renew_again', function (e) {
     let data = $(this).closest('#info_book').data();
     let cve_prestamo = data['cve_prestamo'];
-    let cantidad = data['cantidad'];
-    let entrega = data['entrega'].trim().toLowerCase();
-    let text = "¿Renovar prestamos?";
+    let cantidad_m = data['cantidad_m'];
+    let cantidad_i = data['cantidad_i'];
+    // let entrega = data['entrega'].trim().toLowerCase();
+    let entrega = data['entrega'];
+    let title = "¿Renovar prestamo?";
     let btn = "Renovar";
-    let btn_color = "#28a745";
-    let icon = "warning";
+    // Validar si es posible eliminar
+    let btn_color = "#28a745"; // Botón renovar
+    let icon = "question";
     let rute = '/renew_again/';
     // Llama el SweetAlert del script notification
-    register_entrega(cve_prestamo, text, btn, btn_color, icon, rute, entrega, cantidad);
+    register_renew(cve_prestamo, title, btn, btn_color, icon, cantidad_i , cantidad_m, rute, entrega);
 });
 
 // Valida que todos los campos esten llenos antes de mandar el formulario
 $('#btnSendEstadias').on('click', function (event) {
+    // Declaración de variables
     let matricula = $('input[name=matricula]').val(),
+        titulo = $('input[name=nom_libro]').val(),
         nom_alumno = $('input[name=nom_alumno]').val(),
+        colocacion = $('input[name=colocacion]').val(),
+        cantidad = $('input[name=cantidad_i]').val(),
         carrera_grupo = $('input[name=carrera_grupo]').val();
-
+     // Obliga a esperar que la información este completa
     if(matricula == '' && nom_alumno == '' && carrera_grupo == ''){
         event.preventDefault();
+    }
+    // Valida cantidades negativas
+    if (cantidad <= 0) {
+        event.preventDefault();
+        process('¡Debes ingresar una cantidad mayor a 0!');
+    } 
+    else {
+        event.preventDefault();
+        data = {
+            "titulo": titulo,
+            "colocacion": colocacion,
+        }
+        $.ajax({
+            url: '/cant_for_search/',
+            data: data,
+            type: 'GET',
+            success: function (response) {
+                if (cantidad > response.cantidad) {
+                    process('Cantidad disponible: ' + response.cantidad);
+                } 
+                else {
+                    $('#tbl_registroP').submit()
+                }
+            },
+            error: function (error) { console.log(error); }
+        });
     }
 
 })

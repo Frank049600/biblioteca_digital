@@ -10,15 +10,15 @@ class LongTextField(models.TextField):
 # Create your models here.
 class acervo_model(models.Model):
     
-    class state(models.TextChoices):
-        EXCELENTE = 'EXC', _('Excelente')
-        BUENO = 'BUE', _('Bueno')
-        REGULAR = 'REG', _('Regular')
-        MALO = 'MAL', _('Malo')
+    class State(models.TextChoices):
+        EXCELENTE = 'Excelente', _('Excelente')
+        BUENO = 'Bueno', _('Bueno')
+        REGULAR = 'Regular', _('Regular')
+        MALO = 'Malo', _('Malo')
 
-    class format(models.TextChoices):
-        LIBRO = 'book', _('Libro')
-        DISCO = 'disc', _('Disco')
+    class Format(models.TextChoices):
+        LIBRO = 'Libro', _('Libro')
+        DISCO = 'Disco', _('Disco')
 
     titulo = models.CharField(max_length=100,verbose_name="titulo", null=True, blank=True)
     autor = models.CharField(max_length=100,verbose_name="Autor", null=True, blank=True)
@@ -28,8 +28,8 @@ class acervo_model(models.Model):
     edicion = models.CharField(max_length=100, verbose_name="Edición", null=True, blank=True)
     anio = models.CharField(max_length=20,verbose_name="Año de edición", null=True, blank=True)
     adqui = models.CharField(max_length=20,verbose_name="Tipo de adquisición", null=True, blank=True)
-    estado = models.CharField(max_length=3, verbose_name="Estado", choices=state.choices, default=state.EXCELENTE, null=True, blank=True)
-    formato = models.CharField(max_length=5, verbose_name="formato", choices=format.choices, default=format.LIBRO, null=True, blank=True)
+    estado = models.CharField(max_length=10, verbose_name="Estado", choices=State.choices, default=State.EXCELENTE, null=True, blank=True)
+    formato = models.CharField(max_length=6, verbose_name="formato", choices=Format.choices, default=Format.LIBRO, null=True, blank=True)
     base64 = LongTextField('Portada',null=True,blank=True)
     fecharegistro = models.DateTimeField(verbose_name='Fecha de registro', null=True, blank=True)
     fechaedicion = models.DateTimeField(verbose_name='Fecha de actualiación', null=True, blank=True)

@@ -37,28 +37,30 @@
                 <th class="text-center">Clave prestamo</th>
                 <th class="text-center">Matricula</th>
                 <th class="text-center">Carrera y Grupo</th>
-                <th class="text-center">Nombre Libro</th>
                 <th class="text-center">Colocación</th>
-                <th class="text-center">Cantidad</th>
+                <th class="text-center">Cantidad inicial</th>
+                <th class="text-center">Cantidad en proceso</th>
                 <th class="text-center">Tipo Prestamo</th>
                 <th class="text-center">Días restantes de prestamo</th>
+                <th class="text-center">Estado</th>
                 <th class="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {% for p in data_all %}
-              <tr id="info_book" data-cve_prestamo="{{p.cve_prestamo}}" data-coloca="{{p.colocacion}}" data-matricula="{{p.matricula}}" data-entrega="{{p.entrega}}" data-cantidad="{{p.cantidad}}">
+              <tr id="info_book" data-cve_prestamo="{{p.cve_prestamo}}" data-coloca="{{p.colocacion}}" data-matricula="{{p.matricula}}" data-entrega="{{p.entrega}}" data-cantidad_m="{{p.cantidad_m}}" data-cantidad_i="{{p.cantidad_i}}">
                 <td data-bs-toggle="tooltip" data-bs-placement="top"
-                title="{{p.fechaP}}">{{p.cve_prestamo}}</td>
+                title="Solicitado: {{p.fechaP}}">{{p.cve_prestamo}}</td>
                 <td data-bs-toggle="tooltip" data-bs-placement="top"
                 title="{{p.nom_alumno}}">{{p.matricula}}</td>
                 <td>{{p.carrera_grupo}}</td>
-                <td>{{p.nom_libro}}</td>
-                <td>{{p.colocacion}}</td>
-                <td>{{p.cantidad}}</td>
+                <td data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Título: {{p.nom_libro}}">{{p.colocacion}}</td>
+                <td>{{p.cantidad_i}}</td>
+                <td>{{p.cantidad_m}}</td>
                 <td>{{p.tipoP}}</td>
                 <td class="text-center">
-                  {% if p.entrega != 'Entregado' %}
+                  {% if p.entrega != 'Devuelto' %}
                     {% if p.dias_restantes %}
                       {% if p.dias_restantes >= 4 and p.dias_restantes <= 6 %}
                       <i class="fas fa-circle" style="color:#2ed255; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -79,12 +81,24 @@
                     {% endif %}
                   {% else %}
                   <span class="text-bold text-success" data-bs-toggle="tooltip" data-bs-placement="top"
-                  title="{{p.fechaE}}">Entregado</span>
+                  title="Devuelto: {{p.fechaD}}">Devuelto</span>
                   {% endif %}
+                </td>
+                <td>
+                {% if p.entrega == 'Proceso' %}
+                <span class="text-bold text-info" data-bs-toggle="tooltip" data-bs-placement="top"
+                  title="En proceso de ser recogido">En proceso</span>
+                {% elif p.entrega == 'Entregado' %}
+                <span class="text-bold text-warning" data-bs-toggle="tooltip" data-bs-placement="top"
+                  title="Entregado: {{p.fechaE}}">Entregado</span>
+                  {% elif p.entrega == 'Devuelto' %}
+                <span class="text-bold text-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                  title="Devuelto: {{p.fechaD}}">Devuelto</span>
+                {% endif %}
                 </td>
                 <td class="text-center">
                   <a id="delivered" type="button"><i class="fas fa-truck-loading text-info" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Marcar/Entregado"></i>
+                    title="Entregado/Devuelto"></i>
                   </a>
                   <a id="renew_again" type="button"><i class="fas fa-undo-alt text-success pl-2" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top"
                     title="Renovar prestamo"></i>

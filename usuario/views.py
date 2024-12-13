@@ -77,7 +77,7 @@ def login_view(request):
         'form': form,
     }
 
-    return render(request, 'login/index_login.html', context)
+    return render(request, 'index_login.html', context)
 
 def logout_view(request):
     auth_logout(request)
