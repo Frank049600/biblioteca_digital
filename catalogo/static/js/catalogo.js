@@ -93,9 +93,9 @@ $('#btnSendEstadias').on('click', function (event) {
         event.preventDefault();
     }
     // Valida cantidades negativas
-    if (cantidad < 0) {
+    if (cantidad <= 0) {
         event.preventDefault();
-        process('¡No puedes ingresar cantidades negativas!');
+        process('¡Debes ingresar una cantidad mayor a 0!');
     } 
     else {
         event.preventDefault();

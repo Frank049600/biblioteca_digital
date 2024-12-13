@@ -214,7 +214,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-# Utilización de Crontab
-# CRONJOBS = [
-#     ('*/1 * * * *', 'estadias.cron.hi')
-# ]
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # Deshabilita el límite
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+
+# LOGIN_URL = '/login_user/' # Cambia a la URL de tu vista personalizada.
+# LOGIN_REDIRECT_URL = '/'  # Define a dónde redirigir tras un login exitoso.
+# LOGOUT_REDIRECT_URL = 'login_user/'  # Define a dónde redirigir tras cerrar sesión (opcional).

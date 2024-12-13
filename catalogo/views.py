@@ -8,7 +8,6 @@ import base64
 from django.http import JsonResponse
 from django.utils.timezone import now, localtime
 from sito.models import Alumno, AlumnoGrupo, Grupo, Carrera, Usuario, Persona, Periodo, Docente
-
 from static.helpers import *
 
 # Create your views here.
@@ -88,7 +87,6 @@ def get_alumno(request):
                 "nombre_carrera": carrera.nombre,
                 "generacion": generacion.generacion
             }
-            # print(data['nombre'])
             return JsonResponse(data)
         except Exception as a:
             # alumno_grupo = get_object_or_404(AlumnoGrupo, matricula=matricula)
@@ -142,7 +140,6 @@ def prestamo_registro(request):
             form = catalogo_form(request.POST)
             if form.is_valid():
                 # Se obtiene el número de libros existentes
-                print(form.cleaned_data['nom_libro'], form.cleaned_data['colocacion'])
                 exist_book = acervo_model.objects.filter(titulo=form.cleaned_data['nom_libro'], colocacion=form.cleaned_data['colocacion']).first()
                 if exist_book:
                     if exist_book.cant > 0:
@@ -303,7 +300,8 @@ def search_book(request):
                         'titulo': b.titulo, 
                         'autor': b.autor,
                         'anio': b.anio,
-                        'edicion': b.edicion
+                        'edicion': b.edicion,
+                        'formato': b.formato
                     }
                     data_all.append(book_data)
             return JsonResponse({'status': 'success', 'books': data_all})
@@ -413,9 +411,7 @@ def renew_again(request, cve, cant, entrega):
                 # cant = int(cant)
                 if entrega != 'Devuelto':
                     if cant < book.cantidad_m:
-                        print(f"Entra: {cant}")
                         diferencia = book.cantidad_m - cant
-                        print(diferencia)
                         # Se obtiene la referencia del libro en el acervo
                         ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
                         if ref_catalogo:
@@ -462,35 +458,6 @@ def renew_again(request, cve, cant, entrega):
         print(b)
         messages.add_message(request, messages.ERROR, 'No se pudo realizar la acción')
         return redirect('prestamos_View')
-
-# def return_book(request, cve, cant):
-#     try:
-#         book = model_catalogo.objects.filter(cve_prestamo=cve).first()
-#         if book:
-#             # Valida la cantidad de libros que se solicitan renovar
-#             cant = int(cant)
-#             ref_catalogo = acervo_model.objects.filter(titulo=book.nom_libro, colocacion=book.colocacion).first()
-#             if ref_catalogo:
-#                 # Se aumenta la diferencia en la cantidad total
-#                 ref_catalogo.cant = ref_catalogo.cant + cant
-#                 ref_catalogo.save()
-#             # Sere realiza el ajuste de libros en el catalogo
-#             book.cantidad_m = 0
-# 
-#             book.fechaP = now().replace(microsecond=0)
-#             book.fechaE = None
-#             book.entrega = 'No/entregado'
-#             book.save()
-# 
-#             messages.add_message(request, messages.SUCCESS, 'Renovación exitosa')
-#             return redirect('prestamos_View')
-#         else:
-#             messages.add_message(request, messages.ERROR, '¡El elemento no se encontró!')
-#             return redirect('prestamos_View')
-#     except Exception as r:
-#         print(f"!Algo salio mal: {r}")
-#         messages.add_message(request, messages.ERROR, 'No se pudo realizar la acción')
-#         return redirect('prestamos_View')
 
 # Llega petición ajax, busqueda de cantidad por titulo y colocación
 def cant_for_search(request):

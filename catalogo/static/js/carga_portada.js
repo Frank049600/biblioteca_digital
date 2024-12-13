@@ -1,4 +1,4 @@
-function create_struc(id, titulo, edicion, anio, autor) {
+function create_struc(id, titulo, edicion, anio, autor, formato) {
     let struct = '<div id="registro-'+ id +'" class="mb-3 border border-top-1">'
         + '<label for="proyecto">Nombre del libro</label>'
         + '<div class="input-group mb-3">'
@@ -12,7 +12,14 @@ function create_struc(id, titulo, edicion, anio, autor) {
         + '<div class="input-group-prepend">'
         + '<span class="input-group-text"><i class="fas fa-book-open"></i></span>'
         + '</div>'
-        + '<input type="text" class="form-control" id="title_portada" name="autor-'+ id +'" value="'+ autor +'" placeholder="Autor del libro" readonly>'
+        + '<input type="text" class="form-control" id="title_portada" name="autor-'+ id +'" value="'+ autor +'" placeholder="Autor" readonly>'
+        + '</div>'
+        + '<label for="proyecto">Formato</label>'
+        + '<div class="input-group mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text"><i class="fas fa-book-open"></i></span>'
+        + '</div>'
+        + '<input type="text" class="form-control" id="title_portada" name="formato-'+ id +'" value="'+ formato +'" placeholder="Formato" readonly>'
         + '</div>'
         + '<div class="row">'
         + '<div class="col-xl-6">'
@@ -30,7 +37,7 @@ function create_struc(id, titulo, edicion, anio, autor) {
         + '<div class="input-group-prepend">'
         + '<span class="input-group-text"><i class="fas fa-bookmark"></i></span>'
         + '</div>'
-        + '<input type="text" class="form-control" id="anio_portada" name="anio-'+ id +'" value="'+ anio +'" placeholder="Año del libro" readonly>'
+        + '<input type="text" class="form-control" id="anio_portada" name="anio-'+ id +'" value="'+ anio +'" placeholder="Año" readonly>'
         + '</div>'
         + '</div>'
         + '</div>'
@@ -69,10 +76,11 @@ $('#btn_search_portada').on('click', function () {
                 let autor = bookArray.autor;
                 let anio = bookArray.anio;
                 let edicion = bookArray.edicion;
+                let formato = bookArray.formato;
                 
                 // container.append(create_struc(registroIdCounter++, titulo, edicion, anio, autor));
                 // Añade al contenedor con animación
-                let newElement = $(create_struc(registroIdCounter++, titulo, edicion, anio, autor));
+                let newElement = $(create_struc(registroIdCounter++, titulo, edicion, anio, autor, formato));
                 newElement.css('opacity', 0); // Inicialmente invisible
                 container.append(newElement);
                 newElement.animate({ opacity: 1 }, 800); // Aparece lentamente

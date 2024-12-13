@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import acervo_model
 from import_export.admin import ImportExportModelAdmin
-from import_export.admin import ImportExportActionModelAdmin
+from import_export.admin import ExportMixin, ImportExportModelAdmin
 from import_export import resources
 from .forms import registro_form
 from django.contrib.auth.admin import UserAdmin
