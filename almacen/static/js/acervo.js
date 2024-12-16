@@ -20,18 +20,7 @@ $(document).ready(function () {
         };
         formato = match[formato] != 'undefined' ? match[formato] : formato;
         state = match[state] != 'undefined' ? match[state] : state;
-        console.log(formato, state);
-        // for (let i = 0; i < match.length; i++) {
-        //     console.log('entra1');
-        //     if (match[state.toString()] != undefined) {
-        //         console.log('entra2');
-        //         state = match[state.toString()] 
-        //     };
-        //     if (match[formato.toString()] != undefined) {
-        //         formato = match[formato.toString()]
-        //     };
-        // };
-        // formato = formato == 'book' ? 'Libro' : (formato == 'disc' ? 'Disco' : '');
+        
         let struct = '<div class="info-box mb-3" style="background-color: #3c6382; color: white;">'
             + '<span class="info-box-icon"><i class="fas fa-heading"></i></span>'
             + '<div class="info-box-content">'
@@ -144,19 +133,37 @@ $(document).ready(function () {
             año = data['anio'],
             type_adqui = data['adqui'],
             state = data['state'],
-            formato = data['formato']
+            formato = data['formato'],
+            base64 = data['base64']
         // Se agrega todo el elemento html iterando la información obtenida
         $('#show_more').append(struct_modal(title, autor, editorial, cantidad, colocacion, edicion, año, type_adqui, state, formato));
+        // Se carga el base64 para la imagen
+        if (base64 != '') {
+            $('#more_info_modal #content_portada_default').attr('style', 'display:none');
+            $('#more_info_modal #content_portada').attr('style', 'display:block');
+            $('#more_info_modal #content_portada').attr('src', 'data:image/png;base64,' + base64);
+        }
 
         // Se abre el modal una vez cargada la información
-        $('#more_info_modal').modal('show')
+        $('#more_info_modal').modal('show');
         // Se detecta el cerrado del modal
         $('#more_info_modal').on('hidden.bs.modal', function () {
             // Se realiza el borrado de los elementos hijo de la etiqueta indicada
-            $('#show_more').children().remove()
+            $('#show_more').children().remove();
+            // $('#content_portada').removeAttr('src');
+            if (base64 != '') {
+                $('#more_info_modal #content_portada_default').attr('style', 'display:block');
+                $('#more_info_modal #content_portada').attr('style', 'display:none');
+                $('#content_portada').removeAttr('src');
+            }
         })
     })
 
+    //Función muestra portada
+    $('#more_info_modal #viewCoverBtn').on('click', function () {
+        console.log('llega');
+    })
+    
     // Función para el borrado de elementos
     $('#acervoTable').on('click', 'tbody #info_data td a#remove_register', function (e) {
         let data = $(this).closest('#info_data').data(),

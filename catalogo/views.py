@@ -71,9 +71,11 @@ def get_alumno(request):
     if matricula:
         cve_persona = ''
         try:
-            # alumno_grupo = get_object_or_404(AlumnoGrupo, matricula=matricula)
+            # Obtiene el listado de cve_grupo del alumno
             alumno_grupo = AlumnoGrupo.objects.filter(matricula=matricula).values_list('cve_grupo', flat=True)
+            # Selecciona el ultimo en el que se ha registrado
             cve_grupo = alumno_grupo[len(alumno_grupo) - 1]
+            # Realiza la busqueda del grupo con el cve_grupo
             grupo = Grupo.objects.get(cve_grupo=cve_grupo)
             carrera = Carrera.objects.get(nombre=grupo.cve_carrera)
             generacion = Alumno.objects.get(matricula=matricula)
@@ -89,10 +91,7 @@ def get_alumno(request):
             }
             return JsonResponse(data)
         except Exception as a:
-            # alumno_grupo = get_object_or_404(AlumnoGrupo, matricula=matricula)
-            docentes = Docente.objects.filter(cve_docente=matricula).first()
-            cve_persona = Usuario.objects.get(login=matricula)
-            persona = Persona.objects.get(cve_persona=cve_persona.cve_persona)
+            persona = Persona.objects.get(cve_persona=request.user.cve_persona)
             data = {
                 "nombre": persona.nombre,
                 "apellido_paterno": persona.apellido_paterno,
@@ -101,11 +100,10 @@ def get_alumno(request):
                 "nombre_carrera": "N/A",
                 "generacion": "N/A"
             }
-            # print(data['nombre'])
             return JsonResponse(data)
         except Exception as b:
             print(f"Algo salio mal: {b}")
-    return JsonResponse({'error': 'Matricula no proporcionada'}, status=400)
+    return JsonResponse({'error': 'Matricula o número de empleado no proporcionada'}, status=400)
 
 # Genera clave unica para prestamo
 def create_cve(fullname, colocacion):

@@ -32,9 +32,12 @@ $('#catalogoTable').on('click', 'tbody tr td a#btnPedidoBook', function () {
     let data = $(this).closest('tr').data()
     let portada = 'data:image/png;base64,';
     // Convierte la imagen
-    portada_base64 = data.base64 != 'None' ? portada + data.base64 : portada + default_img()
-    
-    $('#content_portada').attr("src",portada_base64);
+    // portada_base64 = data.base64 != 'None' ? portada + data.base64 : portada + default_img()
+    if (data.base64 != '') {
+        $('#defult_in_portada').attr("style","display:none;");
+        $('#content_portada').attr("style","display:block;");
+        $('#content_portada').attr("src",portada + data.base64);
+    }
     $('input[name=nom_libro]').val(data.titulo);
     $('input[name=nom_autor]').val(data.autor);
     $('input[name=edicion]').val(data.edicion);
@@ -133,8 +136,10 @@ $('#modal_catalogo').on('hidden.bs.modal', function () {
     $('input[name=matricula]').val('');
     $('input[name=nom_alumno]').val('');
     $('input[name=carrera_grupo]').val('');
-    $('#content_portada').attr("src","#");
+    $('#defult_in_portada').attr("style","display:block");
+    $('#content_portada').attr("style","display:none");
+    $('#content_portada').removeAttr("src");
 });
 
-// Función para realizar salto de input con Enter
+// Función para realizar salto de input con tecla Enter
 tabIndex_form('modal_catalogo', true);

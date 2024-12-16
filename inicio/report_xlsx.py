@@ -6,6 +6,8 @@ import os
 from django.conf import settings
 from django.http import HttpResponse
 
+celdas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
+
 def insert_header_image(sheet):
     """
     Inserta una imagen de encabezado en la hoja del libro de Excel.
@@ -35,12 +37,25 @@ def reporte_info(sheet, data):
     sheet['A12'].fill = PatternFill('solid', start_color="d3c905")
     sheet['A12'] = 'CONSULTAS  EN EL CICLO DEL MES DE: ' + data['ciclo']
 
+# Crea la tabla de acervo
 def table_acervo(sheet, data):
+    # Crea titulo de tabla
     # Unión de celdas
     sheet.merge_cells('A11:H11')
     sheet['A11'].font = Font(color = '000000', bold=True, size=12)
     sheet['A11'].fill = PatternFill('solid', start_color="d3c905")
     sheet['A11'] = 'REPORTE GENERAL DE ACERVO BIBLIOGRÁFICO: ' + data['ciclo']
+
+    # Crea encabezados de la tabla
+    sheet['A12'] = "No."
+    sheet['A12'].font = Font(color = '000000', bold=True, size=12)
+    for c in celdas:
+        sheet[c + '12'].fill = PatternFill('solid', start_color="68685f")
+        sheet[c + '13'].fill = PatternFill('solid', start_color="68685f")
+    sheet.column_dimensions['A'].width = 16
+    sheet['B12'] = 'Área de conociento'
+
+
 
 def create_excel(data):
     """
@@ -53,7 +68,6 @@ def create_excel(data):
     # Inserta la imagen en el encabezado
     insert_header_image(sheet)
     # Inserta información
-    # reporte_info(sheet, data)
     table_acervo(sheet, data)
 
     return book
@@ -67,7 +81,7 @@ def generate_report(data):
         response = HttpResponse(
             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         )
-        response['Content-Disposition'] = 'attachment; filename="reporte_mensual.xlsx"'
+        response['Content-Disposition'] = 'attachment; filename="Reporte mensual '+ data['ciclo'] +'.xlsx"'
 
         # Guardar el archivo Excel directamente en la respuesta
         book.save(response)

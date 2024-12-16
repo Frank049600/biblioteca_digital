@@ -2,14 +2,13 @@ from sito.models import Persona, Alumno, AlumnoClase, AlumnoGrupo, Grupo, GrupoS
 from static.utils import dd
 import json
 
-
 def persona(request):
    user = request.user
    if user.is_authenticated:
-       persona = Persona.objects.get(cve_persona=user.cve_persona)
-       return {'persona': persona}
+        persona = Persona.objects.get(cve_persona=user.cve_persona)
+        return {'persona': persona}
    else:
-       return {'persona': ''}
+        return {'persona': ''}
 
 
 

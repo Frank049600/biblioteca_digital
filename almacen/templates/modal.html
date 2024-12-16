@@ -1,3 +1,4 @@
+{% load static %}
 <!-- Modal de registro de libros -->
 <div class="modal fade" id="acervo_add" data-bs-backdrop="static" tabindex="-1" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg">
@@ -79,7 +80,7 @@
                                     <label class="text-muted" for="formato">Formato</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-eye"></i></span>
+                                            <span class="input-group-text"><i class="fas fa-book fa-xs"></i>/<i class="fas fa-compact-disc fa-xs"></i></span>
                                         </div>
                                         {{ form.formato }}
                                     </div>
@@ -120,13 +121,25 @@
 </div>
 
 <div class="modal fade" id="more_info_modal">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color: #3c6382; color: white;">
                 <h4 class="modal-title">Más información</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="show_more"></div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-8">
+                        <div id="show_more"></div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="text-center">
+                            <img alt="portada_libro" id="content_portada" class="img-fluid" style="max-width: 80%; height: auto; display: none;">
+                            <img alt="portada_libro" src="{% static 'img/portada_default.png' %}" id="content_portada_default" class="img-fluid" style="max-width: 80%; height: auto; display: block;">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

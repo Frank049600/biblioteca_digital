@@ -40,7 +40,8 @@ if (iframe.length != 0) {
             }
         }
     });
-    // Función para el pintado del reporte en modo canvas dentro de la página
+
+    // Modo canvas para el pintado del reporte dentro de la página
     let url = $('#pdfViewer').data('url_reporte');
     var loadingTask = pdfjsLib.getDocument({ url: url });
     loadingTask.promise.then(function (pdf) {

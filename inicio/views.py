@@ -8,6 +8,9 @@ from .report_xlsx import generate_report
 from catalogo.models import model_catalogo
 from datetime import datetime
 
+from collections import Counter
+import json
+
 # Create your views here.
 def index_inicio(request):
     # Se asigna el código para el focus en el sidebar
@@ -161,5 +164,27 @@ def report(request):
     data = {
         "ciclo": format_month(cut[0]) + ' ' + cut[1]
     }
+    # Obtiene información del acervo
+    libros = acervo_model.objects.all()
+    # Modelo a comparar, grupos
+    modelo_grupo = [
+        'ADM', 'MET', 'PIA', 
+        'ERC', 'QUIM', 'TIS', 
+        'CBA', 'FSC', 'OCL', 
+        'OCLEC', 'OCEA', 'OCIG', 
+        'FCE', 'IDI', 'LYM',
+        'OC', 'Otros'
+    ]
+    conteo_grupo = {}
+    contador = []
+    for l in libros:
+        acortado = l.colocacion.split(" ")
+        contador.append(acortado[0])
+
+    conteo = Counter(contador)
+    # Crear un diccionario solo con los elementos de modelo_grupo
+    resultado = {grupo: conteo[grupo] for grupo in modelo_grupo}
+
+    # print(json.dumps(resultado, indent=2))
 
     return generate_report(data)
